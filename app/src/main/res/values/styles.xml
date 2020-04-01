@@ -1,11 +1,44 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="panelTitle">
+        <item name="android:textStyle">bold</item>
+        <item name="autoSizeMaxTextSize">64sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">1sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="panelText">
+        <item name="autoSizeMaxTextSize">64sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:gravity">center_vertical|start</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">1sp</item>
+        <item name="android:textColor">@color/colorGray</item>
+    </style>
+
+    <style name="panelIcon">
+        <item name="android:tint">@color/colorGray</item>
+    </style>
+
+    <style name="panelButton" parent="Widget.AppCompat.ImageButton">
+        <item name="backgroundTint">@color/colorMilitaryGreen</item>
+    </style>
+
+    <style name="glassToast">
+        <item name="stColorBackground">@color/colorGlassFoggy</item>
+        <item name="stTextColor">@android:color/tab_indicator_text</item>
+        <item name="stGravity">center</item>
     </style>
 
 </resources>

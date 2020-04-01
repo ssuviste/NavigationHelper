@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/colorGlass">
+
+    <TextView
+        android:id="@+id/titleStart"
+        style="@style/panelTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/from_start"
+        app:layout_constraintBottom_toTopOf="@+id/borderH1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/includeIcons1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/titleCP"
+        style="@style/panelTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/from_cp"
+        app:layout_constraintBottom_toTopOf="@+id/borderH4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/includeIcons2"
+        app:layout_constraintTop_toBottomOf="@+id/borderH3" />
+
+    <TextView
+        android:id="@+id/titleWP"
+        style="@style/panelTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/from_wp"
+        app:layout_constraintBottom_toTopOf="@+id/borderH7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/includeIcons3"
+        app:layout_constraintTop_toBottomOf="@+id/borderH6" />
+
+    <ImageButton
+        android:id="@+id/buttonStartStop"
+        style="@style/panelButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:onClick="buttonStartStopOnClick"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/borderH3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/borderV1"
+        app:layout_constraintTop_toBottomOf="@+id/borderH2"
+        app:srcCompat="@drawable/baseline_play_arrow_24" />
+
+    <ImageButton
+        android:id="@+id/buttonCP"
+        style="@style/panelButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/borderH6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/borderV1"
+        app:layout_constraintTop_toBottomOf="@+id/borderH5"
+        app:srcCompat="@drawable/baseline_beenhere_24" />
+
+    <ImageButton
+        android:id="@+id/buttonWP"
+        style="@style/panelButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/borderV1"
+        app:layout_constraintTop_toBottomOf="@+id/borderH8"
+        app:srcCompat="@drawable/baseline_place_24" />
+
+    <include
+        android:id="@+id/includeIcons1"
+        layout="@layout/icons"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/includeStartStats"
+        app:layout_constraintEnd_toStartOf="@+id/borderV2"
+        app:layout_constraintTop_toTopOf="@+id/includeStartStats" />
+
+    <include
+        android:id="@+id/includeIcons2"
+        layout="@layout/icons"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/includeCPStats"
+        app:layout_constraintEnd_toStartOf="@+id/borderV3"
+        app:layout_constraintTop_toTopOf="@+id/includeCPStats" />
+
+    <include
+        android:id="@+id/includeIcons3"
+        layout="@layout/icons"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/includeWPStats"
+        app:layout_constraintEnd_toStartOf="@+id/borderV4"
+        app:layout_constraintTop_toTopOf="@+id/includeWPStats" />
+
+    <include
+        android:id="@+id/includeStartStats"
+        layout="@layout/start_stats"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/borderH2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/borderH1" />
+
+    <include
+        android:id="@+id/includeCPStats"
+        layout="@layout/cp_stats"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/borderH5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/includeStartStats"
+        app:layout_constraintTop_toBottomOf="@+id/borderH4" />
+
+    <include
+        android:id="@+id/includeWPStats"
+        layout="@layout/cp_stats"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/borderH8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/includeStartStats"
+        app:layout_constraintTop_toBottomOf="@+id/borderH7" />
+
+    <View
+        android:id="@+id/borderH1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/colorGray"
+        app:layout_constraintBottom_toTopOf="@+id/includeStartStats"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/includeIcons1"
+        app:layout_constraintTop_toBottomOf="@+id/titleStart" />
+
+    <View
+        android:id="@+id/borderH2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/colorGray"
+        app:layout_constraintBottom_toTopOf="@+id/buttonStartStop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/includeIcons1"
+        app:layout_constraintTop_toBottomOf="@+id/includeStartStats" />
+
+    <View
+        android:id="@+id/borderH3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/colorGray"
+        app:layout_constraintBottom_toTopOf="@+id/titleCP"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/includeIcons2"
+        app:layout_constraintTop_toBottomOf="@+id/buttonStartStop" />
+
+    <View
+        android:id="@+id/borderH4"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/colorGray"
+        app:layout_constraintBottom_toTopOf="@+id/includeCPStats"
+        app:layout_constraintEnd_toEndOf="@+id/titleCP"
+        app:layout_constraintStart_toStartOf="@+id/includeIcons2"
+        app:layout_constraintTop_toBottomOf="@+id/titleCP" />
+
+    <View
+        android:id="@+id/borderH5"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/colorGray"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCP"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/includeIcons2"
+        app:layout_constraintTop_toBottomOf="@+id/includeCPStats" />
+
+    <View
+        android:id="@+id/borderH6"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/colorGray"
+        app:layout_constraintBottom_toTopOf="@+id/titleWP"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/includeIcons3"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCP" />
+
+    <View
+        android:id="@+id/borderH7"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/colorGray"
+        app:layout_constraintBottom_toTopOf="@+id/includeWPStats"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/includeIcons3"
+        app:layout_constraintTop_toBottomOf="@+id/titleWP" />
+
+    <View
+        android:id="@+id/borderH8"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/colorGray"
+        app:layout_constraintBottom_toTopOf="@+id/buttonWP"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/includeIcons3"
+        app:layout_constraintTop_toBottomOf="@+id/includeWPStats" />
+
+    <View
+        android:id="@+id/borderV1"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@color/colorGray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/includeIcons1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/borderV2"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@color/colorGray"
+        app:layout_constraintBottom_toTopOf="@+id/borderH2"
+        app:layout_constraintEnd_toStartOf="@+id/includeStartStats"
+        app:layout_constraintTop_toBottomOf="@+id/borderH1" />
+
+    <View
+        android:id="@+id/borderV3"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@color/colorGray"
+        app:layout_constraintBottom_toTopOf="@+id/borderH5"
+        app:layout_constraintEnd_toStartOf="@+id/includeCPStats"
+        app:layout_constraintTop_toBottomOf="@+id/borderH4"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <View
+        android:id="@+id/borderV4"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@color/colorGray"
+        app:layout_constraintBottom_toTopOf="@+id/borderH8"
+        app:layout_constraintEnd_toStartOf="@+id/includeWPStats"
+        app:layout_constraintTop_toBottomOf="@+id/borderH7"
+        app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
