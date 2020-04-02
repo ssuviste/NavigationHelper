@@ -3,58 +3,67 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/borders_r">
 
     <TextView
-        android:id="@+id/walkDistWP"
+        android:id="@+id/walkDistUnit"
         style="@style/panelText"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"
-        android:text="@string/init_dist"
-        app:layout_constraintBottom_toTopOf="@+id/flyDistWP"
+        android:gravity="start|center_vertical"
+        android:text="@string/unit_dist"
+        app:layout_constraintBottom_toTopOf="@+id/flyDistUnit"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/flyDistWP"
+        android:id="@+id/flyDistUnit"
         style="@style/panelText"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"
-        android:text="@string/init_dist"
-        app:layout_constraintBottom_toTopOf="@+id/timeWP"
+        android:gravity="start|center_vertical"
+        android:text="@string/unit_dist"
+        app:layout_constraintBottom_toTopOf="@+id/timeUnit"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/walkDistWP" />
+        app:layout_constraintTop_toBottomOf="@+id/walkDistUnit" />
 
     <TextView
-        android:id="@+id/timeWP"
+        android:id="@+id/timeUnit"
         style="@style/panelText"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"
-        android:text="@string/init_time"
-        app:layout_constraintBottom_toTopOf="@+id/speedWP"
+        android:gravity="start|center_vertical"
+        android:text="@string/unit_time"
+        app:layout_constraintBottom_toTopOf="@+id/speedUnit"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/flyDistWP" />
+        app:layout_constraintTop_toBottomOf="@+id/flyDistUnit" />
 
     <TextView
-        android:id="@+id/speedWP"
+        android:id="@+id/speedUnit"
         style="@style/panelText"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"
-        android:text="@string/init_speed"
+        android:gravity="start|center_vertical"
+        android:text="@string/unit_speed"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeWP" />
+        app:layout_constraintTop_toBottomOf="@+id/timeUnit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

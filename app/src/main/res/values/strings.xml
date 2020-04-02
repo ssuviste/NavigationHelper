@@ -4,9 +4,12 @@
     <string name="from_start">From Start</string>
     <string name="from_cp">From CP</string>
     <string name="from_wp">From WP</string>
-    <string name="init_time">00:00:00</string>
+    <string name="unit_dist">m</string>
+    <string name="unit_time">hh:mm:ss</string>
+    <string name="unit_speed">mm:ss/km</string>
     <string name="init_dist">0 m</string>
-    <string name="init_speed">0 min/km</string>
+    <string name="init_time">00:00:00</string>
+    <string name="init_speed">00:00/km</string>
     <string name="start_on_press">Tracking started!</string>
     <string name="stop_on_press">Tracking stopped!</string>
 </resources>

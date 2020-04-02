@@ -2,58 +2,59 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/borders_b">
 
     <TextView
         android:id="@+id/walkDistWP"
         style="@style/panelText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
         android:text="@string/init_dist"
         app:layout_constraintBottom_toTopOf="@+id/flyDistWP"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/flyDistWP"
         style="@style/panelText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
         android:text="@string/init_dist"
         app:layout_constraintBottom_toTopOf="@+id/timeWP"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/walkDistWP" />
 
     <TextView
         android:id="@+id/timeWP"
         style="@style/panelText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
         android:text="@string/init_time"
         app:layout_constraintBottom_toTopOf="@+id/speedWP"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/flyDistWP" />
 
     <TextView
         android:id="@+id/speedWP"
         style="@style/panelText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
         android:text="@string/init_speed"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timeWP" />
 

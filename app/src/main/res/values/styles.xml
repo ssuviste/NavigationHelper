@@ -19,11 +19,12 @@
     </style>
 
     <style name="panelText">
-        <item name="autoSizeMaxTextSize">64sp</item>
-        <item name="android:maxLines">1</item>
-        <item name="android:gravity">center_vertical|start</item>
         <item name="autoSizeTextType">uniform</item>
         <item name="autoSizeMinTextSize">1sp</item>
+        <item name="autoSizeMaxTextSize">64sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:gravity">center_vertical|end</item>
         <item name="android:textColor">@color/colorGray</item>
     </style>
 

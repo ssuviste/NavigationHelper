@@ -187,7 +187,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun showToastMsg(msg: String) {
-        StyleableToast.makeText(this, msg, Toast.LENGTH_LONG, R.style.glassToast).show()
+        StyleableToast.makeText(this, msg, Toast.LENGTH_SHORT, R.style.glassToast).show()
     }
 
     // BROADCAST RECEIVER

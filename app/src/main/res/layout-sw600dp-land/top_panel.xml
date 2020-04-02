@@ -21,7 +21,7 @@
     <ImageButton
         android:id="@+id/buttonCompass"
         style="@style/panelButton"
-        android:layout_width="wrap_content"
+        android:layout_width="72dp"
         android:layout_height="0dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/buttonUpDirection"
