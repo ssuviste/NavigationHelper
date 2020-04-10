@@ -1,30 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/colorGlass">
-
-    <ImageButton
-        android:id="@+id/buttonRewind"
-        style="@style/panelButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonUpDirection"
-        app:layout_constraintEnd_toStartOf="@+id/buttonMenu"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonUpDirection"
-        app:layout_constraintTop_toTopOf="@+id/buttonUpDirection"
-        app:srcCompat="@drawable/baseline_restore_24" />
 
     <ImageButton
         android:id="@+id/buttonCompass"
         style="@style/panelButton"
         android:layout_width="0dp"
-        android:layout_height="66dp"
+        android:layout_height="60dp"
+        android:background="@drawable/button_green_ripple_tb"
+        android:contentDescription="@string/cont_desc_compass_btn"
+        android:onClick="buttonCompassOnClick"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:scaleType="fitCenter"
+        android:tint="@color/colorGreenMilitary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonUpDirection"
         app:layout_constraintHorizontal_bias="0.5"
@@ -32,43 +24,59 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/baseline_explore_24" />
+        app:srcCompat="@drawable/baseline_explore_off_24" />
 
     <ImageButton
         android:id="@+id/buttonUpDirection"
         style="@style/panelButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/cont_dest_up_dir_btn"
+        android:onClick="buttonUpDirOnClick"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:scaleType="fitCenter"
+        android:tint="@color/colorGreenMilitary"
         app:layout_constraintBottom_toBottomOf="@+id/buttonCompass"
-        app:layout_constraintEnd_toStartOf="@+id/buttonRewind"
+        app:layout_constraintEnd_toStartOf="@+id/buttonKeepCentered"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/buttonCompass"
         app:layout_constraintTop_toTopOf="@+id/buttonCompass"
-        app:srcCompat="@drawable/baseline_mobile_up_24" />
+        app:srcCompat="@drawable/baseline_emoji_people_24" />
+
+    <ImageButton
+        android:id="@+id/buttonKeepCentered"
+        style="@style/panelButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/cont_desc_rewind_btn"
+        android:onClick="buttonKeepCenteredOnClick"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:scaleType="fitCenter"
+        android:tint="@color/colorGreenMilitary"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonUpDirection"
+        app:layout_constraintEnd_toStartOf="@+id/buttonMenu"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonUpDirection"
+        app:layout_constraintTop_toTopOf="@+id/buttonUpDirection"
+        app:srcCompat="@drawable/baseline_donut_large_24" />
 
     <ImageButton
         android:id="@+id/buttonMenu"
         style="@style/panelButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/cont_desc_menu_btn"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonRewind"
+        android:tint="@color/colorGreenMilitary"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonKeepCentered"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonRewind"
-        app:layout_constraintTop_toTopOf="@+id/buttonRewind"
+        app:layout_constraintStart_toEndOf="@+id/buttonKeepCentered"
+        app:layout_constraintTop_toTopOf="@+id/buttonKeepCentered"
         app:srcCompat="@drawable/baseline_menu_24" />
 
-    <View
-        android:id="@+id/borderH1"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@color/colorGray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCompass"
-        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

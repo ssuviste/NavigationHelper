@@ -5,7 +5,10 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="colorGray">#6E6E6E</color>
-    <color name="colorMilitaryGreen">#008577</color>
+    <color name="colorLightGray">#D7D7D7</color>
+
+    <color name="colorGreenGlass">#800F9D7C</color>
+    <color name="colorGreenMilitary">#007868</color>
 
     <color name="colorGlass">#A6E0EEEE</color>
     <color name="colorGlassFoggy">#D9D4E4E4</color>

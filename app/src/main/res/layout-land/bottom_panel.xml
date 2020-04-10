@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:background="@color/colorGlass">
@@ -9,14 +8,13 @@
     <TextView
         android:id="@+id/titleStart"
         style="@style/panelTitle"
-        android:layout_width="75dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/borders_b"
-        android:paddingStart="1dp"
-        android:paddingEnd="1dp"
+        android:layout_width="110dp"
+        android:layout_height="40sp"
+        android:background="@drawable/borders_l"
         android:text="@string/from_start"
+        app:autoSizeMaxTextSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/includeStartStats"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonStartStop"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,10 +22,11 @@
     <include
         android:id="@+id/includeIcons1"
         layout="@layout/icons"
-        android:layout_width="wrap_content"
+        android:layout_width="28dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/includeStartStats"
-        app:layout_constraintEnd_toStartOf="@+id/includeStartStats"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/titleStart"
         app:layout_constraintTop_toTopOf="@+id/includeStartStats"
         app:layout_constraintVertical_bias="0.0" />
@@ -37,8 +36,8 @@
         layout="@layout/start_stats"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonStartStop"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/titleCP"
+        app:layout_constraintEnd_toEndOf="@+id/titleStart"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/includeIcons1"
         app:layout_constraintTop_toBottomOf="@+id/titleStart" />
@@ -46,37 +45,40 @@
     <ImageButton
         android:id="@+id/buttonStartStop"
         style="@style/panelButton"
-        android:layout_width="0dp"
+        android:layout_width="35dp"
         android:layout_height="0dp"
+        android:background="@drawable/button_green_ripple_lr"
+        android:contentDescription="@string/cont_desc_ss_btn"
         android:onClick="buttonStartStopOnClick"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/titleCP"
+        android:tint="@color/colorGreenMilitary"
+        app:layout_constraintBottom_toTopOf="@+id/buttonCP"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/titleStart"
-        app:layout_constraintTop_toBottomOf="@+id/includeStartStats"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/baseline_play_arrow_24" />
 
     <TextView
         android:id="@+id/titleCP"
         style="@style/panelTitle"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/borders_tb"
-        android:paddingStart="1dp"
-        android:paddingEnd="1dp"
+        android:layout_height="40sp"
+        android:background="@drawable/borders_tl"
         android:text="@string/from_cp"
+        app:autoSizeMaxTextSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/includeCPStats"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/titleStart"
         app:layout_constraintStart_toStartOf="@+id/titleStart"
-        app:layout_constraintTop_toBottomOf="@+id/buttonStartStop" />
+        app:layout_constraintTop_toBottomOf="@+id/includeStartStats" />
 
     <include
         android:id="@+id/includeIcons2"
         layout="@layout/icons"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/includeCPStats"
-        app:layout_constraintEnd_toStartOf="@+id/includeCPStats"
+        app:layout_constraintEnd_toEndOf="@+id/includeIcons1"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/titleCP"
         app:layout_constraintTop_toTopOf="@+id/includeCPStats" />
@@ -86,8 +88,8 @@
         layout="@layout/cp_stats"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonCP"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/titleWP"
+        app:layout_constraintEnd_toEndOf="@+id/titleStart"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/includeIcons2"
         app:layout_constraintTop_toBottomOf="@+id/titleCP" />
@@ -95,36 +97,40 @@
     <ImageButton
         android:id="@+id/buttonCP"
         style="@style/panelButton"
-        android:layout_width="0dp"
+        android:layout_width="35dp"
         android:layout_height="0dp"
+        android:background="@drawable/button_green_ripple_tlr"
+        android:contentDescription="@string/cont_desc_cp_btn"
+        android:onClick="buttonCPOnClick"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/titleWP"
+        android:tint="@color/colorGreenMilitary"
+        app:layout_constraintBottom_toTopOf="@+id/buttonWP"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/titleCP"
-        app:layout_constraintTop_toBottomOf="@+id/includeCPStats"
+        app:layout_constraintTop_toBottomOf="@+id/buttonStartStop"
         app:srcCompat="@drawable/baseline_beenhere_24" />
 
     <TextView
         android:id="@+id/titleWP"
         style="@style/panelTitle"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/borders_tb"
-        android:paddingStart="1dp"
-        android:paddingEnd="1dp"
+        android:layout_height="40sp"
+        android:background="@drawable/borders_tl"
         android:text="@string/from_wp"
+        app:autoSizeMaxTextSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/includeWPStats"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/titleStart"
         app:layout_constraintStart_toStartOf="@+id/titleStart"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCP" />
+        app:layout_constraintTop_toBottomOf="@+id/includeCPStats" />
 
     <include
         android:id="@+id/includeIcons3"
         layout="@layout/icons"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/includeWPStats"
-        app:layout_constraintEnd_toStartOf="@+id/includeWPStats"
+        app:layout_constraintEnd_toEndOf="@+id/includeIcons1"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/titleWP"
         app:layout_constraintTop_toTopOf="@+id/includeWPStats" />
@@ -134,8 +140,8 @@
         layout="@layout/wp_stats"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonWP"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/titleStart"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/includeIcons3"
         app:layout_constraintTop_toBottomOf="@+id/titleWP" />
@@ -143,25 +149,18 @@
     <ImageButton
         android:id="@+id/buttonWP"
         style="@style/panelButton"
-        android:layout_width="0dp"
+        android:layout_width="35dp"
         android:layout_height="0dp"
+        android:background="@drawable/button_green_ripple_tlr"
+        android:contentDescription="@string/cont_desc_wp_btn"
+        android:onClick="buttonWPOnClick"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:scaleType="fitCenter"
+        android:tint="@color/colorGreenMilitary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/titleWP"
-        app:layout_constraintTop_toBottomOf="@+id/includeWPStats"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCP"
         app:srcCompat="@drawable/baseline_place_24" />
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:background="@color/colorGray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/titleStart"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

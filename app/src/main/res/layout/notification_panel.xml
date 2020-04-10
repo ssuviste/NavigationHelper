@@ -1,206 +1,324 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorGlass">
+    android:maxHeight="150dp"
+    android:orientation="vertical"
+    android:scrollbarSize="4dp">
 
     <TextView
-        android:id="@+id/titleStart"
-        style="@style/panelTitle"
-        android:layout_width="0dp"
+        android:id="@+id/appName"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="1"
+        android:drawableStart="@drawable/baseline_gps_fixed_primary_dark_24"
+        android:drawablePadding="5dp"
+        android:gravity="center_vertical"
+        android:text="@string/app_name"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="12sp"
+        app:drawableTint="@color/colorPrimaryDark" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/from_start"
-        app:layout_constraintBottom_toTopOf="@+id/borderH2"
-        app:layout_constraintEnd_toStartOf="@+id/borderV2"
-        app:layout_constraintStart_toEndOf="@+id/borderV1" />
+        android:background="@drawable/borders_t"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/titleCP"
-        style="@style/panelTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/from_cp"
-        app:layout_constraintBottom_toTopOf="@+id/borderH2"
-        app:layout_constraintEnd_toStartOf="@+id/borderV3"
-        app:layout_constraintStart_toEndOf="@+id/borderV2" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/borders_r"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/titleWP"
-        style="@style/panelTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/from_wp"
-        app:layout_constraintBottom_toTopOf="@+id/borderH2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/borderV3" />
+            <TextView
+                android:id="@+id/emptyCell1"
+                style="@style/panelTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp" />
 
-    <ImageButton
-        android:id="@+id/buttonStartStop"
-        style="@style/panelButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:onClick="buttonStartStopOnClick"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/borderV2"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@id/borderV4"
-        app:layout_constraintTop_toTopOf="@+id/includeStartStats"
-        app:srcCompat="@drawable/baseline_play_arrow_24" />
+            <TextView
+                android:id="@+id/walkDistIcon"
+                style="@style/panelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:drawableStart="@drawable/baseline_directions_run_black_18"
+                android:drawablePadding="2dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp" />
 
-    <ImageButton
-        android:id="@+id/buttonCP"
-        style="@style/panelButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/borderV3"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/includeCPStats"
-        app:layout_constraintTop_toTopOf="@+id/includeCPStats"
-        app:srcCompat="@drawable/baseline_beenhere_24" />
+            <TextView
+                android:id="@+id/flyDistIcon"
+                style="@style/panelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:drawableStart="@drawable/baseline_flight_black_18"
+                android:drawablePadding="2dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp" />
 
-    <ImageButton
-        android:id="@+id/buttonWP"
-        style="@style/panelButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/includeWPStats"
-        app:layout_constraintTop_toTopOf="@+id/includeWPStats"
-        app:srcCompat="@drawable/baseline_place_24" />
+            <TextView
+                android:id="@+id/timeIcon"
+                style="@style/panelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:drawableStart="@drawable/baseline_schedule_black_18"
+                android:drawablePadding="2dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp" />
 
-    <include
-        android:id="@+id/includeIcons"
-        layout="@layout/icons"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/borderV1"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/includeStartStats" />
+            <TextView
+                android:id="@+id/speedIcon"
+                style="@style/panelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:drawableStart="@drawable/baseline_speed_black_18"
+                android:drawablePadding="2dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp" />
 
-    <include
-        android:id="@+id/includeStartStats"
-        layout="@layout/start_stats"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/borderV4"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/borderV1" />
+            <TextView
+                android:id="@+id/emptyCell2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_lightgray_borders_tb" />
 
-    <include
-        android:id="@+id/includeCPStats"
-        layout="@layout/cp_stats"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonCP"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/borderV2"
-        app:layout_constraintTop_toTopOf="@+id/includeStartStats" />
+        </LinearLayout>
 
-    <include
-        android:id="@+id/includeWPStats"
-        layout="@layout/cp_stats"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonWP"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/borderV3"
-        app:layout_constraintTop_toTopOf="@+id/includeCPStats" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-    <View
-        android:id="@+id/borderH1"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@color/colorGray"
-        app:layout_constraintBottom_toTopOf="@+id/titleCP"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:id="@+id/titleStart"
+                style="@style/panelTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/from_start" />
 
-    <View
-        android:id="@+id/borderH2"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@color/colorGray"
-        app:layout_constraintBottom_toTopOf="@+id/includeStartStats"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:id="@+id/walkDistStart"
+                style="@style/panelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/init_dist" />
 
-    <View
-        android:id="@+id/borderV1"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:background="@color/colorGray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/includeStartStats"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/includeIcons"
-        app:layout_constraintTop_toBottomOf="@+id/borderH1" />
+            <TextView
+                android:id="@+id/flyDistStart"
+                style="@style/panelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/init_dist" />
 
-    <View
-        android:id="@+id/borderV2"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:background="@color/colorGray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/includeCPStats"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonStartStop"
-        app:layout_constraintTop_toBottomOf="@+id/borderH1" />
+            <TextView
+                android:id="@+id/timeStart"
+                style="@style/panelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/init_time" />
 
-    <View
-        android:id="@+id/borderV3"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:background="@color/colorGray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/includeWPStats"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonCP"
-        app:layout_constraintTop_toBottomOf="@+id/borderH1" />
+            <TextView
+                android:id="@+id/speedStart"
+                style="@style/panelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/init_speed" />
 
-    <View
-        android:id="@+id/borderV4"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:background="@color/colorGray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonStartStop"
-        app:layout_constraintStart_toEndOf="@+id/includeStartStats"
-        app:layout_constraintTop_toBottomOf="@+id/borderH2"
-        app:layout_constraintVertical_bias="0.0" />
+            <TextView
+                android:id="@+id/emptyCell3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_lightgray_borders_tb" />
 
-    <View
-        android:id="@+id/borderV5"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:background="@color/colorGray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonCP"
-        app:layout_constraintStart_toEndOf="@+id/includeCPStats"
-        app:layout_constraintTop_toBottomOf="@+id/borderH2"
-        app:layout_constraintVertical_bias="0.0" />
+        </LinearLayout>
 
-    <View
-        android:id="@+id/borderV6"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:background="@color/colorGray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonWP"
-        app:layout_constraintStart_toEndOf="@+id/includeWPStats"
-        app:layout_constraintTop_toBottomOf="@+id/borderH2"
-        app:layout_constraintVertical_bias="0.0" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/borders_l"
+            android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/titleCP"
+                style="@style/panelTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/from_cp" />
+
+            <TextView
+                android:id="@+id/walkDistCP"
+                style="@style/panelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/init_dist" />
+
+            <TextView
+                android:id="@+id/flyDistCP"
+                style="@style/panelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/init_dist" />
+
+            <TextView
+                android:id="@+id/timeCP"
+                style="@style/panelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/init_time" />
+
+            <TextView
+                android:id="@+id/speedCP"
+                style="@style/panelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/init_speed" />
+
+            <Button
+                android:id="@+id/buttonCP"
+                style="@style/panelButton"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="4dp"
+                android:drawableStart="@drawable/baseline_beenhere_green_24"
+                android:text="@string/cont_desc_cp_btn" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/borders_l"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/titleWP"
+                style="@style/panelTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/from_wp" />
+
+            <TextView
+                android:id="@+id/walkDistWP"
+                style="@style/panelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/init_dist" />
+
+            <TextView
+                android:id="@+id/flyDistWP"
+                style="@style/panelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/init_dist" />
+
+            <TextView
+                android:id="@+id/timeWP"
+                style="@style/panelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/init_time" />
+
+            <TextView
+                android:id="@+id/speedWP"
+                style="@style/panelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/init_speed" />
+
+            <Button
+                android:id="@+id/buttonWP"
+                style="@style/panelButton"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="4dp"
+                android:drawableStart="@drawable/baseline_place_green_24"
+                android:text="@string/cont_desc_wp_btn" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

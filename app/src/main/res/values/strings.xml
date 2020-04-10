@@ -1,15 +1,35 @@
 <resources>
-    <string name="app_name">NavigationHelper</string>
+    <string name="app_name">Navigation Helper</string>
     <string name="title_activity_maps">Map</string>
+
     <string name="from_start">From Start</string>
     <string name="from_cp">From CP</string>
     <string name="from_wp">From WP</string>
-    <string name="unit_dist">m</string>
-    <string name="unit_time">hh:mm:ss</string>
-    <string name="unit_speed">mm:ss/km</string>
+
+    <string name="cont_desc_ss_btn">Start/Stop</string>
+    <string name="cont_desc_cp_btn">Add CP</string>
+    <string name="cont_desc_wp_btn">Add WP</string>
+    <string name="cont_desc_walk_icon">Total Dist</string>
+    <string name="cont_desc_fly_icon">Direct Dist</string>
+    <string name="cont_desc_time_icon">Time</string>
+    <string name="cont_desc_speed_icon">Speed</string>
+    <string name="cont_desc_compass_btn">Compass</string>
+    <string name="cont_dest_up_dir_btn">Up Direction</string>
+    <string name="cont_desc_rewind_btn">Rewind</string>
+    <string name="cont_desc_menu_btn">Menu</string>
+
+    <string name="unit_dist">&#160;m</string>
+    <string name="unit_speed">/km</string>
+
     <string name="init_dist">0 m</string>
     <string name="init_time">00:00:00</string>
     <string name="init_speed">00:00/km</string>
-    <string name="start_on_press">Tracking started!</string>
-    <string name="stop_on_press">Tracking stopped!</string>
+
+    <string name="tracking_started">Tracking started!</string>
+    <string name="tracking_stopped">Tracking stopped!</string>
+    <string name="up_dir_north">Up direction: North</string>
+    <string name="up_dir_direction">Up direction: Real direction</string>
+    <string name="up_dir_user_chosen">Up direction: User chosen</string>
+    <string name="center_enabled">Centering: Enabled</string>
+    <string name="center_disabled">Centering: Disabled</string>
 </resources>

@@ -9,13 +9,16 @@
     </style>
 
     <style name="panelTitle">
-        <item name="android:textStyle">bold</item>
-        <item name="autoSizeMaxTextSize">64sp</item>
-        <item name="android:maxLines">1</item>
         <item name="autoSizeTextType">uniform</item>
         <item name="autoSizeMinTextSize">1sp</item>
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="autoSizeMaxTextSize">64sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/colorGreenMilitary</item>
+        <item name="android:gravity">end</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingEnd">4dp</item>
     </style>
 
     <style name="panelText">
@@ -26,20 +29,34 @@
         <item name="android:fontFamily">monospace</item>
         <item name="android:gravity">center_vertical|end</item>
         <item name="android:textColor">@color/colorGray</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingEnd">4dp</item>
     </style>
 
     <style name="panelIcon">
         <item name="android:tint">@color/colorGray</item>
     </style>
 
-    <style name="panelButton" parent="Widget.AppCompat.ImageButton">
-        <item name="backgroundTint">@color/colorMilitaryGreen</item>
+    <style name="panelButton">
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">1sp</item>
+        <item name="autoSizeMaxTextSize">14sp</item>
+        <item name="android:textAlignment">viewEnd</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorGreenMilitary</item>
+        <item name="android:background">@drawable/button_green_ripple_tbl</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingEnd">4dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
     </style>
 
     <style name="glassToast">
+        <item name="stGravity">center</item>
         <item name="stColorBackground">@color/colorGlassFoggy</item>
         <item name="stTextColor">@android:color/tab_indicator_text</item>
-        <item name="stGravity">center</item>
+        <item name="stRadius">15dp</item>
     </style>
 
 </resources>
