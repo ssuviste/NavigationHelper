@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.*
 import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.*
 import androidx.appcompat.app.AppCompatActivity
@@ -20,10 +21,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Polyline
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.material.snackbar.Snackbar
 import com.muddzdev.styleabletoast.StyleableToast
 import kotlinx.android.synthetic.main.bottom_panel.*
@@ -49,7 +47,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var trackPolyline: Polyline
     private lateinit var trackPolylineOptions: PolylineOptions
+
     private var track = ArrayList<LatLng>()
+    private var allCPs = ArrayList<LatLng>()
+    private var allCPMarkers = ArrayList<Marker>()
+    private var locationWP: Location? = null
+    private var locationWPMarker: Marker? = null
 
     private var toastedBtnLastClickTime = 0L
 
@@ -134,56 +137,60 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.d(TAG, "onSaveInstanceState")
         super.onSaveInstanceState(outState)
 
-        outState.putParcelableArrayList(C.TRACK_KEY, track)
+        outState.putParcelableArrayList(C.RES_TRACK_KEY, track)
+        outState.putParcelableArrayList(C.RES_CPS_KEY, allCPs)
+        outState.putParcelable(C.RES_WP, locationWP)
 
-        outState.putString(C.WALK_DIST_START_KEY, walkDistStart.text.toString())
-        outState.putString(C.FLY_DIST_START_KEY, flyDistStart.text.toString())
-        outState.putString(C.TIME_START_KEY, timeStart.text.toString())
-        outState.putString(C.SPEED_START_KEY, speedStart.text.toString())
+        outState.putString(C.RES_WALK_DIST_START_KEY, walkDistStart.text.toString())
+        outState.putString(C.RES_FLY_DIST_START_KEY, flyDistStart.text.toString())
+        outState.putString(C.RES_TIME_START_KEY, timeStart.text.toString())
+        outState.putString(C.RES_SPEED_START_KEY, speedStart.text.toString())
 
-        outState.putString(C.WALK_DIST_CP_KEY, walkDistCP.text.toString())
-        outState.putString(C.FLY_DIST_CP_KEY, flyDistCP.text.toString())
-        outState.putString(C.TIME_CP_KEY, timeCP.text.toString())
-        outState.putString(C.SPEED_CP_KEY, speedCP.text.toString())
+        outState.putString(C.RES_WALK_DIST_CP_KEY, walkDistCP.text.toString())
+        outState.putString(C.RES_FLY_DIST_CP_KEY, flyDistCP.text.toString())
+        outState.putString(C.RES_TIME_CP_KEY, timeCP.text.toString())
+        outState.putString(C.RES_SPEED_CP_KEY, speedCP.text.toString())
 
-        outState.putString(C.WALK_DIST_WP_KEY, walkDistWP.text.toString())
-        outState.putString(C.FLY_DIST_WP_KEY, flyDistWP.text.toString())
-        outState.putString(C.TIME_WP_KEY, timeWP.text.toString())
-        outState.putString(C.SPEED_WP_KEY, speedWP.text.toString())
+        outState.putString(C.RES_WALK_DIST_WP_KEY, walkDistWP.text.toString())
+        outState.putString(C.RES_FLY_DIST_WP_KEY, flyDistWP.text.toString())
+        outState.putString(C.RES_TIME_WP_KEY, timeWP.text.toString())
+        outState.putString(C.RES_SPEED_WP_KEY, speedWP.text.toString())
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         Log.d(TAG, "onRestoreInstanceState")
         super.onRestoreInstanceState(savedInstanceState)
 
-        track = savedInstanceState.getParcelableArrayList(C.TRACK_KEY)!!
+        track = savedInstanceState.getParcelableArrayList(C.RES_TRACK_KEY)!!
+        allCPs = savedInstanceState.getParcelableArrayList(C.RES_CPS_KEY)!!
+        locationWP = savedInstanceState.getParcelable(C.RES_WP)
 
         walkDistStart.text =
-            savedInstanceState.getString(C.WALK_DIST_START_KEY, R.string.init_dist.toString())
+            savedInstanceState.getString(C.RES_WALK_DIST_START_KEY, R.string.init_dist.toString())
         flyDistStart.text =
-            savedInstanceState.getString(C.FLY_DIST_START_KEY, R.string.init_dist.toString())
+            savedInstanceState.getString(C.RES_FLY_DIST_START_KEY, R.string.init_dist.toString())
         timeStart.text =
-            savedInstanceState.getString(C.TIME_START_KEY, R.string.init_time.toString())
+            savedInstanceState.getString(C.RES_TIME_START_KEY, R.string.init_time.toString())
         speedStart.text =
-            savedInstanceState.getString(C.SPEED_START_KEY, R.string.init_speed.toString())
+            savedInstanceState.getString(C.RES_SPEED_START_KEY, R.string.init_speed.toString())
 
         walkDistCP.text =
-            savedInstanceState.getString(C.WALK_DIST_CP_KEY, R.string.init_dist.toString())
+            savedInstanceState.getString(C.RES_WALK_DIST_CP_KEY, R.string.init_dist.toString())
         flyDistCP.text =
-            savedInstanceState.getString(C.FLY_DIST_CP_KEY, R.string.init_dist.toString())
+            savedInstanceState.getString(C.RES_FLY_DIST_CP_KEY, R.string.init_dist.toString())
         timeCP.text =
-            savedInstanceState.getString(C.TIME_CP_KEY, R.string.init_time.toString())
+            savedInstanceState.getString(C.RES_TIME_CP_KEY, R.string.init_time.toString())
         speedCP.text =
-            savedInstanceState.getString(C.SPEED_CP_KEY, R.string.init_speed.toString())
+            savedInstanceState.getString(C.RES_SPEED_CP_KEY, R.string.init_speed.toString())
 
         walkDistWP.text =
-            savedInstanceState.getString(C.WALK_DIST_WP_KEY, R.string.init_dist.toString())
+            savedInstanceState.getString(C.RES_WALK_DIST_WP_KEY, R.string.init_dist.toString())
         flyDistWP.text =
-            savedInstanceState.getString(C.FLY_DIST_WP_KEY, R.string.init_dist.toString())
+            savedInstanceState.getString(C.RES_FLY_DIST_WP_KEY, R.string.init_dist.toString())
         timeWP.text =
-            savedInstanceState.getString(C.TIME_WP_KEY, R.string.init_time.toString())
+            savedInstanceState.getString(C.RES_TIME_WP_KEY, R.string.init_time.toString())
         speedWP.text =
-            savedInstanceState.getString(C.SPEED_WP_KEY, R.string.init_speed.toString())
+            savedInstanceState.getString(C.RES_SPEED_WP_KEY, R.string.init_speed.toString())
     }
 
     override fun onRequestPermissionsResult(
@@ -232,6 +239,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         trackPolylineOptions = PolylineOptions()
             .color(ContextCompat.getColor(this, R.color.colorGreenGlass))
         trackPolyline = mMap.addPolyline(trackPolylineOptions)
+        updateTrack()
+        updateUI()
 
         // Add a marker in Sydney and move the camera
         //val sydney = LatLng(-34.0, 151.0)
@@ -240,7 +249,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if (checkPermissions()) {
             mMap.isMyLocationEnabled = true
         }
-        updateUI()
     }
 
     private fun createNotificationChannel() {
@@ -347,9 +355,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     }
                 }
                 C.TRACKING_UPDATE -> {
-                    val newTrack = intent.getParcelableArrayListExtra<LatLng>(C.TCK_UPD_TRACK_KEY)
-                    if (newTrack != null) {
-                        track = newTrack
+                    val updTrack = intent.getParcelableArrayListExtra<LatLng>(C.TCK_UPD_TRACK_KEY)
+                    val updAllCPs = intent.getParcelableArrayListExtra<LatLng>(C.TCK_UPD_CPS_KEY)
+                    val updLocationWP = intent.getParcelableExtra<Location?>(C.TCK_UPD_WP_KEY)
+                    if (updTrack != null && updAllCPs != null) {
+                        track = updTrack
+                        allCPs = updAllCPs
+                        if (updLocationWP != null) {
+                            locationWP = updLocationWP
+                        }
                         updateTrack()
                     }
 
@@ -381,11 +395,36 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun resetTrack() {
         track.clear()
+        allCPs.clear()
+        allCPMarkers.clear()
+        locationWP = null
+        mMap.clear()
+        trackPolyline = mMap.addPolyline(trackPolylineOptions)
         trackPolyline.points = track
     }
 
     private fun updateTrack() {
         trackPolyline.points = track
+        var addableMarkerCount = allCPs.size - allCPMarkers.size
+        while (addableMarkerCount > 0) {
+            val cpMarker = MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_beenhere_black_36))
+            allCPMarkers.add(mMap.addMarker(cpMarker.position(allCPs[allCPMarkers.size])))
+            addableMarkerCount--
+        }
+        if (locationWP != null) {
+            val markerWP = MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_place_black_36))
+            if (locationWPMarker == null) {
+                locationWPMarker = mMap.addMarker(markerWP
+                    .position(LatLng(locationWP!!.latitude, locationWP!!.longitude)))
+            } else if (locationWPMarker!!.position.latitude != locationWP!!.latitude
+                || locationWPMarker!!.position.longitude != locationWP!!.longitude) {
+                locationWPMarker!!.remove()
+                locationWPMarker = mMap.addMarker(markerWP
+                    .position(LatLng(locationWP!!.latitude, locationWP!!.longitude)))
+            }
+        }
     }
 
     private fun resetBottomPanelStats() {
@@ -465,7 +504,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if (locationServiceActive) {
             resetTrack()
             resetBottomPanelStats()
-            sendBroadcast(Intent(C.ENABLE_TRACKING))
         } else {
             sendBroadcast(Intent(C.DISABLE_TRACKING))
             //TODO: Save track

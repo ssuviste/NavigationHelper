@@ -6,10 +6,9 @@ class C {
         const val NOTIFICATION_ACTION_CP = "notification_action.cp"
         const val NOTIFICATION_ACTION_WP = "notification_action.wp"
 
-        const val TIMER_ACTION = "timer_action"
-
-        const val ENABLE_TRACKING = "enable_tracking"
         const val DISABLE_TRACKING = "disable_tracking"
+
+        const val TIMER_ACTION = "timer_action"
 
         const val LOCATION_UPDATE = "location_update"
 
@@ -20,6 +19,8 @@ class C {
         const val TRACKING_UPDATE = "tracking_update"
 
         const val TCK_UPD_TRACK_KEY = "tracking_update.track"
+        const val TCK_UPD_CPS_KEY = "tracking_update.all_cps"
+        const val TCK_UPD_WP_KEY = "tracking_update.wp"
 
         const val TCK_UPD_WALK_DIST_START_KEY = "tracking_update.walk_distance_start"
         const val TCK_UPD_FLY_DIST_START_KEY = "tracking_update.fly_distance_start"
@@ -36,26 +37,28 @@ class C {
         const val TCK_UPD_TIME_WP_KEY = "tracking_update.time_wp"
         const val TCK_UPD_SPEED_WP_KEY = "tracking_update.speed_wp"
 
-        const val LOCATION_SERVICE_STATE_KEY = "tracking_service_state"
-        const val COMPASS_STATE_KEY = "compass_state"
-        const val UP_DIR_STATE_KEY = "up_dir_state"
+        const val RES_LOCATION_SERVICE_STATE_KEY = "tracking_service_state"
+        const val RES_COMPASS_STATE_KEY = "compass_state"
+        const val RES_UP_DIR_STATE_KEY = "up_dir_state"
 
-        const val TRACK_KEY = "track"
+        const val RES_TRACK_KEY = "restore.track"
+        const val RES_CPS_KEY = "restore.all_cps"
+        const val RES_WP = "restore.wp"
 
-        const val WALK_DIST_START_KEY = "walk_distance_start"
-        const val FLY_DIST_START_KEY = "fly_distance_start"
-        const val TIME_START_KEY = "time_start"
-        const val SPEED_START_KEY = "speed_start"
+        const val RES_WALK_DIST_START_KEY = "restore.walk_distance_start"
+        const val RES_FLY_DIST_START_KEY = "restore.fly_distance_start"
+        const val RES_TIME_START_KEY = "restore.time_start"
+        const val RES_SPEED_START_KEY = "restore.speed_start"
 
-        const val WALK_DIST_CP_KEY = "walk_distance_cp"
-        const val FLY_DIST_CP_KEY = "fly_distance_cp"
-        const val TIME_CP_KEY = "time_cp"
-        const val SPEED_CP_KEY = "speed_cp"
+        const val RES_WALK_DIST_CP_KEY = "restore.walk_distance_cp"
+        const val RES_FLY_DIST_CP_KEY = "restore.fly_distance_cp"
+        const val RES_TIME_CP_KEY = "restore.time_cp"
+        const val RES_SPEED_CP_KEY = "restore.speed_cp"
 
-        const val WALK_DIST_WP_KEY = "walk_distance_wp"
-        const val FLY_DIST_WP_KEY = "fly_distance_wp"
-        const val TIME_WP_KEY = "time_wp"
-        const val SPEED_WP_KEY = "speed_wp"
+        const val RES_WALK_DIST_WP_KEY = "restore.walk_distance_wp"
+        const val RES_FLY_DIST_WP_KEY = "restore.fly_distance_wp"
+        const val RES_TIME_WP_KEY = "restore.time_wp"
+        const val RES_SPEED_WP_KEY = "restore.speed_wp"
 
         const val LOC_UPD_INTERVAL_IN_MILLISECONDS = 2000L
         const val LOC_FASTEST_UPD_INTERVAL_IN_MILLISECONDS = LOC_UPD_INTERVAL_IN_MILLISECONDS / 2

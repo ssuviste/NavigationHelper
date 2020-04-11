@@ -42,6 +42,7 @@ class LocationService : Service() {
 
     private var trackingEnabled = false
     private var track = ArrayList<LatLng>()
+    private var allCPs = ArrayList<LatLng>()
 
     private var locationStart: Location? = null
     private var walkDistStart = 0f
@@ -66,7 +67,6 @@ class LocationService : Service() {
         Log.d(TAG, "onCreate")
         super.onCreate()
 
-        broadcastReceiverIntentFilter.addAction(C.ENABLE_TRACKING)
         broadcastReceiverIntentFilter.addAction(C.DISABLE_TRACKING)
         broadcastReceiverIntentFilter.addAction(C.NOTIFICATION_ACTION_CP)
         broadcastReceiverIntentFilter.addAction(C.NOTIFICATION_ACTION_WP)
@@ -112,11 +112,16 @@ class LocationService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "onStartCommand")
 
-        // set counters and locations to 0/null
+        trackingEnabled = true
+
+        // set counters and locations to initial state
         currentLocation = null
         locationStart = null
         locationCP = null
         locationWP = null
+
+        track.clear()
+        allCPs.clear()
 
         walkDistStart = 0f
         flyDistStart = 0f
@@ -133,9 +138,8 @@ class LocationService : Service() {
         timeWP = 0L
         speedWP = 0L
 
-        if (trackingEnabled) {
-            showNotification()
-        }
+        toggleTimerService(trackingEnabled)
+        showNotification()
 
         return START_STICKY
         //return super.onStartCommand(intent, flags, startId)
@@ -257,6 +261,8 @@ class LocationService : Service() {
         // broadcast new location to UI
         val intent = Intent(C.TRACKING_UPDATE)
         intent.putExtra(C.TCK_UPD_TRACK_KEY, track)
+        intent.putExtra(C.TCK_UPD_CPS_KEY, allCPs)
+        intent.putExtra(C.TCK_UPD_WP_KEY, locationWP)
 
         intent.putExtra(C.TCK_UPD_WALK_DIST_START_KEY, "%.0f".format(walkDistStart) + getString(R.string.unit_dist))
         intent.putExtra(C.TCK_UPD_FLY_DIST_START_KEY, "%.0f".format(flyDistStart) + getString(R.string.unit_dist))
@@ -358,33 +364,30 @@ class LocationService : Service() {
         override fun onReceive(context: Context?, intent: Intent?) {
             Log.d(TAG, intent!!.action!!)
             when(intent.action) {
-                C.ENABLE_TRACKING -> {
-                    trackingEnabled = true
-                    toggleTimerService(trackingEnabled)
-                }
                 C.DISABLE_TRACKING -> {
                     trackingEnabled = false
                     toggleTimerService(trackingEnabled)
                     cancelAllNotifications()
                 }
                 C.NOTIFICATION_ACTION_CP -> {
-                    locationCP = currentLocation
-                    walkDistCP = 0f
-                    flyDistCP = 0f
-                    timeCP = 0L
-                    speedCP = 0L
-                    if (trackingEnabled) {
-                        showNotification()
+                    if (trackingEnabled && currentLocation != null) {
+                        locationCP = currentLocation
+                        allCPs.add(LatLng(locationCP!!.latitude, locationCP!!.longitude))
+                        walkDistCP = 0f
+                        flyDistCP = 0f
+                        timeCP = 0L
+                        speedCP = 0L
+                        showTrack()
                     }
                 }
                 C.NOTIFICATION_ACTION_WP -> {
-                    locationWP = currentLocation
-                    walkDistWP = 0f
-                    flyDistWP = 0f
-                    timeWP = 0L
-                    speedWP = 0L
-                    if (trackingEnabled) {
-                        showNotification()
+                    if (trackingEnabled && currentLocation != null) {
+                        locationWP = currentLocation
+                        walkDistWP = 0f
+                        flyDistWP = 0f
+                        timeWP = 0L
+                        speedWP = 0L
+                        showTrack()
                     }
                 }
                 C.TIMER_ACTION -> {
