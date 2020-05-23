@@ -6,10 +6,13 @@
 
     <color name="colorGray">#6E6E6E</color>
     <color name="colorLightGray">#D7D7D7</color>
+    <color name="colorWhite">#FFFFFF</color>
 
     <color name="colorGreenGlass">#800F9D7C</color>
     <color name="colorGreenMilitary">#007868</color>
 
+    <color name="colorBlueGoogle">#4C8BF5</color>
+
     <color name="colorGlass">#A6E0EEEE</color>
-    <color name="colorGlassFoggy">#D9D4E4E4</color>
+    <color name="colorGlassFoggy">#D9767E7E</color>
 </resources>

@@ -2,6 +2,73 @@
     <string name="app_name">Navigation Helper</string>
     <string name="title_activity_maps">Map</string>
 
+    <string name="new_session">New Session</string>
+    <string name="current_session">Current Session</string>
+    <string name="history">Past Sessions</string>
+    <string name="preferences">Preferences</string>
+    <string name="help">Help</string>
+
+    <string name="logged_out">Currently logged out</string>
+    <string name="current_user">Current user:</string>
+    <string name="email_unknown">unknown</string>
+
+    <string name="login">Log In</string>
+    <string name="logout">Log Out</string>
+    <string name="register">Register</string>
+
+    <string name="login_success">Login successful!</string>
+    <string name="login_fail">Login failed!</string>
+    <string name="register_success">Registration successful!</string>
+    <string name="register_fail">Registration failed!</string>
+
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+
+    <string name="sync_data_to_server">Sync data to server</string>
+    <string name="sync_interval">Syncing interval (s)</string>
+    <string name="track_gradient">Track gradient</string>
+    <string name="gradient_pace_range">Gradient pace range (min/km)</string>
+    <string name="zero">0</string>
+    <string name="five">5</string>
+    <string name="sixty">60</string>
+    <string name="three_dots">&#8230;</string>
+
+    <string name="session_title">Session title</string>
+    <string name="date">Date:</string>
+    <string name="checkpoints">Checkpoints:</string>
+    <string name="date_sample">31.12.2000 12:00:00</string>
+
+    <string name="help_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ac
+        mauris sed turpis efficitur maximus. Donec lobortis fermentum risus in accumsan. Integer
+        suscipit nisi quis augue mollis dapibus malesuada quis elit. Nam semper tortor libero, ut
+        ullamcorper dui semper et. Nunc ut velit sit amet elit gravida sodales ac nec enim. Cras eu
+        vulputate lorem, vel rhoncus libero. Quisque consequat cursus nunc at convallis.\n\nNulla
+        sed ex eget ex convallis fringilla. Sed facilisis sit amet nisl eget porta. Nullam ac
+        suscipit sem. Proin gravida felis velit, vel efficitur lectus placerat a. Nam bibendum lorem
+        sapien, a luctus turpis porta ac. Proin sed efficitur nisl. Mauris metus massa, ullamcorper
+        at bibendum bibendum, vulputate maximus felis. Fusce dictum diam viverra lorem molestie
+        convallis. In et gravida lectus. Pellentesque nec justo vitae ante porta eleifend. Duis
+        accumsan feugiat nulla sed facilisis. Mauris fermentum egestas bibendum. Cras sodales leo
+        vitae maximus volutpat. Pellentesque viverra ex quis lacinia rhoncus.\n\nIn mattis fringilla
+        ultrices. Curabitur tempor lacinia ligula. Maecenas justo justo, consequat ac metus vel,
+        faucibus elementum sem. Donec luctus tempus congue. Morbi commodo quam vitae turpis accumsan
+        scelerisque. Vivamus laoreet est vel venenatis venenatis. Cras gravida nulla quis venenatis
+        varius. Nullam mollis tincidunt vehicula.\n\nVestibulum vehicula sem vel condimentum
+        rhoncus. Duis vel semper enim, nec rhoncus enim. Pellentesque ultricies est elit, vel
+        consequat mauris porttitor sollicitudin. Nam ante massa, facilisis quis orci ac, malesuada
+        suscipit felis. Sed placerat eget nibh eget feugiat. Maecenas non vehicula lacus.
+        Suspendisse turpis metus, ultricies eu ipsum eu, aliquet facilisis odio. Praesent sagittis
+        mi non laoreet accumsan. Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nAenean
+        gravida ex velit, sed vestibulum orci imperdiet vitae. Nam erat ante, semper ut aliquam non,
+        commodo sed metus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
+        inceptos himenaeos. In id lacus quis metus consectetur commodo ut sed magna. Sed at
+        fringilla ligula. Etiam turpis arcu, dignissim at rhoncus viverra, cursus in ex. Sed at nibh
+        ut orci ultricies rutrum. Sed molestie augue non ex euismod mollis. Aenean ullamcorper metus
+        augue, eu posuere velit pulvinar ac. Proin blandit nisl et consectetur auctor. Nulla feugiat
+        quam vel nunc malesuada rutrum.</string>
+
     <string name="from_start">From Start</string>
     <string name="from_cp">From CP</string>
     <string name="from_wp">From WP</string>
@@ -14,9 +81,13 @@
     <string name="cont_desc_time_icon">Time</string>
     <string name="cont_desc_speed_icon">Speed</string>
     <string name="cont_desc_compass_btn">Compass</string>
-    <string name="cont_dest_up_dir_btn">Up Direction</string>
-    <string name="cont_desc_rewind_btn">Rewind</string>
+    <string name="cont_desc_up_dir_btn">Up Direction</string>
+    <string name="cont_desc_keep_centered_btn">Keep Centered</string>
+    <string name="cont_desc_edit_btn">Edit</string>
+    <string name="cont_desc_delete_btn">Delete</string>
+    <string name="cont_desc_email_btn">Email GPX</string>
     <string name="cont_desc_menu_btn">Menu</string>
+    <string name="cont_desc_track_icon">Track</string>
 
     <string name="unit_dist">&#160;m</string>
     <string name="unit_speed">/km</string>
@@ -25,11 +96,33 @@
     <string name="init_time">00:00:00</string>
     <string name="init_speed">00:00/km</string>
 
-    <string name="tracking_started">Tracking started!</string>
-    <string name="tracking_stopped">Tracking stopped!</string>
+    <string name="session_started">Session started!</string>
+    <string name="session_ended_saved">Session ended &amp; saved!</string>
+    <string name="save_failed">Saving failed!</string>
+    <string name="compass_enabled">Compass: Enabled</string>
+    <string name="compass_disabled">Compass: Disabled</string>
     <string name="up_dir_north">Up direction: North</string>
     <string name="up_dir_direction">Up direction: Real direction</string>
     <string name="up_dir_user_chosen">Up direction: User chosen</string>
     <string name="center_enabled">Centering: Enabled</string>
     <string name="center_disabled">Centering: Disabled</string>
+    <string name="preferences_locked">Locked during active session!</string>
+
+    <string name="end_session_question">End and save session?</string>
+    <string name="session_title_hint">Enter session title</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="auto_session_name">Unnamed session</string>
+
+    <string name="invalid_name">Name is required!</string>
+    <string name="invalid_email_empty">Email is required!</string>
+    <string name="invalid_email">Invalid email!</string>
+    <string name="invalid_pw_empty">Password is required!</string>
+    <string name="invalid_pw_ws">Password must not contain spaces!</string>
+    <string name="invalid_pw_length">Password must contain at least 6 characters!</string>
+    <string name="invalid_pw_uc_lc">Password must contain upper- and lowercase letters!</string>
+    <string name="invalid_pw_number">Password must contain at least 1 number!</string>
+    <string name="invalid_pw_special_char">Password must contain at least 1 special character!</string>
+
 </resources>

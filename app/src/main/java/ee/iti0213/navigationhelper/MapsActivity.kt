@@ -1,40 +1,54 @@
 package ee.iti0213.navigationhelper
 
 import android.Manifest
+import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.*
 import android.content.pm.PackageManager
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.location.Location
 import android.net.Uri
-import android.os.*
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
+import android.os.Bundle
+import android.os.IBinder
+import android.os.SystemClock
 import android.provider.Settings
+import android.text.InputType
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.CameraUpdateFactory
-
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.material.snackbar.Snackbar
-import com.muddzdev.styleabletoast.StyleableToast
+import ee.iti0213.navigationhelper.controller.CompassController
+import ee.iti0213.navigationhelper.helper.C
+import ee.iti0213.navigationhelper.helper.Common
+import ee.iti0213.navigationhelper.helper.State
+import ee.iti0213.navigationhelper.helper.UpDirection
+import ee.iti0213.navigationhelper.service.LocationService
+import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.bottom_panel.*
 import kotlinx.android.synthetic.main.cp_stats.*
 import kotlinx.android.synthetic.main.start_stats.*
 import kotlinx.android.synthetic.main.top_panel.*
 import kotlinx.android.synthetic.main.wp_stats.*
-import java.util.ArrayList
+import kotlin.collections.ArrayList
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     companion object {
         private val TAG = this::class.java.declaringClass!!.simpleName
-        private var locationServiceActive = false
         private var compassEnabled = false
         private var upDirectionState = UpDirection.USER_CHOSEN
         private var keepCenteredEnabled = false
@@ -44,17 +58,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private val broadcastReceiverIntentFilter: IntentFilter = IntentFilter()
 
     private lateinit var mMap: GoogleMap
+    private lateinit var compass: CompassController
 
-    private lateinit var trackPolyline: Polyline
-    private lateinit var trackPolylineOptions: PolylineOptions
 
-    private var track = ArrayList<LatLng>()
-    private var allCPs = ArrayList<LatLng>()
-    private var allCPMarkers = ArrayList<Marker>()
-    private var locationWP: Location? = null
-    private var locationWPMarker: Marker? = null
-
-    private var toastedBtnLastClickTime = 0L
+    private var track = ArrayList<Location>()
+    private var trackPolyLinesCount = 0
+    private var cpArray = ArrayList<Location>()
+    private var cpMarkersCount = 0
+    private var wp: Location? = null
+    private var wpMarker: Marker? = null
 
     private lateinit var mBoundService: LocationService
     private var mBound: Boolean = false
@@ -91,6 +103,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if (!checkPermissions()) {
             requestPermissions()
         }
+
+        val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        val magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+        val image = findViewById<ImageView>(R.id.imageViewCompass)
+        compass = CompassController(sensorManager, accelerometer, magnetometer, image)
     }
 
     override fun onStart() {
@@ -107,11 +125,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onResume()
         LocalBroadcastManager.getInstance(this)
             .registerReceiver(broadcastReceiver, broadcastReceiverIntentFilter)
+        compass.actOnResume()
     }
 
     override fun onPause() {
         Log.d(TAG, "onPause")
         super.onPause()
+        compass.actOnPause()
     }
 
     override fun onStop() {
@@ -138,8 +158,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onSaveInstanceState(outState)
 
         outState.putParcelableArrayList(C.RES_TRACK_KEY, track)
-        outState.putParcelableArrayList(C.RES_CPS_KEY, allCPs)
-        outState.putParcelable(C.RES_WP, locationWP)
+        outState.putParcelableArrayList(C.RES_CPS_KEY, cpArray)
+        outState.putParcelable(C.RES_WP, wp)
 
         outState.putString(C.RES_WALK_DIST_START_KEY, walkDistStart.text.toString())
         outState.putString(C.RES_FLY_DIST_START_KEY, flyDistStart.text.toString())
@@ -162,8 +182,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onRestoreInstanceState(savedInstanceState)
 
         track = savedInstanceState.getParcelableArrayList(C.RES_TRACK_KEY)!!
-        allCPs = savedInstanceState.getParcelableArrayList(C.RES_CPS_KEY)!!
-        locationWP = savedInstanceState.getParcelable(C.RES_WP)
+        cpArray = savedInstanceState.getParcelableArrayList(C.RES_CPS_KEY)!!
+        wp = savedInstanceState.getParcelable(C.RES_WP)
 
         walkDistStart.text =
             savedInstanceState.getString(C.RES_WALK_DIST_START_KEY, R.string.init_dist.toString())
@@ -236,10 +256,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         Log.d(TAG, "onMapReady")
         mMap = googleMap
-        trackPolylineOptions = PolylineOptions()
-            .color(ContextCompat.getColor(this, R.color.colorGreenGlass))
-        trackPolyline = mMap.addPolyline(trackPolylineOptions)
-        updateTrack()
+        /*trackPolylineOptions = PolylineOptions()
+            .color(ContextCompat.getColor(this, R.color.colorBlueGoogle))
+            .width(C.TRACK_WIDTH)
+        trackPolyline = mMap.addPolyline(trackPolylineOptions)*/
+        updateMap()
         updateUI()
 
         // Add a marker in Sydney and move the camera
@@ -309,8 +330,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun updateLocationServiceState() {
-        if (locationServiceActive) {
+    private fun updateSessionState() {
+        if (!State.sessionActive) {
             if (Build.VERSION.SDK_INT >= 26) {
                 // starting the FOREGROUND service
                 // service has to display non-dismissible notification within 5 secs
@@ -318,12 +339,63 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             } else {
                 startService(Intent(this, LocationService::class.java))
             }
-            showToastMsg(getString(R.string.tracking_started))
+            Common.showToastMsg(this, getString(R.string.session_started))
+            State.sessionActive = true
+            changeStartStopBtnIcon()
+            resetBottomPanelStats()
+            resetTrack()
         } else {
-            // stopping the service
-            stopService(Intent(this, LocationService::class.java))
-            showToastMsg(getString(R.string.tracking_stopped))
+            // ask for stopping confirmation
+            showStopTrackingConfirmationDialog()
         }
+    }
+
+    private fun showStopTrackingConfirmationDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(R.string.end_session_question)
+
+        val container = FrameLayout(this)
+        val params = FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        val input = EditText(this)
+        params.setMargins(52,24,52,24)
+        input.layoutParams = params
+        input.inputType = InputType.TYPE_CLASS_TEXT
+        input.hint = getString(R.string.session_title_hint)
+        container.addView(input)
+        builder.setView(container)
+
+        builder.setPositiveButton(getString(R.string.confirm)) { _, _ ->
+            run {
+                if (saveSessionToDB(input.text.toString())) {
+                    Common.showToastMsg(this, getString(R.string.session_ended_saved))
+                } else {
+                    Common.showToastMsg(this, getString(R.string.save_failed))
+                }
+                stopService(Intent(this, LocationService::class.java))
+                sendBroadcast(Intent(C.DISABLE_TRACKING))
+                State.sessionActive = false
+                changeStartStopBtnIcon()
+                updateMap()
+            }
+        }
+
+        builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+            run {
+                dialog.cancel()
+            }
+        }
+
+        builder.show()
+    }
+
+    private fun saveSessionToDB(name: String?): Boolean {
+        val sessionName = if (name.isNullOrBlank()) getString(R.string.auto_session_name) else name
+
+        //TODO: Save session to DB
+        return true
     }
 
     // BROADCAST RECEIVER
@@ -332,40 +404,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.d(TAG, intent!!.action!!)
             when (intent.action) {
                 C.LOCATION_UPDATE -> {
-                    val lat = intent.getDoubleExtra(C.LOC_UPD_LATITUDE_KEY, 0.0)
-                    val lng = intent.getDoubleExtra(C.LOC_UPD_LONGITUDE_KEY, 0.0)
-                    val target = if (keepCenteredEnabled && (lat != 0.0 || lng != 0.0)) {
-                        LatLng(lat, lng)
-                    } else {
-                        mMap.cameraPosition.target
-                    }
-                    val bearing = when (upDirectionState) {
-                        UpDirection.NORTH -> 0f
-                        UpDirection.DIRECTION -> intent.getFloatExtra(C.LOC_UPD_BEARING_KEY, 0f)
-                        UpDirection.USER_CHOSEN -> mMap.cameraPosition.bearing
-                    }
-                    if (target != mMap.cameraPosition.target || bearing != mMap.cameraPosition.bearing) {
-                        val cameraPosition = CameraPosition(
-                            target,
-                            mMap.cameraPosition.zoom,
-                            mMap.cameraPosition.tilt,
-                            bearing
-                        )
-                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
-                    }
+                    val loc = intent.extras!!.get(C.LOC_UPD_LOCATION_KEY) as Location
+                    updateCamera(loc)
                 }
                 C.TRACKING_UPDATE -> {
-                    val updTrack = intent.getParcelableArrayListExtra<LatLng>(C.TCK_UPD_TRACK_KEY)
-                    val updAllCPs = intent.getParcelableArrayListExtra<LatLng>(C.TCK_UPD_CPS_KEY)
+                    val updTrack = intent.getParcelableArrayListExtra<Location>(C.TCK_UPD_TRACK_KEY)
+                    val updAllCPs = intent.getParcelableArrayListExtra<Location>(C.TCK_UPD_CPS_KEY)
                     val updLocationWP = intent.getParcelableExtra<Location?>(C.TCK_UPD_WP_KEY)
                     if (updTrack != null && updAllCPs != null) {
                         track = updTrack
-                        allCPs = updAllCPs
-                        if (updLocationWP != null) {
-                            locationWP = updLocationWP
-                        }
-                        updateTrack()
+                        cpArray = updAllCPs
                     }
+                    if (updLocationWP != null) {
+                            wp = updLocationWP
+                    }
+                    updateMap()
 
                     walkDistStart.text = replaceNullString(intent.getStringExtra(C.TCK_UPD_WALK_DIST_START_KEY), getString(R.string.init_dist))
                     flyDistStart.text = replaceNullString(intent.getStringExtra(C.TCK_UPD_FLY_DIST_START_KEY), getString(R.string.init_dist))
@@ -386,6 +439,85 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    private fun updateCamera(loc: Location) {
+        val target = if (keepCenteredEnabled && (loc.latitude != 0.0 || loc.longitude != 0.0)) {
+            LatLng(loc.latitude, loc.longitude)
+        } else {
+            mMap.cameraPosition.target
+        }
+        val bearing = when (upDirectionState) {
+            UpDirection.NORTH -> 0f
+            UpDirection.DIRECTION -> loc.bearing
+            UpDirection.USER_CHOSEN -> mMap.cameraPosition.bearing
+        }
+        if (target != mMap.cameraPosition.target || bearing != mMap.cameraPosition.bearing) {
+            val cameraPosition = CameraPosition(
+                target,
+                mMap.cameraPosition.zoom,
+                mMap.cameraPosition.tilt,
+                bearing
+            )
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+        }
+    }
+
+    private fun updateMap() {
+        updateMapMarkers()
+        updateTrack()
+    }
+
+    private fun updateTrack() {
+        while (track.size - 1 > trackPolyLinesCount) {
+            val first = LatLng(track[trackPolyLinesCount].latitude, track[trackPolyLinesCount].longitude)
+            val second = LatLng(track[trackPolyLinesCount + 1].latitude, track[trackPolyLinesCount + 1].longitude)
+            val color = Common.getTrackColor(this, track[trackPolyLinesCount], track[trackPolyLinesCount + 1])
+            mMap.addPolyline(PolylineOptions().add(first, second).color(color).width(C.TRACK_WIDTH))
+            trackPolyLinesCount++
+        }
+    }
+
+    private fun updateMapMarkers() {
+        if (trackPolyLinesCount == 0 && track.size > 0) {
+            val marker = MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_fiber_manual_record_black_18))
+                .position(LatLng(track[0].latitude, track[0].longitude))
+                .anchor(0.5f, 0.5f)
+            mMap.addMarker(marker)
+        }
+        if (!State.sessionActive && track.size > 0) {
+            val marker = MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_flag_black_36))
+                .position(LatLng(track.last().latitude, track.last().longitude))
+                .anchor(0.25f, 0.85f)
+            mMap.addMarker(marker)
+        }
+        while (cpArray.size > cpMarkersCount) {
+            val marker = MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_beenhere_black_36))
+                .position(LatLng(cpArray[cpMarkersCount].latitude, cpArray[cpMarkersCount].longitude))
+                .anchor(0.5f, 0.9f)
+            mMap.addMarker(marker)
+            cpMarkersCount++
+        }
+        if (wp != null) {
+            if (wpMarker == null) {
+                val marker = MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_place_black_36))
+                    .anchor(0.5f, 0.9f)
+                wpMarker = mMap.addMarker(marker
+                    .position(LatLng(wp!!.latitude, wp!!.longitude)))
+            } else if (wpMarker!!.position.latitude != wp!!.latitude
+                || wpMarker!!.position.longitude != wp!!.longitude) {
+                val marker = MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_place_black_36))
+                    .anchor(0.5f, 0.9f)
+                wpMarker!!.remove()
+                wpMarker = mMap.addMarker(marker
+                    .position(LatLng(wp!!.latitude, wp!!.longitude)))
+            }
+        }
+    }
+
     private fun replaceNullString(input: String?, replacement: String): String {
         if (input == null) {
             return replacement
@@ -395,36 +527,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun resetTrack() {
         track.clear()
-        allCPs.clear()
-        allCPMarkers.clear()
-        locationWP = null
+        trackPolyLinesCount = 0
+        cpArray.clear()
+        cpMarkersCount = 0
+        wp = null
         mMap.clear()
-        trackPolyline = mMap.addPolyline(trackPolylineOptions)
-        trackPolyline.points = track
-    }
-
-    private fun updateTrack() {
-        trackPolyline.points = track
-        var addableMarkerCount = allCPs.size - allCPMarkers.size
-        while (addableMarkerCount > 0) {
-            val cpMarker = MarkerOptions()
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_beenhere_black_36))
-            allCPMarkers.add(mMap.addMarker(cpMarker.position(allCPs[allCPMarkers.size])))
-            addableMarkerCount--
-        }
-        if (locationWP != null) {
-            val markerWP = MarkerOptions()
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_place_black_36))
-            if (locationWPMarker == null) {
-                locationWPMarker = mMap.addMarker(markerWP
-                    .position(LatLng(locationWP!!.latitude, locationWP!!.longitude)))
-            } else if (locationWPMarker!!.position.latitude != locationWP!!.latitude
-                || locationWPMarker!!.position.longitude != locationWP!!.longitude) {
-                locationWPMarker!!.remove()
-                locationWPMarker = mMap.addMarker(markerWP
-                    .position(LatLng(locationWP!!.latitude, locationWP!!.longitude)))
-            }
-        }
+        //trackPolyline = mMap.addPolyline(trackPolylineOptions)
+        //trackPolyline.points = track
     }
 
     private fun resetBottomPanelStats() {
@@ -445,7 +554,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun changeStartStopBtnIcon() {
-        if (locationServiceActive) {
+        if (State.sessionActive) {
             buttonStartStop.setImageResource(R.drawable.baseline_stop_24)
         } else {
             buttonStartStop.setImageResource(R.drawable.baseline_play_arrow_24)
@@ -479,61 +588,48 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    private fun toggleCompass() {
+        compass.setVisible(compassEnabled)
+        if (!compassEnabled) {
+            imageViewCompass.clearAnimation()
+            imageViewCompass.visibility = View.INVISIBLE
+        }
+    }
+
     private fun updateUI() {
         changeStartStopBtnIcon()
         changeCompassBtnIcon()
         changeUpDirBtnIcon()
         changeKeepCenteredBtnIcon()
-        updateTrack()
-    }
-
-    private fun showToastMsg(msg: String) {
-        StyleableToast.makeText(this, msg, Toast.LENGTH_SHORT, R.style.glassToast).show()
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun buttonStartStopOnClick(view: View) {
-        if (SystemClock.elapsedRealtime() - toastedBtnLastClickTime < C.TOASTED_BTN_COOL_DOWN) {
-            return
-        }
-        toastedBtnLastClickTime = SystemClock.elapsedRealtime()
-
-        locationServiceActive = !locationServiceActive
-        updateLocationServiceState()
-        changeStartStopBtnIcon()
-        if (locationServiceActive) {
-            resetTrack()
-            resetBottomPanelStats()
-        } else {
-            sendBroadcast(Intent(C.DISABLE_TRACKING))
-            //TODO: Save track
-        }
+        toggleCompass()
+        updateMap()
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun buttonCompassOnClick(view: View) {
         compassEnabled = !compassEnabled
+        toggleCompass()
         changeCompassBtnIcon()
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun buttonUpDirOnClick(view: View) {
-        if (SystemClock.elapsedRealtime() - toastedBtnLastClickTime < C.TOASTED_BTN_COOL_DOWN) {
+        if (SystemClock.elapsedRealtime() - State.toastBtnLastClickTime < C.TOASTED_BTN_COOL_DOWN) {
             return
         }
-        toastedBtnLastClickTime = SystemClock.elapsedRealtime()
+        State.toastBtnLastClickTime = SystemClock.elapsedRealtime()
 
         upDirectionState = when (upDirectionState) {
             UpDirection.USER_CHOSEN -> {
-                showToastMsg(getString(R.string.up_dir_direction))
+                Common.showToastMsg(this, getString(R.string.up_dir_direction))
                 UpDirection.DIRECTION
             }
             UpDirection.DIRECTION -> {
-                showToastMsg(getString(R.string.up_dir_north))
+                Common.showToastMsg(this, getString(R.string.up_dir_north))
                 UpDirection.NORTH
             }
             UpDirection.NORTH -> {
-                showToastMsg(getString(R.string.up_dir_user_chosen))
+                Common.showToastMsg(this, getString(R.string.up_dir_user_chosen))
                 UpDirection.USER_CHOSEN
             }
         }
@@ -542,18 +638,28 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     @Suppress("UNUSED_PARAMETER")
     fun buttonKeepCenteredOnClick(view: View) {
-        if (SystemClock.elapsedRealtime() - toastedBtnLastClickTime < C.TOASTED_BTN_COOL_DOWN) {
+        if (SystemClock.elapsedRealtime() - State.toastBtnLastClickTime < C.TOASTED_BTN_COOL_DOWN) {
             return
         }
-        toastedBtnLastClickTime = SystemClock.elapsedRealtime()
+        State.toastBtnLastClickTime = SystemClock.elapsedRealtime()
 
         keepCenteredEnabled = !keepCenteredEnabled
         if (keepCenteredEnabled) {
-            showToastMsg(getString(R.string.center_enabled))
+            Common.showToastMsg(this, getString(R.string.center_enabled))
         } else {
-            showToastMsg(getString(R.string.center_disabled))
+            Common.showToastMsg(this, getString(R.string.center_disabled))
         }
         changeKeepCenteredBtnIcon()
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun buttonStartStopOnClick(view: View) {
+        if (SystemClock.elapsedRealtime() - State.toastBtnLastClickTime < C.TOASTED_BTN_COOL_DOWN) {
+            return
+        }
+        State.toastBtnLastClickTime = SystemClock.elapsedRealtime()
+
+        updateSessionState()
     }
 
     @Suppress("UNUSED_PARAMETER")

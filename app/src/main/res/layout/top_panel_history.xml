@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorGlass">
+
+    <ImageButton
+        android:id="@+id/buttonEdit"
+        style="@style/panelButton"
+        android:layout_width="0dp"
+        android:layout_height="35dp"
+        android:background="@drawable/button_green_ripple_tb"
+        android:contentDescription="@string/cont_desc_edit_btn"
+        android:onClick="buttonEditOnClick"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:scaleType="fitCenter"
+        android:tint="@color/colorGreenMilitary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonDelete"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/baseline_edit_24" />
+
+    <ImageButton
+        android:id="@+id/buttonDelete"
+        style="@style/panelButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/cont_desc_delete_btn"
+        android:onClick="buttonDeleteOnClick"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:scaleType="fitCenter"
+        android:tint="@color/colorGreenMilitary"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonEdit"
+        app:layout_constraintEnd_toStartOf="@+id/buttonEmail"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonEdit"
+        app:layout_constraintTop_toTopOf="@+id/buttonEdit"
+        app:srcCompat="@drawable/baseline_delete_24" />
+
+    <ImageButton
+        android:id="@+id/buttonEmail"
+        style="@style/panelButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/cont_desc_email_btn"
+        android:onClick="buttonEmailOnClick"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:scaleType="fitCenter"
+        android:tint="@color/colorGreenMilitary"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonDelete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonDelete"
+        app:layout_constraintTop_toTopOf="@+id/buttonDelete"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/baseline_mail_24" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/colorGlass">
+
+    <TextView
+        android:id="@+id/titleStartHistory"
+        style="@style/panelTitle"
+        android:layout_width="210dp"
+        android:layout_height="100dp"
+        android:background="@drawable/borders_l"
+        android:text="@string/from_start"
+        app:autoSizeMaxTextSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/includeStartStatsHistory"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/includeIcons1History"
+        layout="@layout/icons_history"
+        android:layout_width="46dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/includeStartStatsHistory"
+        app:layout_constraintEnd_toStartOf="@+id/includeStartStatsHistory"
+        app:layout_constraintStart_toStartOf="@+id/titleStartHistory"
+        app:layout_constraintTop_toTopOf="@+id/includeStartStatsHistory"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <include
+        android:id="@+id/includeStartStatsHistory"
+        layout="@layout/start_stats_history"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/titleCPHistory"
+        app:layout_constraintEnd_toEndOf="@+id/titleStartHistory"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/includeIcons1History"
+        app:layout_constraintTop_toBottomOf="@+id/titleStartHistory" />
+
+    <TextView
+        android:id="@+id/titleCPHistory"
+        style="@style/panelTitle"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:background="@drawable/borders_tl"
+        android:text="@string/from_cp"
+        app:autoSizeMaxTextSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/includeCPStatsHistory"
+        app:layout_constraintEnd_toEndOf="@+id/titleStartHistory"
+        app:layout_constraintStart_toStartOf="@+id/titleStartHistory"
+        app:layout_constraintTop_toBottomOf="@+id/includeStartStatsHistory" />
+
+    <include
+        android:id="@+id/includeIcons2History"
+        layout="@layout/icons_history"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/includeCPStatsHistory"
+        app:layout_constraintEnd_toEndOf="@+id/includeIcons1History"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/titleCPHistory"
+        app:layout_constraintTop_toTopOf="@+id/includeCPStatsHistory" />
+
+    <include
+        android:id="@+id/includeCPStatsHistory"
+        layout="@layout/cp_stats_history"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/titleWPHistory"
+        app:layout_constraintEnd_toEndOf="@+id/titleStartHistory"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/includeIcons2History"
+        app:layout_constraintTop_toBottomOf="@+id/titleCPHistory" />
+
+    <TextView
+        android:id="@+id/titleWPHistory"
+        style="@style/panelTitle"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:background="@drawable/borders_tl"
+        android:text="@string/from_wp"
+        app:autoSizeMaxTextSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/includeWPStatsHistory"
+        app:layout_constraintEnd_toEndOf="@+id/titleStartHistory"
+        app:layout_constraintStart_toStartOf="@+id/titleStartHistory"
+        app:layout_constraintTop_toBottomOf="@+id/includeCPStatsHistory" />
+
+    <include
+        android:id="@+id/includeIcons3History"
+        layout="@layout/icons_history"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/includeWPStatsHistory"
+        app:layout_constraintEnd_toEndOf="@+id/includeIcons1History"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/titleWPHistory"
+        app:layout_constraintTop_toTopOf="@+id/includeWPStatsHistory" />
+
+    <include
+        android:id="@+id/includeWPStatsHistory"
+        layout="@layout/wp_stats_history"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/titleStartHistory"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/includeIcons3History"
+        app:layout_constraintTop_toBottomOf="@+id/titleWPHistory" />
+
+    <View
+        android:id="@+id/viewBorderV1"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@color/colorGray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/titleStartHistory"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

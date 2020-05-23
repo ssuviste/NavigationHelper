@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorGlass"
+    tools:context=".PreferencesActivity">
+
+    <include
+        android:id="@+id/mainMenuToolbar"
+        layout="@layout/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.22" />
+
+    <ScrollView
+        android:id="@+id/preferencesScreenScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainMenuToolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchSyncEnable"
+                style="@style/preferencesSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sync_data_to_server"
+                android:textSize="24sp"
+                android:theme="@style/preferencesSwitchTheme" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewSyncIntervalDesc"
+                    style="@style/textViewDefault"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:padding="16dp"
+                    android:text="@string/sync_interval"
+                    android:textSize="24sp" />
+
+                <SeekBar
+                    android:id="@+id/seekBarSyncInterval"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:max="295"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:progress="0" />
+
+                <TextView
+                    android:id="@+id/textViewSyncInterval"
+                    style="@style/textViewDefault"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:gravity="start|center_vertical"
+                    android:paddingStart="0dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="16dp"
+                    android:text="@string/five"
+                    android:textSize="24sp" />
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchGradientEnable"
+                style="@style/preferencesSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/track_gradient"
+                android:textSize="24sp"
+                android:theme="@style/preferencesSwitchTheme" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewGradientPaceDesc"
+                    style="@style/textViewDefault"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingStart="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="0dp"
+                    android:paddingBottom="16dp"
+                    android:text="@string/gradient_pace_range"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/textViewMinPace"
+                    style="@style/textViewDefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingStart="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="16dp"
+                    android:text="@string/zero"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/textViewPaceRangeFiller"
+                    style="@style/textViewDefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:text="@string/three_dots"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/textViewMaxPace"
+                    style="@style/textViewDefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingStart="4dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="16dp"
+                    android:text="@string/sixty"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <me.bendik.simplerangeview.SimpleRangeView
+                android:id="@+id/rangeBarGradientPace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:activeFocusThumbAlpha="0.25"
+                app:activeFocusThumbColor="@android:color/darker_gray"
+                app:activeLineColor="@color/colorPrimary"
+                app:activeLineThickness="2dp"
+                app:activeThumbColor="@color/colorPrimary"
+                app:activeThumbFocusRadius="16dp"
+                app:activeThumbRadius="6dp"
+                app:activeTickColor="@color/colorPrimary"
+                app:count="61"
+                app:end="20"
+                app:fixedLineThickness="2dp"
+                app:lineColor="@color/colorLightGray"
+                app:lineThickness="2dp"
+                app:movable="true"
+                app:start="7"
+                app:tickColor="@color/colorLightGray" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
