@@ -40,6 +40,7 @@ dependencies {
 
     implementation 'com.muddzdev:styleabletoast:2.2.0'
     implementation 'me.bendik.simplerangeview:simplerangeview:0.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     implementation 'com.android.volley:volley:1.1.1'
 

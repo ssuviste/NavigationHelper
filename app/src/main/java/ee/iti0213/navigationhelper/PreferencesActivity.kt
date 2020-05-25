@@ -39,7 +39,8 @@ class PreferencesActivity : AppCompatActivity() {
         }
 
         textViewSyncInterval.text = (Preferences.syncInterval.toInt() / 1000).toString()
-        seekBarSyncInterval.progress = Preferences.syncInterval.toInt() / 1000
+        seekBarSyncInterval.progress =
+            (Preferences.syncInterval - C.MIN_SYNC_INTERVAL_IN_MILLISECONDS).toInt() / 1000
         seekBarSyncInterval.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
@@ -52,19 +53,32 @@ class PreferencesActivity : AppCompatActivity() {
             }
         })
 
+        textViewGpsAccuracy.text = Preferences.gpsAccuracy.toString()
+        seekBarGpsAccuracy.progress = Preferences.gpsAccuracy - C.LOC_MIN_ACCURACY
+        seekBarGpsAccuracy.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                Preferences.gpsAccuracy = C.LOC_MIN_ACCURACY + progress
+                textViewGpsAccuracy.text = Preferences.gpsAccuracy.toString()
+            }
+        })
+
         textViewMinPace.text = Preferences.gradientMinPace.toString()
         textViewMaxPace.text = Preferences.gradientMaxPace.toString()
-        rangeBarGradientPace.start = Preferences.gradientMinPace
-        rangeBarGradientPace.end = Preferences.gradientMaxPace
+        rangeBarGradientPace.start = Preferences.gradientMinPace - C.PACE_MIN
+        rangeBarGradientPace.end = Preferences.gradientMaxPace - C.PACE_MIN
         rangeBarGradientPace.onTrackRangeListener = object : OnTrackRangeListener {
             override fun onStartRangeChanged(@NotNull rangeView: SimpleRangeView, start: Int) {
-                Preferences.gradientMinPace = start
-                textViewMinPace.text = start.toString()
+                Preferences.gradientMinPace = start + C.PACE_MIN
+                textViewMinPace.text = (start + C.PACE_MIN).toString()
             }
 
             override fun onEndRangeChanged(@NotNull rangeView: SimpleRangeView, end: Int) {
-                Preferences.gradientMaxPace = end
-                textViewMaxPace.text = end.toString()
+                Preferences.gradientMaxPace = end + C.PACE_MIN
+                textViewMaxPace.text = (end + C.PACE_MIN).toString()
             }
         }
     }

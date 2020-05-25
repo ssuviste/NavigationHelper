@@ -28,9 +28,10 @@
 
     <string name="sync_data_to_server">Sync data to server</string>
     <string name="sync_interval">Syncing interval (s)</string>
+    <string name="gps_accuracy">GPS accuracy (m)</string>
     <string name="track_gradient">Track gradient</string>
     <string name="gradient_pace_range">Gradient pace range (min/km)</string>
-    <string name="zero">0</string>
+    <string name="one">1</string>
     <string name="five">5</string>
     <string name="sixty">60</string>
     <string name="three_dots">&#8230;</string>

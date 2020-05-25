@@ -19,6 +19,7 @@ import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -91,6 +92,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -100,8 +103,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         createNotificationChannel()
 
-        if (!checkPermissions()) {
-            requestPermissions()
+        if (!checkFineLocationPermissions()) {
+            requestFineLocationPermissions()
+        }
+        if (!checkExtStoragePermissions()) {
+            requestExtStoragePermissions()
         }
 
         val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
@@ -117,7 +123,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         Intent(this, LocationService::class.java).also { intent ->
             bindService(intent, connection, Context.BIND_AUTO_CREATE)
         }
-
     }
 
     override fun onResume() {
@@ -219,7 +224,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         grantResults: IntArray
     ) {
         Log.i(TAG, "onRequestPermissionResult")
-        if (requestCode == C.REQUEST_PERMISSIONS_REQUEST_CODE) {
+        if (requestCode == C.REQUEST_FINE_LOC_PERMISSIONS_REQUEST_CODE) {
             when {
                 grantResults.count() <= 0 -> { // If user interaction was interrupted, the permission request is cancelled and you
                     // receive empty arrays.
@@ -256,20 +261,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         Log.d(TAG, "onMapReady")
         mMap = googleMap
-        /*trackPolylineOptions = PolylineOptions()
-            .color(ContextCompat.getColor(this, R.color.colorBlueGoogle))
-            .width(C.TRACK_WIDTH)
-        trackPolyline = mMap.addPolyline(trackPolylineOptions)*/
-        updateMap()
-        updateUI()
-
-        // Add a marker in Sydney and move the camera
-        //val sydney = LatLng(-34.0, 151.0)
-        //mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-
-        if (checkPermissions()) {
+        if (checkFineLocationPermissions()) {
             mMap.isMyLocationEnabled = true
         }
+        updateMap()
+        updateUI()
     }
 
     private fun createNotificationChannel() {
@@ -289,14 +285,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     // Returns the current state of the permissions needed.
-    private fun checkPermissions(): Boolean {
+    private fun checkFineLocationPermissions(): Boolean {
         return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
             this,
             Manifest.permission.ACCESS_FINE_LOCATION
         )
     }
 
-    private fun requestPermissions() {
+    private fun requestFineLocationPermissions() {
         val shouldProvideRationale =
             ActivityCompat.shouldShowRequestPermissionRationale(
                 this,
@@ -314,7 +310,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    C.REQUEST_PERMISSIONS_REQUEST_CODE
+                    C.REQUEST_FINE_LOC_PERMISSIONS_REQUEST_CODE
                 )
             }.show()
         } else {
@@ -325,9 +321,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                C.REQUEST_PERMISSIONS_REQUEST_CODE
+                C.REQUEST_FINE_LOC_PERMISSIONS_REQUEST_CODE
             )
         }
+    }
+
+    private fun checkExtStoragePermissions(): Boolean {
+        return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    }
+
+    private fun requestExtStoragePermissions() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ),
+            C.REQUEST_EXT_STORAGE_PERMISSIONS_REQUEST_CODE
+        )
     }
 
     private fun updateSessionState() {
@@ -345,7 +359,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             resetBottomPanelStats()
             resetTrack()
         } else {
-            // ask for stopping confirmation
             showStopTrackingConfirmationDialog()
         }
     }
@@ -369,14 +382,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         builder.setPositiveButton(getString(R.string.confirm)) { _, _ ->
             run {
-                if (saveSessionToDB(input.text.toString())) {
-                    Common.showToastMsg(this, getString(R.string.session_ended_saved))
-                } else {
-                    Common.showToastMsg(this, getString(R.string.save_failed))
-                }
+                val intent = Intent(C.DISABLE_TRACKING)
+                intent.putExtra(C.DIS_TCK_SESSION_NAME_KEY, input.text.toString())
+                sendBroadcast(intent)
+
                 stopService(Intent(this, LocationService::class.java))
-                sendBroadcast(Intent(C.DISABLE_TRACKING))
                 State.sessionActive = false
+                Common.showToastMsg(this, getString(R.string.session_ended_saved))
                 changeStartStopBtnIcon()
                 updateMap()
             }
@@ -389,13 +401,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         builder.show()
-    }
-
-    private fun saveSessionToDB(name: String?): Boolean {
-        val sessionName = if (name.isNullOrBlank()) getString(R.string.auto_session_name) else name
-
-        //TODO: Save session to DB
-        return true
     }
 
     // BROADCAST RECEIVER

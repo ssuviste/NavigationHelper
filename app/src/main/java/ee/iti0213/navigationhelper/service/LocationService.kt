@@ -7,10 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.location.Location
-import android.os.Binder
-import android.os.Build
-import android.os.IBinder
-import android.os.Looper
+import android.os.*
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -19,6 +16,12 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.*
 import ee.iti0213.navigationhelper.helper.C
 import ee.iti0213.navigationhelper.R
+import ee.iti0213.navigationhelper.db.LocationData
+import ee.iti0213.navigationhelper.db.Repository
+import ee.iti0213.navigationhelper.db.SessionData
+import ee.iti0213.navigationhelper.helper.Common
+import ee.iti0213.navigationhelper.helper.Preferences
+import ee.iti0213.navigationhelper.helper.State
 
 class LocationService : Service() {
     companion object {
@@ -28,16 +31,21 @@ class LocationService : Service() {
     private val broadcastReceiver = InnerBroadcastReceiver()
     private val broadcastReceiverIntentFilter: IntentFilter = IntentFilter()
 
+    // Binder given to clients
+    private val binder = LocationBinder()
+
     private val mLocationRequest: LocationRequest = LocationRequest()
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
     private var mLocationCallback: LocationCallback? = null
 
-    // Binder given to clients
-    private val binder = LocationBinder()
+    private lateinit var databaseConnector: Repository
 
-    private val timeIntervalInSeconds: Long = C.TIMER_INTERVAL_IN_MILLISECONDS / 1000
+    private lateinit var sessionLocalId: String
 
-    // last received location
+    private var serviceStartTimestamp = 0L
+    private var lastCPTimestamp = 0L
+    private var lastWPTimestamp = 0L
+
     private var currentLocation: Location? = null
 
     private var trackingEnabled = false
@@ -67,11 +75,12 @@ class LocationService : Service() {
         Log.d(TAG, "onCreate")
         super.onCreate()
 
+        databaseConnector = Repository(this).open()
+
         broadcastReceiverIntentFilter.addAction(C.DISABLE_TRACKING)
         broadcastReceiverIntentFilter.addAction(C.NOTIFICATION_ACTION_CP)
         broadcastReceiverIntentFilter.addAction(C.NOTIFICATION_ACTION_WP)
         broadcastReceiverIntentFilter.addAction(C.TIMER_ACTION)
-
         registerReceiver(broadcastReceiver, broadcastReceiverIntentFilter)
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -81,6 +90,7 @@ class LocationService : Service() {
                 onNewLocation(locationResult.lastLocation)
             }
         }
+        sessionLocalId = Common.generateHashString()
         getLastLocation()
         createLocationRequest()
         requestLocationUpdates()
@@ -92,6 +102,9 @@ class LocationService : Service() {
 
         //stop location updates
         mFusedLocationClient.removeLocationUpdates(mLocationCallback)
+
+        // close database connection
+        databaseConnector.close()
 
         // remove notifications
         cancelAllNotifications()
@@ -113,6 +126,10 @@ class LocationService : Service() {
         Log.d(TAG, "onStartCommand")
 
         trackingEnabled = true
+        serviceStartTimestamp = System.currentTimeMillis()
+
+        //TODO: create new session in db
+        addSessionToDatabase()
 
         // set counters and locations to initial state
         currentLocation = null
@@ -160,6 +177,43 @@ class LocationService : Service() {
         return super.onUnbind(intent)
     }
 
+    private fun addSessionToDatabase() {
+        val existingLocalIds = databaseConnector.getAllSessionLocalIds()
+        while (existingLocalIds.contains(sessionLocalId)) {
+            sessionLocalId = Common.generateHashString()
+        }
+        databaseConnector.addSession(
+            SessionData(
+                sessionLocalId,
+                null,
+                C.SESSION_NAME_DEFAULT,
+                C.SESSION_DESC_DEFAULT,
+                serviceStartTimestamp,
+                Preferences.gradientMinPace,
+                Preferences.gradientMaxPace,
+                0
+            )
+        )
+    }
+
+    private fun finishSessionInDatabase(newSessionName: String?) {
+        databaseConnector.setSessionIsFinished(sessionLocalId, 1)
+        if (!newSessionName.isNullOrBlank()) {
+            databaseConnector.setSessionName(sessionLocalId, newSessionName)
+        }
+    }
+
+    private fun addLocationToDatabase(location: Location, locationType: String) {
+        databaseConnector.addLocation(
+            LocationData(
+                sessionLocalId,
+                location,
+                locationType,
+                needsSync = if (Preferences.syncEnabled && State.loggedIn) 1 else 0
+            )
+        )
+    }
+
     private fun createLocationRequest() {
         mLocationRequest.interval = C.LOC_UPD_INTERVAL_IN_MILLISECONDS
         mLocationRequest.fastestInterval = C.LOC_FASTEST_UPD_INTERVAL_IN_MILLISECONDS
@@ -196,31 +250,27 @@ class LocationService : Service() {
     }
 
     private fun onNewLocation(location: Location) {
-        //TODO: Set accuracy filtering
         if (!location.hasAccuracy()
-            || location.accuracy > C.LOC_MIN_ACCURACY
+            || location.accuracy > Preferences.gpsAccuracy
             || (currentLocation != null && currentLocation!!.distanceTo(location) < C.LOC_STAND_RADIUS)) {
             return
         }
         Log.i(TAG, "New location: $location")
         val intent = Intent(C.LOCATION_UPDATE)
         intent.putExtra(C.LOC_UPD_LOCATION_KEY, location)
-
-        intent.putExtra(C.LOC_UPD_LATITUDE_KEY, location.latitude)
-        intent.putExtra(C.LOC_UPD_LONGITUDE_KEY, location.longitude)
-        intent.putExtra(C.LOC_UPD_BEARING_KEY, location.bearing)
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+
         if (trackingEnabled) {
             updateDistances(location)
             showTrack()
+            //TODO: add location to db with the correct session id
+            addLocationToDatabase(location, C.LOC_TYPE_LOC)
         }
     }
 
     private fun updateDistances(location: Location) {
         if (currentLocation == null) {
             locationStart = location
-            //locationCP = location
-            //locationWP = location
         } else {
             flyDistStart = location.distanceTo(locationStart)
             walkDistStart += location.distanceTo(currentLocation)
@@ -235,19 +285,17 @@ class LocationService : Service() {
                 walkDistWP += location.distanceTo(currentLocation)
             }
         }
-        //track.add(LatLng(location.latitude, location.longitude))
         track.add(location)
-        // keep the location for future
         currentLocation = location
     }
 
     private fun updateTimes() {
-        timeStart += timeIntervalInSeconds
+        timeStart = (System.currentTimeMillis() - serviceStartTimestamp) / 1000
         if (locationCP != null) {
-            timeCP += timeIntervalInSeconds
+            timeCP = (System.currentTimeMillis() - lastCPTimestamp) / 1000
         }
         if (locationWP != null) {
-            timeWP += timeIntervalInSeconds
+            timeWP = (System.currentTimeMillis() - lastWPTimestamp) / 1000
         }
     }
 
@@ -280,9 +328,9 @@ class LocationService : Service() {
             C.TCK_UPD_FLY_DIST_START_KEY, "%.0f".format(flyDistStart) + getString(
                 R.string.unit_dist
             ))
-        intent.putExtra(C.TCK_UPD_TIME_START_KEY, formatTime(timeStart))
+        intent.putExtra(C.TCK_UPD_TIME_START_KEY, Common.formatTime(timeStart))
         intent.putExtra(
-            C.TCK_UPD_SPEED_START_KEY, formatSpeed(speedStart) + getString(
+            C.TCK_UPD_SPEED_START_KEY, Common.formatSpeed(speedStart) + getString(
                 R.string.unit_speed
             ))
 
@@ -294,9 +342,9 @@ class LocationService : Service() {
             C.TCK_UPD_FLY_DIST_CP_KEY, "%.0f".format(flyDistCP) + getString(
                 R.string.unit_dist
             ))
-        intent.putExtra(C.TCK_UPD_TIME_CP_KEY, formatTime(timeCP))
+        intent.putExtra(C.TCK_UPD_TIME_CP_KEY, Common.formatTime(timeCP))
         intent.putExtra(
-            C.TCK_UPD_SPEED_CP_KEY, formatSpeed(speedCP) + getString(
+            C.TCK_UPD_SPEED_CP_KEY, Common.formatSpeed(speedCP) + getString(
                 R.string.unit_speed
             ))
 
@@ -308,9 +356,9 @@ class LocationService : Service() {
             C.TCK_UPD_FLY_DIST_WP_KEY, "%.0f".format(flyDistWP) + getString(
                 R.string.unit_dist
             ))
-        intent.putExtra(C.TCK_UPD_TIME_WP_KEY, formatTime(timeWP))
+        intent.putExtra(C.TCK_UPD_TIME_WP_KEY, Common.formatTime(timeWP))
         intent.putExtra(
-            C.TCK_UPD_SPEED_WP_KEY, formatSpeed(speedWP) + getString(
+            C.TCK_UPD_SPEED_WP_KEY, Common.formatSpeed(speedWP) + getString(
                 R.string.unit_speed
             ))
 
@@ -333,9 +381,9 @@ class LocationService : Service() {
             R.id.walkDistStart, "%.0f".format(walkDistStart) + getString(R.string.unit_dist))
         notifyView.setTextViewText(
             R.id.flyDistStart, "%.0f".format(flyDistStart) + getString(R.string.unit_dist))
-        notifyView.setTextViewText(R.id.timeStart, formatTime(timeStart))
+        notifyView.setTextViewText(R.id.timeStart, Common.formatTime(timeStart))
         notifyView.setTextViewText(
-            R.id.speedStart, formatSpeed(speedStart) + getString(R.string.unit_speed))
+            R.id.speedStart, Common.formatSpeed(speedStart) + getString(R.string.unit_speed))
 
         notifyView.setTextViewText(
             R.id.walkDistCP, "%.0f".format(walkDistCP) + getString(
@@ -345,9 +393,9 @@ class LocationService : Service() {
             R.id.flyDistCP, "%.0f".format(flyDistCP) + getString(
                 R.string.unit_dist
             ))
-        notifyView.setTextViewText(R.id.timeCP, formatTime(timeCP))
+        notifyView.setTextViewText(R.id.timeCP, Common.formatTime(timeCP))
         notifyView.setTextViewText(
-            R.id.speedCP, formatSpeed(speedCP) + getString(
+            R.id.speedCP, Common.formatSpeed(speedCP) + getString(
                 R.string.unit_speed
             ))
 
@@ -359,9 +407,9 @@ class LocationService : Service() {
             R.id.flyDistWP, "%.0f".format(flyDistWP) + getString(
                 R.string.unit_dist
             ))
-        notifyView.setTextViewText(R.id.timeWP, formatTime(timeWP))
+        notifyView.setTextViewText(R.id.timeWP, Common.formatTime(timeWP))
         notifyView.setTextViewText(
-            R.id.speedWP, formatSpeed(speedWP) + getString(
+            R.id.speedWP, Common.formatSpeed(speedWP) + getString(
                 R.string.unit_speed
             ))
 
@@ -395,53 +443,23 @@ class LocationService : Service() {
         }
     }
 
-    private fun formatTime(time: Long): String {
-        val hours = time / 3600
-        if (hours > 99) return "99:59:59"
-        val minutes = (time % 3600) / 60
-        val seconds = time % 60
-        val hoursString = when {
-            hours < 10 -> "0$hours"
-            else -> "$hours"
-        }
-        val minutesString = when {
-            minutes < 10 -> ":0$minutes"
-            else -> ":$minutes"
-        }
-        val secondsString = when {
-            seconds < 10 -> ":0$seconds"
-            else -> ":$seconds"
-        }
-        return "$hoursString$minutesString$secondsString"
-    }
-
-    private fun formatSpeed(time: Long): String {
-        val minutes = time / 60
-        if (minutes > 99) return "99:59"
-        val seconds = time % 60
-        val minutesString = when {
-            minutes < 10 -> "0$minutes"
-            else -> "$minutes"
-        }
-        val secondsString = when {
-            seconds < 10 -> ":0$seconds"
-            else -> ":$seconds"
-        }
-        return "$minutesString$secondsString"
-    }
-
     private inner class InnerBroadcastReceiver: BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             Log.d(TAG, intent!!.action!!)
             when(intent.action) {
                 C.DISABLE_TRACKING -> {
+                    val newSessionName = intent.getStringExtra(C.DIS_TCK_SESSION_NAME_KEY)
                     trackingEnabled = false
                     toggleTimerService(trackingEnabled)
                     cancelAllNotifications()
+                    //TODO: set session as isFinished and change its name if user wants to
+                    finishSessionInDatabase(newSessionName)
                 }
                 C.NOTIFICATION_ACTION_CP -> {
                     if (trackingEnabled && currentLocation != null) {
                         locationCP = currentLocation
+                        addLocationToDatabase(locationCP!!, C.LOC_TYPE_CP)
+                        lastCPTimestamp = System.currentTimeMillis()
                         allCPs.add(currentLocation!!)
                         walkDistCP = 0f
                         flyDistCP = 0f
@@ -453,6 +471,8 @@ class LocationService : Service() {
                 C.NOTIFICATION_ACTION_WP -> {
                     if (trackingEnabled && currentLocation != null) {
                         locationWP = currentLocation
+                        addLocationToDatabase(locationWP!!, C.LOC_TYPE_WP)
+                        lastWPTimestamp = System.currentTimeMillis()
                         walkDistWP = 0f
                         flyDistWP = 0f
                         timeWP = 0L

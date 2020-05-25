@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/recyclerRowSession"
     android:background="@drawable/button_green_ripple_b"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="horizontal">
 
     <ImageView
@@ -93,7 +96,7 @@
                 android:gravity="center_vertical"
                 android:paddingStart="4dp"
                 android:paddingEnd="0dp"
-                android:text="@string/zero"
+                android:text="@string/one"
                 android:textSize="24sp" />
         </LinearLayout>
 

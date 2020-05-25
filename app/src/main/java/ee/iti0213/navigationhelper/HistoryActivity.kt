@@ -4,8 +4,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import ee.iti0213.navigationhelper.adapter.DataRecyclerViewAdapterHistory
+import ee.iti0213.navigationhelper.db.Repository
+import kotlinx.android.synthetic.main.activity_history.*
 
 class HistoryActivity : AppCompatActivity() {
+
+    private lateinit var databaseConnector: Repository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,5 +26,15 @@ class HistoryActivity : AppCompatActivity() {
         @Suppress("DEPRECATION")
         toolbar.logo.setColorFilter(white, mode)
         setSupportActionBar(toolbar)
+
+        databaseConnector = Repository(this).open()
+
+        recyclerViewHistory.layoutManager = LinearLayoutManager(this)
+        recyclerViewHistory.adapter = DataRecyclerViewAdapterHistory(this, databaseConnector)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        databaseConnector.close()
     }
 }

@@ -17,7 +17,8 @@ class TimerService : Service() {
     private val sendTimerBroadcast = object : Runnable {
         override fun run() {
             sendBroadcast(Intent(C.TIMER_ACTION))
-            handler.postDelayed(this,
+            handler.postDelayed(
+                this,
                 C.TIMER_INTERVAL_IN_MILLISECONDS
             )
         }
@@ -27,7 +28,8 @@ class TimerService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "onStartCommand")
         handler = Handler(Looper.getMainLooper())
-        handler.postDelayed(sendTimerBroadcast,
+        handler.postDelayed(
+            sendTimerBroadcast,
             C.TIMER_INTERVAL_IN_MILLISECONDS
         )
 

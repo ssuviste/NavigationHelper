@@ -8,7 +8,10 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.muddzdev.styleabletoast.StyleableToast
 import ee.iti0213.navigationhelper.R
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.regex.Pattern
+import kotlin.random.Random
 
 class Common {
     companion object {
@@ -88,6 +91,58 @@ class Common {
             } else {
                 ContextCompat.getColor(context, R.color.colorBlueGoogle)
             }
+        }
+
+        fun generateHashString(): String {
+            val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+            return (1..C.SESSION_LOCAL_ID_LENGTH)
+                .map { Random.nextInt(0, charPool.size) }
+                .map(charPool::get)
+                .joinToString("")
+        }
+
+        fun formatTimestamp(time: Long, forServer: Boolean): String {
+            val sdf = if (forServer) {
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault())
+            } else {
+                SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.getDefault())
+            }
+            return sdf.format(Date(time))
+        }
+
+        fun formatTime(time: Long): String {
+            val hours = time / 3600
+            if (hours > 99) return "99:59:59"
+            val minutes = (time % 3600) / 60
+            val seconds = time % 60
+            val hoursString = when {
+                hours < 10 -> "0$hours"
+                else -> "$hours"
+            }
+            val minutesString = when {
+                minutes < 10 -> ":0$minutes"
+                else -> ":$minutes"
+            }
+            val secondsString = when {
+                seconds < 10 -> ":0$seconds"
+                else -> ":$seconds"
+            }
+            return "$hoursString$minutesString$secondsString"
+        }
+
+        fun formatSpeed(time: Long): String {
+            val minutes = time / 60
+            if (minutes > 99) return "99:59"
+            val seconds = time % 60
+            val minutesString = when {
+                minutes < 10 -> "0$minutes"
+                else -> "$minutes"
+            }
+            val secondsString = when {
+                seconds < 10 -> ":0$seconds"
+                else -> ":$seconds"
+            }
+            return "$minutesString$secondsString"
         }
     }
 }

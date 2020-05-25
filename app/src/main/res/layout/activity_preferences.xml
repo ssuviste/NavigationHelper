@@ -78,6 +78,44 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewGpsAccuracyDesc"
+                    style="@style/textViewDefault"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:padding="16dp"
+                    android:text="@string/gps_accuracy" />
+
+                <SeekBar
+                    android:id="@+id/seekBarGpsAccuracy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:max="20"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:progress="0" />
+
+                <TextView
+                    android:id="@+id/textViewGpsAccuracy"
+                    style="@style/textViewDefault"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:gravity="start|center_vertical"
+                    android:paddingStart="0dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="16dp"
+                    android:text="@string/five" />
+
+            </LinearLayout>
+
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switchGradientEnable"
                 style="@style/preferencesSwitch"
@@ -112,7 +150,7 @@
                     android:paddingTop="16dp"
                     android:paddingEnd="4dp"
                     android:paddingBottom="16dp"
-                    android:text="@string/zero" />
+                    android:text="@string/one" />
 
                 <TextView
                     android:id="@+id/textViewPaceRangeFiller"
@@ -151,7 +189,7 @@
                 app:activeThumbFocusRadius="16dp"
                 app:activeThumbRadius="6dp"
                 app:activeTickColor="@color/colorPrimary"
-                app:count="61"
+                app:count="60"
                 app:end="20"
                 app:fixedLineThickness="2dp"
                 app:lineColor="@color/colorLightGray"

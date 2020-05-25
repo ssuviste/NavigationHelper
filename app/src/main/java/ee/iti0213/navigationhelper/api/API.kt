@@ -18,13 +18,13 @@ class API {
         const val AUTH_LOGIN = "/Account/Login"
         const val GPS_SESSION = "/GpsSessions"
         const val GPS_LOCATIONS = "/GpsLocations"
-        const val GPS_LOCATION_TYPES = "/GpsLocationTypes"
 
-        const val REST_LOCATION_ID_LOC = "00000000-0000-0000-0000-000000000001"
-        const val REST_LOCATION_ID_WP = "00000000-0000-0000-0000-000000000002"
-        const val REST_LOCATION_ID_CP = "00000000-0000-0000-0000-000000000003"
+        const val REST_ID_LOC = "00000000-0000-0000-0000-000000000001"
+        const val REST_ID_WP = "00000000-0000-0000-0000-000000000002"
+        const val REST_ID_CP = "00000000-0000-0000-0000-000000000003"
 
         var token: String? = null
+        var currentSessionId: String? = null
 
         fun postToUrl(context: Context, endpoint: String, reqParams: JSONObject, useToken: Boolean,
                       callBack: (context: Context, resp: JSONObject) -> Unit,

@@ -12,6 +12,7 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import ee.iti0213.navigationhelper.api.API
+import ee.iti0213.navigationhelper.api.SyncManager
 import ee.iti0213.navigationhelper.helper.State
 import kotlinx.android.synthetic.main.activity_main_menu.*
 
@@ -40,6 +41,7 @@ class MainMenuActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_menu)
+        SyncManager.initialize(this)
 
         val white = ContextCompat.getColor(this, R.color.colorWhite)
         val mode = android.graphics.PorterDuff.Mode.MULTIPLY
