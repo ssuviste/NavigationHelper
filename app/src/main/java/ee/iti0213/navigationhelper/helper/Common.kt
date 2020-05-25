@@ -2,7 +2,6 @@ package ee.iti0213.navigationhelper.helper
 
 import android.content.Context
 import android.graphics.Color
-import android.location.Location
 import android.util.Patterns
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -74,9 +73,9 @@ class Common {
             return true
         }
 
-        fun getTrackColor(context: Context, first: Location, second: Location): Int {
+        fun getTrackColor(context: Context, firstTime: Long, secondTime: Long, dist: Float): Int {
             return if (Preferences.gradientEnabled) {
-                val pace = (second.time - first.time) / 60f / first.distanceTo(second)
+                val pace = (secondTime - firstTime) / 60f / dist
                 val ratio = when {
                     pace < Preferences.gradientMinPace -> 0f
                     pace > Preferences.gradientMaxPace -> 1f
@@ -94,20 +93,35 @@ class Common {
         }
 
         fun generateHashString(): String {
-            val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+            val charPool: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
             return (1..C.SESSION_LOCAL_ID_LENGTH)
                 .map { Random.nextInt(0, charPool.size) }
                 .map(charPool::get)
                 .joinToString("")
         }
 
-        fun formatTimestamp(time: Long, forServer: Boolean): String {
-            val sdf = if (forServer) {
-                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault())
-            } else {
-                SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.getDefault())
+        fun convertLongToDate(time: Long, format: DateFormat): String {
+            val sdf = when (format) {
+                DateFormat.DEFAULT ->
+                    SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.getDefault())
+                DateFormat.SERVER ->
+                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault())
+                DateFormat.GPX ->
+                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.getDefault())
             }
             return sdf.format(Date(time))
+        }
+
+        fun convertDateToLong(date: String, format: DateFormat): Long {
+            val sdf = when (format) {
+                DateFormat.DEFAULT ->
+                    SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.getDefault())
+                DateFormat.SERVER ->
+                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault())
+                DateFormat.GPX ->
+                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.getDefault())
+            }
+            return sdf.parse(date)!!.time
         }
 
         fun formatTime(time: Long): String {

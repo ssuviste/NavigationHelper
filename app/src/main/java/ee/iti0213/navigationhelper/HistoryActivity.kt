@@ -28,7 +28,10 @@ class HistoryActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         databaseConnector = Repository(this).open()
+    }
 
+    override fun onResume() {
+        super.onResume()
         recyclerViewHistory.layoutManager = LinearLayoutManager(this)
         recyclerViewHistory.adapter = DataRecyclerViewAdapterHistory(this, databaseConnector)
     }

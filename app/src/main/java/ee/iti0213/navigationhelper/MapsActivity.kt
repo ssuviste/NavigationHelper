@@ -34,10 +34,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.material.snackbar.Snackbar
 import ee.iti0213.navigationhelper.controller.CompassController
-import ee.iti0213.navigationhelper.helper.C
-import ee.iti0213.navigationhelper.helper.Common
-import ee.iti0213.navigationhelper.helper.State
-import ee.iti0213.navigationhelper.helper.UpDirection
+import ee.iti0213.navigationhelper.helper.*
 import ee.iti0213.navigationhelper.service.LocationService
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.bottom_panel.*
@@ -475,7 +472,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         while (track.size - 1 > trackPolyLinesCount) {
             val first = LatLng(track[trackPolyLinesCount].latitude, track[trackPolyLinesCount].longitude)
             val second = LatLng(track[trackPolyLinesCount + 1].latitude, track[trackPolyLinesCount + 1].longitude)
-            val color = Common.getTrackColor(this, track[trackPolyLinesCount], track[trackPolyLinesCount + 1])
+            val color = Common.getTrackColor(
+                this,
+                track[trackPolyLinesCount].time,
+                track[trackPolyLinesCount + 1].time,
+                track[trackPolyLinesCount].distanceTo(track[trackPolyLinesCount + 1])
+            )
             mMap.addPolyline(PolylineOptions().add(first, second).color(color).width(C.TRACK_WIDTH))
             trackPolyLinesCount++
         }

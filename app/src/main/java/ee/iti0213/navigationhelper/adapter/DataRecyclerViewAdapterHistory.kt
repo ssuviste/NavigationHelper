@@ -13,6 +13,7 @@ import ee.iti0213.navigationhelper.db.Repository
 import ee.iti0213.navigationhelper.db.SessionData
 import ee.iti0213.navigationhelper.helper.C
 import ee.iti0213.navigationhelper.helper.Common
+import ee.iti0213.navigationhelper.helper.DateFormat
 import kotlinx.android.synthetic.main.recycler_row_session.view.*
 
 class DataRecyclerViewAdapterHistory(context: Context, private val databaseConnector: Repository) :
@@ -35,7 +36,7 @@ class DataRecyclerViewAdapterHistory(context: Context, private val databaseConne
         val cpCount = databaseConnector.getAllCPsBySessionLocalId(session.localId).size
         holder.itemView.recyclerRowSession.tag = session.localId
         holder.itemView.textViewSessionTitle.text = session.sessionName
-        holder.itemView.textViewSessionDate.text = Common.formatTimestamp(session.startTime, false)
+        holder.itemView.textViewSessionDate.text = Common.convertLongToDate(session.startTime, DateFormat.DEFAULT)
         holder.itemView.textViewSessionCPsCount.text = cpCount.toString()
     }
 

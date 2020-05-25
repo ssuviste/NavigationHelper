@@ -108,9 +108,15 @@
     <string name="center_enabled">Centering: Enabled</string>
     <string name="center_disabled">Centering: Disabled</string>
     <string name="preferences_locked">Locked during active session!</string>
+    <string name="session_name_changed">Session name changed!</string>
+    <string name="session_deleted">Session deleted!</string>
+    <string name="email_sent">GPX file sent to user email.</string>
 
     <string name="end_session_question">End and save session?</string>
     <string name="session_title_hint">Enter session title</string>
+    <string name="edit_session_title_question">Edit session title?</string>
+    <string name="session_new_title_hint">New session title</string>
+    <string name="delete_session_question">Delete this session?</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
 
@@ -126,4 +132,8 @@
     <string name="invalid_pw_number">Password must contain at least 1 number!</string>
     <string name="invalid_pw_special_char">Password must contain at least 1 special character!</string>
 
+    <string name="send_email_from">Send email from:</string>
+    <string name="no_email_clients_installed">There are no email clients installed.</string>
+    <string name="email_default_subject">Navigation Helper Session GPX File</string>
+    <string name="email_default_body">Session GPX file can be found in the attachments.</string>
 </resources>

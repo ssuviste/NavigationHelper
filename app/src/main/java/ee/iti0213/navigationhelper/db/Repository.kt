@@ -34,7 +34,7 @@ class Repository(val context: Context) {
         db.insert(DbHelper.SESSIONS_TABLE_NAME, null, values)
     }
 
-    fun getAllSessions(): List<SessionData> {
+    private fun getAllSessions(): List<SessionData> {
         val sessions = ArrayList<SessionData>()
         val columns = arrayOf(
             DbHelper.SESSION_LOCAL_ID,
@@ -83,6 +83,10 @@ class Repository(val context: Context) {
         return getAllSessions().filter { it.isFinished != 0 }
     }
 
+    fun getAllSessionsWhereServerIdNull(): List<SessionData> {
+        return getAllSessions().filter { it.serverId == null }
+    }
+
     fun getAllSessionLocalIds(): List<String> {
         val columns = arrayOf(
             DbHelper.SESSION_LOCAL_ID
@@ -107,12 +111,11 @@ class Repository(val context: Context) {
     fun setSessionIsFinished(localId: String, isFinished: Int) {
         val values = ContentValues()
         values.put(DbHelper.SESSION_IS_FINISHED, isFinished)
-        //val whereArgs = arrayOf(localId)
         db.update(
             DbHelper.SESSIONS_TABLE_NAME,
             values,
             "${DbHelper.SESSION_LOCAL_ID} = '$localId'",
-            null //whereArgs
+            null
         )
     }
 
@@ -122,6 +125,25 @@ class Repository(val context: Context) {
         db.update(
             DbHelper.SESSIONS_TABLE_NAME,
             values,
+            "${DbHelper.SESSION_LOCAL_ID} = '$localId'",
+            null
+        )
+    }
+
+    fun setSessionServerId(startTime: Long, serverId: String) {
+        val values = ContentValues()
+        values.put(DbHelper.SESSION_SERVER_ID, serverId)
+        db.update(
+            DbHelper.SESSIONS_TABLE_NAME,
+            values,
+            "${DbHelper.SESSION_START_TIME} = $startTime",
+            null
+        )
+    }
+
+    fun deleteAllSessionsWithLocalId(localId: String) {
+        db.delete(
+            DbHelper.SESSIONS_TABLE_NAME,
             "${DbHelper.SESSION_LOCAL_ID} = '$localId'",
             null
         )
@@ -153,7 +175,7 @@ class Repository(val context: Context) {
             DbHelper.LOCATION_NEEDS_SYNC
         )
         val selection = "${DbHelper.LOCATION_SESSION_LOCAL_ID} = '$sessionLocalId'"
-        val orderBy = DbHelper.LOCATION_ID + " DESC"
+        val orderBy = DbHelper.LOCATION_ID + " ASC"
         val cursor = db.query(
             DbHelper.LOCATIONS_TABLE_NAME,
             columns,
@@ -192,5 +214,13 @@ class Repository(val context: Context) {
         return getAllLocationsBySessionLocalId(sessionLocalId).filter {
             it.locationType == C.LOC_TYPE_WP
         }
+    }
+
+    fun deleteAllLocationsWithSessionLocalId(sessionLocalId: String) {
+        db.delete(
+            DbHelper.LOCATIONS_TABLE_NAME,
+            "${DbHelper.LOCATION_SESSION_LOCAL_ID} = '$sessionLocalId'",
+            null
+        )
     }
 }

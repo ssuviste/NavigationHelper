@@ -24,6 +24,20 @@ class LocationData {
     }
 
     constructor(
+        sessionLocalId: String, location: Location,
+        recordedAt: Long, locationType: String, needsSync: Int
+    ) {
+        this.sessionLocalId = sessionLocalId
+        this.recordedAt = recordedAt
+        this.latitude = location.latitude
+        this.longitude = location.longitude
+        this.altitude = location.altitude
+        this.accuracy = location.accuracy
+        this.locationType = locationType
+        this.needsSync = needsSync
+    }
+
+    constructor(
         sessionLocalId: String, recordedAt: Long, latitude: Double, longitude: Double,
         altitude: Double, accuracy: Float, locationType: String, needsSync: Int
     ) {

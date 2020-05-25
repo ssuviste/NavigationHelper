@@ -128,7 +128,6 @@ class LocationService : Service() {
         trackingEnabled = true
         serviceStartTimestamp = System.currentTimeMillis()
 
-        //TODO: create new session in db
         addSessionToDatabase()
 
         // set counters and locations to initial state
@@ -185,7 +184,7 @@ class LocationService : Service() {
         databaseConnector.addSession(
             SessionData(
                 sessionLocalId,
-                null,
+                if (Preferences.syncEnabled && State.loggedIn) null else C.LOCAL_SESSION,
                 C.SESSION_NAME_DEFAULT,
                 C.SESSION_DESC_DEFAULT,
                 serviceStartTimestamp,
@@ -201,6 +200,9 @@ class LocationService : Service() {
         if (!newSessionName.isNullOrBlank()) {
             databaseConnector.setSessionName(sessionLocalId, newSessionName)
         }
+        if (currentLocation != null) {
+            addLocationToDatabase(currentLocation!!, C.LOC_TYPE_LOC)
+        }
     }
 
     private fun addLocationToDatabase(location: Location, locationType: String) {
@@ -208,8 +210,9 @@ class LocationService : Service() {
             LocationData(
                 sessionLocalId,
                 location,
+                System.currentTimeMillis(),
                 locationType,
-                needsSync = if (Preferences.syncEnabled && State.loggedIn) 1 else 0
+                if (Preferences.syncEnabled && State.loggedIn) 1 else 0
             )
         )
     }
@@ -263,7 +266,6 @@ class LocationService : Service() {
         if (trackingEnabled) {
             updateDistances(location)
             showTrack()
-            //TODO: add location to db with the correct session id
             addLocationToDatabase(location, C.LOC_TYPE_LOC)
         }
     }
@@ -452,7 +454,6 @@ class LocationService : Service() {
                     trackingEnabled = false
                     toggleTimerService(trackingEnabled)
                     cancelAllNotifications()
-                    //TODO: set session as isFinished and change its name if user wants to
                     finishSessionInDatabase(newSessionName)
                 }
                 C.NOTIFICATION_ACTION_CP -> {
