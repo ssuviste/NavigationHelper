@@ -286,7 +286,7 @@ class HistoryMapsActivity : AppCompatActivity(), OnMapReadyCallback {
         builder.setPositiveButton(getString(R.string.confirm)) { _, _ ->
             run {
                 if (input.text.isNullOrBlank()) {
-                    databaseConnector.setSessionName(sessionLocalId, C.SESSION_NAME_DEFAULT)
+                    databaseConnector.setSessionName(sessionLocalId, getString(R.string.auto_session_name))
                 } else {
                     databaseConnector.setSessionName(sessionLocalId, input.text.toString())
                 }
@@ -317,7 +317,7 @@ class HistoryMapsActivity : AppCompatActivity(), OnMapReadyCallback {
             run {
                 databaseConnector.deleteAllLocationsWithSessionLocalId(sessionLocalId)
                 databaseConnector.deleteAllSessionsWithLocalId(sessionLocalId)
-                Common.showToastMsg(this, getString(R.string.session_name_changed))
+                Common.showToastMsg(this, getString(R.string.session_deleted))
                 finish()
             }
         }
@@ -358,7 +358,7 @@ class HistoryMapsActivity : AppCompatActivity(), OnMapReadyCallback {
         intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.email_default_body))
         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file))
         try {
-            startActivity(Intent.createChooser(intent, getString(R.string.send_email_from)))
+            startActivity(Intent.createChooser(intent, getString(R.string.send_email_using)))
         } catch (ex: ActivityNotFoundException) {
             Common.showToastMsg(this, getString(R.string.no_email_clients_installed))
         }

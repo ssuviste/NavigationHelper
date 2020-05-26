@@ -121,6 +121,7 @@
     <string name="cancel">Cancel</string>
 
     <string name="auto_session_name">Unnamed session</string>
+    <string name="auto_session_desc">GPS Session</string>
 
     <string name="invalid_name">Name is required!</string>
     <string name="invalid_email_empty">Email is required!</string>
@@ -132,7 +133,7 @@
     <string name="invalid_pw_number">Password must contain at least 1 number!</string>
     <string name="invalid_pw_special_char">Password must contain at least 1 special character!</string>
 
-    <string name="send_email_from">Send email from:</string>
+    <string name="send_email_using">Send email using:</string>
     <string name="no_email_clients_installed">There are no email clients installed.</string>
     <string name="email_default_subject">Navigation Helper Session GPX File</string>
     <string name="email_default_body">Session GPX file can be found in the attachments.</string>

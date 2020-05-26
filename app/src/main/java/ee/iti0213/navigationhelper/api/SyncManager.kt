@@ -4,10 +4,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import ee.iti0213.navigationhelper.db.Repository
-import ee.iti0213.navigationhelper.helper.Common
-import ee.iti0213.navigationhelper.helper.DateFormat
-import ee.iti0213.navigationhelper.helper.Preferences
-import ee.iti0213.navigationhelper.helper.State
+import ee.iti0213.navigationhelper.helper.*
 import org.json.JSONObject
 
 object SyncManager {
@@ -45,22 +42,54 @@ object SyncManager {
             val reqParams = JSONObject()
             reqParams.put("name", session.sessionName)
             reqParams.put("description", session.description)
-            reqParams.put("recordedAt", Common.convertLongToDate(session.startTime, DateFormat.SERVER))
+            reqParams.put(
+                "recordedAt",
+                Common.convertLongToDate(session.startTime, DateFormat.SERVER)
+            )
             reqParams.put("paceMin", session.paceMin * 60)
             reqParams.put("paceMax", session.paceMax * 60)
             API.postToUrl(
                 context!!, API.GPS_SESSION, reqParams, true,
-                { c, r ->  APICallback.sessionInit(c, r) },
-                { c, r ->  APICallback.sessionInitError(c, r) }
+                { c, r -> APICallback.sessionSyncSuccess(c, r) },
+                { c, r -> APICallback.sessionSyncFail(c, r) }
             )
         }
     }
 
     private fun syncLocations() {
-
+        val locationsToSync = databaseConnector!!.getAllLocationsWhichNeedSync()
+        for (loc in locationsToSync) {
+            val sessionServerId =
+                databaseConnector!!.getSessionServerIdWhereLocalId(loc.sessionLocalId)
+            if (!sessionServerId.isNullOrBlank() && sessionServerId != C.LOCAL_SESSION) {
+                val locationType = when (loc.locationType) {
+                    C.LOC_TYPE_LOC -> API.REST_ID_LOC
+                    C.LOC_TYPE_CP -> API.REST_ID_CP
+                    else -> API.REST_ID_WP
+                }
+                val recordedAt = Common.convertLongToDate(loc.recordedAt, DateFormat.SERVER)
+                val reqParams = JSONObject()
+                reqParams.put("recordedAt", recordedAt)
+                reqParams.put("latitude", loc.latitude)
+                reqParams.put("longitude", loc.longitude)
+                reqParams.put("accuracy", loc.accuracy)
+                reqParams.put("altitude", loc.altitude)
+                reqParams.put("gpsSessionId", sessionServerId)
+                reqParams.put("gpsLocationTypeId", locationType)
+                API.postToUrl(
+                    context!!, API.GPS_LOCATIONS, reqParams, true,
+                    { c, r -> APICallback.locationSyncSuccess(c, r) },
+                    { c, r -> APICallback.locationSyncFail(c, r) }
+                )
+            }
+        }
     }
 
-    fun writeSessionServerIdToDatabase(startTime: Long, serverId: String) {
+    fun updateSessionServerId(startTime: Long, serverId: String) {
         databaseConnector!!.setSessionServerId(startTime, serverId)
+    }
+
+    fun setLocationSyncNeedToZero(startTime: Long) {
+        databaseConnector!!.setLocationSyncNeed(startTime, 0)
     }
 }

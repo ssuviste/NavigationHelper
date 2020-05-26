@@ -46,12 +46,8 @@ class C {
         const val RES_FLY_DIST_WP_KEY = "restore.fly_distance_wp"
         const val RES_TIME_WP_KEY = "restore.time_wp"
         const val RES_SPEED_WP_KEY = "restore.speed_wp"
-        const val RES_EMAIL_ALREADY_SENT_KEY = "restore.email_already_sent"
 
         const val SESSION_LOCAL_ID_KEY = "session.local_id"
-
-        const val SESSION_NAME_DEFAULT = "Session"
-        const val SESSION_DESC_DEFAULT = "GPS session"
 
         const val LOCAL_SESSION = "local_session"
 

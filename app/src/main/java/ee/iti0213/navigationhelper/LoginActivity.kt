@@ -55,8 +55,8 @@ class LoginActivity : AppCompatActivity() {
             reqParams.put("password", editTextLoginPassword.text.toString())
             API.postToUrl(
                 this, API.AUTH_LOGIN, reqParams, false,
-                { c, r ->  APICallback.login(c, r) },
-                { c, r ->  APICallback.loginError(c, r)}
+                { c, r ->  APICallback.loginSuccess(c, r) },
+                { c, r ->  APICallback.loginFail(c, r)}
             )
             finish()
         }

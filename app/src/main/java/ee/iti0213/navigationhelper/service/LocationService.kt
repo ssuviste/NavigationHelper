@@ -185,8 +185,8 @@ class LocationService : Service() {
             SessionData(
                 sessionLocalId,
                 if (Preferences.syncEnabled && State.loggedIn) null else C.LOCAL_SESSION,
-                C.SESSION_NAME_DEFAULT,
-                C.SESSION_DESC_DEFAULT,
+                getString(R.string.auto_session_name),
+                getString(R.string.auto_session_desc),
                 serviceStartTimestamp,
                 Preferences.gradientMinPace,
                 Preferences.gradientMaxPace,

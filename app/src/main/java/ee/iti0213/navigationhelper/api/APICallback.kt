@@ -13,13 +13,13 @@ class APICallback {
     companion object {
         private val TAG = this::class.java.declaringClass!!.simpleName
 
-        fun register(context: Context, response: JSONObject) {
+        fun registerSuccess(context: Context, response: JSONObject) {
             API.token = response.getString("token")
             State.loggedIn = true
             Common.showToastMsg(context, response.getString("status"))
         }
 
-        fun registerError(context: Context, error: VolleyError) {
+        fun registerFail(context: Context, error: VolleyError) {
             State.userEmail = null
             State.loggedIn = false
             val message = String(error.networkResponse.data, Charset.defaultCharset())
@@ -29,13 +29,13 @@ class APICallback {
             Common.showToastMsg(context, message)
         }
 
-        fun login(context: Context, response: JSONObject) {
+        fun loginSuccess(context: Context, response: JSONObject) {
             API.token = response.getString("token")
             State.loggedIn = true
             Common.showToastMsg(context, response.getString("status"))
         }
 
-        fun loginError(context: Context, error: VolleyError) {
+        fun loginFail(context: Context, error: VolleyError) {
             State.userEmail = null
             State.loggedIn = false
             val message = String(error.networkResponse.data, Charset.defaultCharset())
@@ -46,15 +46,31 @@ class APICallback {
         }
 
         @Suppress("UNUSED_PARAMETER")
-        fun sessionInit(context: Context, response: JSONObject) {
+        fun sessionSyncSuccess(context: Context, response: JSONObject) {
             Log.d(TAG, "Session sync success")
             val startTime = Common.convertDateToLong(response.getString("recordedAt"), DateFormat.SERVER)
             val serverId = response.getString("id")
-            SyncManager.writeSessionServerIdToDatabase(startTime, serverId)
+            SyncManager.updateSessionServerId(startTime, serverId)
         }
 
         @Suppress("UNUSED_PARAMETER")
-        fun sessionInitError(context: Context, error: VolleyError) {
+        fun sessionSyncFail(context: Context, error: VolleyError) {
+            val message = String(error.networkResponse.data, Charset.defaultCharset())
+                .replace("\"", " ")
+                .replace("{ messages :[ ", "")
+                .replace(" ]}", "")
+            Log.e(TAG, message)
+        }
+
+        @Suppress("UNUSED_PARAMETER")
+        fun locationSyncSuccess(context: Context, response: JSONObject) {
+            Log.d(TAG, "Location sync success")
+            val recordedAt = Common.convertDateToLong(response.getString("recordedAt"), DateFormat.SERVER)
+            SyncManager.setLocationSyncNeedToZero(recordedAt)
+        }
+
+        @Suppress("UNUSED_PARAMETER")
+        fun locationSyncFail(context: Context, error: VolleyError) {
             val message = String(error.networkResponse.data, Charset.defaultCharset())
                 .replace("\"", " ")
                 .replace("{ messages :[ ", "")

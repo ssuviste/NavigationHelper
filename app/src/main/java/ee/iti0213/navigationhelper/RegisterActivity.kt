@@ -60,8 +60,8 @@ class RegisterActivity : AppCompatActivity() {
             reqParams.put("lastName", editTextLastName.text.toString())
             API.postToUrl(
                 this, API.AUTH_REGISTER, reqParams, false,
-                { c, r ->  APICallback.register(c, r) },
-                { c, r ->  APICallback.registerError(c, r)}
+                { c, r ->  APICallback.registerSuccess(c, r) },
+                { c, r ->  APICallback.registerFail(c, r)}
             )
             finish()
         }

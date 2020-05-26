@@ -58,9 +58,9 @@ class Repository(val context: Context) {
         )
         while (cursor.moveToNext()) {
             val serverId = if (cursor.isNull(cursor.getColumnIndex(DbHelper.SESSION_SERVER_ID))) {
-                cursor.getString(cursor.getColumnIndex(DbHelper.SESSION_SERVER_ID))
-            } else {
                 null
+            } else {
+                cursor.getString(cursor.getColumnIndex(DbHelper.SESSION_SERVER_ID))
             }
             sessions.add(
                 SessionData(
@@ -85,6 +85,28 @@ class Repository(val context: Context) {
 
     fun getAllSessionsWhereServerIdNull(): List<SessionData> {
         return getAllSessions().filter { it.serverId == null }
+    }
+
+    fun getSessionServerIdWhereLocalId(localId: String): String? {
+        val columns = arrayOf(
+            DbHelper.SESSION_SERVER_ID
+        )
+        val selection = "${DbHelper.SESSION_LOCAL_ID} = '$localId'"
+        val cursor = db.query(
+            DbHelper.SESSIONS_TABLE_NAME,
+            columns,
+            selection,
+            null,
+            null,
+            null,
+            null
+        )
+        var result: String? = null
+        if (cursor.moveToNext()) {
+            result = cursor.getString(cursor.getColumnIndex(DbHelper.SESSION_SERVER_ID))
+        }
+        cursor.close()
+        return result
     }
 
     fun getAllSessionLocalIds(): List<String> {
@@ -214,6 +236,58 @@ class Repository(val context: Context) {
         return getAllLocationsBySessionLocalId(sessionLocalId).filter {
             it.locationType == C.LOC_TYPE_WP
         }
+    }
+
+    fun getAllLocationsWhichNeedSync(): List<LocationData> {
+        val columns = arrayOf(
+            DbHelper.LOCATION_SESSION_LOCAL_ID,
+            DbHelper.LOCATION_RECORDED_AT,
+            DbHelper.LOCATION_LATITUDE,
+            DbHelper.LOCATION_LONGITUDE,
+            DbHelper.LOCATION_ALTITUDE,
+            DbHelper.LOCATION_ACCURACY,
+            DbHelper.LOCATION_TYPE,
+            DbHelper.LOCATION_NEEDS_SYNC
+        )
+        val selection = "${DbHelper.LOCATION_NEEDS_SYNC} <> 0"
+        val orderBy = DbHelper.LOCATION_ID + " ASC"
+        val cursor = db.query(
+            DbHelper.LOCATIONS_TABLE_NAME,
+            columns,
+            selection,
+            null,
+            null,
+            null,
+            orderBy
+        )
+        val locations = ArrayList<LocationData>()
+        while (cursor.moveToNext()) {
+            locations.add(
+                LocationData(
+                    cursor.getString(cursor.getColumnIndex(DbHelper.LOCATION_SESSION_LOCAL_ID)),
+                    cursor.getLong(cursor.getColumnIndex(DbHelper.LOCATION_RECORDED_AT)),
+                    cursor.getDouble(cursor.getColumnIndex(DbHelper.LOCATION_LATITUDE)),
+                    cursor.getDouble(cursor.getColumnIndex(DbHelper.LOCATION_LONGITUDE)),
+                    cursor.getDouble(cursor.getColumnIndex(DbHelper.LOCATION_ALTITUDE)),
+                    cursor.getFloat(cursor.getColumnIndex(DbHelper.LOCATION_ACCURACY)),
+                    cursor.getString(cursor.getColumnIndex(DbHelper.LOCATION_TYPE)),
+                    cursor.getInt(cursor.getColumnIndex(DbHelper.LOCATION_NEEDS_SYNC))
+                )
+            )
+        }
+        cursor.close()
+        return locations
+    }
+
+    fun setLocationSyncNeed(recordedAt: Long, needsSync: Int) {
+        val values = ContentValues()
+        values.put(DbHelper.LOCATION_NEEDS_SYNC, needsSync)
+        db.update(
+            DbHelper.LOCATIONS_TABLE_NAME,
+            values,
+            "${DbHelper.LOCATION_RECORDED_AT} = $recordedAt",
+            null
+        )
     }
 
     fun deleteAllLocationsWithSessionLocalId(sessionLocalId: String) {
