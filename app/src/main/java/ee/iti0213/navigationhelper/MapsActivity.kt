@@ -47,9 +47,9 @@ import kotlin.collections.ArrayList
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     companion object {
         private val TAG = this::class.java.declaringClass!!.simpleName
-        private var compassEnabled = false
-        private var upDirectionState = UpDirection.USER_CHOSEN
-        private var keepCenteredEnabled = false
+        private var compassEnabled: Boolean = false
+        private var upDirectionState: UpDirection = UpDirection.USER_CHOSEN
+        private var keepCenteredEnabled: Boolean = false
     }
 
     private val broadcastReceiver = InnerBroadcastReceiver()
@@ -57,7 +57,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var compass: CompassController
-
 
     private var track = ArrayList<Location>()
     private var trackPolyLinesCount = 0

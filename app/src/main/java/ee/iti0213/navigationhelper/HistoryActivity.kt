@@ -22,7 +22,6 @@ class HistoryActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.mainMenuToolbar)
         toolbar.title = getString(R.string.history)
         toolbar.logo = getDrawable(R.drawable.baseline_restore_24)
-        //toolbar.overflowIcon = getDrawable(R.drawable.baseline_account_box_24)
         @Suppress("DEPRECATION")
         toolbar.logo.setColorFilter(white, mode)
         setSupportActionBar(toolbar)

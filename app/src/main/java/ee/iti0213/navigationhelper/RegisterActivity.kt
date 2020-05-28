@@ -51,7 +51,7 @@ class RegisterActivity : AppCompatActivity() {
             && Common.isNameValid(this, editTextLastName.text)
             && Common.isEmailValid(this, editTextEmail.text)
             && Common.isPasswordValid(this, editTextPassword.text)) {
-            //TODO: Register user
+
             State.userEmail = editTextEmail.text.toString()
             val reqParams = JSONObject()
             reqParams.put("email", editTextEmail.text.toString())

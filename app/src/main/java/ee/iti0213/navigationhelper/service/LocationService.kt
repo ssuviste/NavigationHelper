@@ -14,14 +14,11 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.*
-import ee.iti0213.navigationhelper.helper.C
 import ee.iti0213.navigationhelper.R
 import ee.iti0213.navigationhelper.db.LocationData
 import ee.iti0213.navigationhelper.db.Repository
 import ee.iti0213.navigationhelper.db.SessionData
-import ee.iti0213.navigationhelper.helper.Common
-import ee.iti0213.navigationhelper.helper.Preferences
-import ee.iti0213.navigationhelper.helper.State
+import ee.iti0213.navigationhelper.helper.*
 
 class LocationService : Service() {
     companion object {
@@ -109,12 +106,8 @@ class LocationService : Service() {
         // remove notifications
         cancelAllNotifications()
 
-        // don't forget to unregister broadcast receiver!!!!
+        // unregister broadcast receiver
         unregisterReceiver(broadcastReceiver)
-
-        // broadcast stop to UI
-        //val intent = Intent(C.TRACKING_UPDATE)
-        //LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
     }
 
     override fun onLowMemory() {
@@ -158,7 +151,6 @@ class LocationService : Service() {
         showNotification()
 
         return START_STICKY
-        //return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -187,7 +179,7 @@ class LocationService : Service() {
                 if (Preferences.syncEnabled && State.loggedIn) null else C.LOCAL_SESSION,
                 getString(R.string.auto_session_name),
                 getString(R.string.auto_session_desc),
-                serviceStartTimestamp,
+                System.currentTimeMillis() / 1000 * 1000,
                 Preferences.gradientMinPace,
                 Preferences.gradientMaxPace,
                 0
@@ -210,7 +202,7 @@ class LocationService : Service() {
             LocationData(
                 sessionLocalId,
                 location,
-                System.currentTimeMillis(),
+                System.currentTimeMillis() / 1000 * 1000,
                 locationType,
                 if (Preferences.syncEnabled && State.loggedIn) 1 else 0
             )
@@ -228,7 +220,7 @@ class LocationService : Service() {
         try {
             mFusedLocationClient.lastLocation
                 .addOnCompleteListener { task -> if (task.isSuccessful) {
-                    Log.w(TAG, "Task successful")
+                    Log.w(TAG, "Successfully got last location")
                     if (task.result != null) {
                         onNewLocation(task.result!!)
                     }

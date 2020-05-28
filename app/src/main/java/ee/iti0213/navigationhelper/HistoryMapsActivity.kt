@@ -82,12 +82,14 @@ class HistoryMapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
         drawTrack()
         drawMapMarkers()
-        mMap.moveCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                LatLng(locations.first().latitude, locations.first().longitude),
-                15f
+        if (locations.isNotEmpty()) {
+            mMap.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(locations.first().latitude, locations.first().longitude),
+                    15f
+                )
             )
-        )
+        }
     }
 
     override fun onDestroy() {
@@ -155,13 +157,13 @@ class HistoryMapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun calculateSpeeds() {
-        if (walkDistStart != 0f) {
+        if (walkDistStart > 0f) {
             speedStart = (timeStart / (walkDistStart / 1000)).toLong()
         }
-        if (walkDistCP != 0f) {
+        if (walkDistCP > 0f) {
             speedCP = (timeCP / (walkDistCP / 1000)).toLong()
         }
-        if (walkDistWP != 0f) {
+        if (walkDistWP > 0f) {
             speedWP = (timeWP / (walkDistWP / 1000)).toLong()
         }
     }

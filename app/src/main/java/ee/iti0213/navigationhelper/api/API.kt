@@ -24,7 +24,6 @@ class API {
         const val REST_ID_CP = "00000000-0000-0000-0000-000000000003"
 
         var token: String? = null
-        var currentSessionId: String? = null
 
         fun postToUrl(context: Context, endpoint: String, reqParams: JSONObject, useToken: Boolean,
                       callBack: (context: Context, resp: JSONObject) -> Unit,

@@ -16,7 +16,6 @@ class HelpActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.mainMenuToolbar)
         toolbar.title = getString(R.string.help)
         toolbar.logo = getDrawable(R.drawable.baseline_help_24)
-        //toolbar.overflowIcon = getDrawable(R.drawable.baseline_account_box_24)
         @Suppress("DEPRECATION")
         toolbar.logo.setColorFilter(white, mode)
         setSupportActionBar(toolbar)

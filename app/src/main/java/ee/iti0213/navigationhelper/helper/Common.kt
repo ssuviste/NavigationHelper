@@ -105,7 +105,7 @@ class Common {
                 DateFormat.DEFAULT ->
                     SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.getDefault())
                 DateFormat.SERVER ->
-                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault())
+                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
                 DateFormat.GPX ->
                     SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.getDefault())
             }
@@ -117,7 +117,7 @@ class Common {
                 DateFormat.DEFAULT ->
                     SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.getDefault())
                 DateFormat.SERVER ->
-                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault())
+                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
                 DateFormat.GPX ->
                     SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.getDefault())
             }

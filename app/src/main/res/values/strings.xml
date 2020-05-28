@@ -27,7 +27,7 @@
     <string name="password">Password</string>
 
     <string name="sync_data_to_server">Sync data to server</string>
-    <string name="sync_interval">Syncing interval (s)</string>
+    <string name="sync_interval">Sync interval (s)</string>
     <string name="gps_accuracy">GPS accuracy (m)</string>
     <string name="track_gradient">Track gradient</string>
     <string name="gradient_pace_range">Gradient pace range (min/km)</string>
