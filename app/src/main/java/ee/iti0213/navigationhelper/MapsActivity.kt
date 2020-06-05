@@ -99,11 +99,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         createNotificationChannel()
 
-        if (!checkFineLocationPermissions()) {
-            requestFineLocationPermissions()
+        if (!checkFineLocationPermission()) {
+            requestFineLocationPermission()
         }
-        if (!checkExtStoragePermissions()) {
-            requestExtStoragePermissions()
+        if (!checkExtStoragePermission()) {
+            requestExtStoragePermission()
         }
 
         val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
@@ -257,7 +257,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         Log.d(TAG, "onMapReady")
         mMap = googleMap
-        if (checkFineLocationPermissions()) {
+        if (checkFineLocationPermission()) {
             mMap.isMyLocationEnabled = true
         }
         updateMap()
@@ -281,14 +281,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     // Returns the current state of the permissions needed.
-    private fun checkFineLocationPermissions(): Boolean {
+    private fun checkFineLocationPermission(): Boolean {
         return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
             this,
             Manifest.permission.ACCESS_FINE_LOCATION
         )
     }
 
-    private fun requestFineLocationPermissions() {
+    private fun requestFineLocationPermission() {
         val shouldProvideRationale =
             ActivityCompat.shouldShowRequestPermissionRationale(
                 this,
@@ -322,14 +322,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun checkExtStoragePermissions(): Boolean {
+    private fun checkExtStoragePermission(): Boolean {
         return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
             this,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
     }
 
-    private fun requestExtStoragePermissions() {
+    private fun requestExtStoragePermission() {
         ActivityCompat.requestPermissions(
             this,
             arrayOf(
