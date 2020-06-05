@@ -13,7 +13,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import ee.iti0213.navigationhelper.api.API
 import ee.iti0213.navigationhelper.api.SyncManager
-import ee.iti0213.navigationhelper.helper.State
+import ee.iti0213.navigationhelper.state.State
 import kotlinx.android.synthetic.main.activity_main_menu.*
 
 class MainMenuActivity : AppCompatActivity() {

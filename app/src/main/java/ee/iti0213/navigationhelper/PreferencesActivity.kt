@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import ee.iti0213.navigationhelper.helper.C
-import ee.iti0213.navigationhelper.helper.Preferences
+import ee.iti0213.navigationhelper.state.Preferences
 import kotlinx.android.synthetic.main.activity_preferences.*
 import me.bendik.simplerangeview.SimpleRangeView
 import me.bendik.simplerangeview.SimpleRangeView.OnTrackRangeListener

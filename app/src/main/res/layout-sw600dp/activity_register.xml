@@ -76,10 +76,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="36dp"
+                android:layout_marginBottom="16dp"
                 android:autofillHints=""
                 android:ems="10"
                 android:hint="@string/password"
+                android:inputType="textPassword"
+                android:textSize="36sp" />
+
+            <EditText
+                android:id="@+id/editTextConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="36dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/confirm_password"
                 android:inputType="textPassword"
                 android:textSize="36sp" />
 

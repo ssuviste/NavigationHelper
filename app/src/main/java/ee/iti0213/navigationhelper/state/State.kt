@@ -1,4 +1,4 @@
-package ee.iti0213.navigationhelper.helper
+package ee.iti0213.navigationhelper.state
 
 object State {
     var loggedIn: Boolean = false

@@ -12,6 +12,7 @@ class LocationData {
     var locationType: String
     var needsSync: Int
 
+    @Suppress("UNUSED")
     constructor(sessionLocalId: String, location: Location, locationType: String, needsSync: Int) {
         this.sessionLocalId = sessionLocalId
         this.recordedAt = location.time

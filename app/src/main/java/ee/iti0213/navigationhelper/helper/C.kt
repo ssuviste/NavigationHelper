@@ -2,6 +2,7 @@ package ee.iti0213.navigationhelper.helper
 
 class C {
     companion object {
+        const val NOTIFICATION_CHANNEL_DESC = "Default channel"
         const val NOTIFICATION_CHANNEL = "default_channel"
         const val NOTIFICATION_ACTION_CP = "notification_action.cp"
         const val NOTIFICATION_ACTION_WP = "notification_action.wp"

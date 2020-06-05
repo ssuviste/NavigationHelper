@@ -23,7 +23,6 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -36,6 +35,7 @@ import com.google.android.material.snackbar.Snackbar
 import ee.iti0213.navigationhelper.controller.CompassController
 import ee.iti0213.navigationhelper.helper.*
 import ee.iti0213.navigationhelper.service.LocationService
+import ee.iti0213.navigationhelper.state.State
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.bottom_panel.*
 import kotlinx.android.synthetic.main.cp_stats.*
@@ -68,11 +68,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mBoundService: LocationService
     private var mBound: Boolean = false
 
-    /** Defines callbacks for service binding, passed to bindService()  */
+    // Defines callbacks for service binding, passed to bindService()
     private val connection = object : ServiceConnection {
-
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            // We've bound to LocationService, cast the IBinder and get LocationService instance
             val binder = service as LocationService.LocationBinder
             mBoundService = binder.getService()
             mBound = true
@@ -85,7 +84,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -114,7 +112,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onStart() {
-        Log.d(TAG, "onStart")
         super.onStart()
         Intent(this, LocationService::class.java).also { intent ->
             bindService(intent, connection, Context.BIND_AUTO_CREATE)
@@ -122,7 +119,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onResume() {
-        Log.d(TAG, "onResume")
         super.onResume()
         LocalBroadcastManager.getInstance(this)
             .registerReceiver(broadcastReceiver, broadcastReceiverIntentFilter)
@@ -130,13 +126,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onPause() {
-        Log.d(TAG, "onPause")
         super.onPause()
         compass.actOnPause()
     }
 
     override fun onStop() {
-        Log.d(TAG, "onStop")
         super.onStop()
         unbindService(connection)
         mBound = false
@@ -144,18 +138,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .unregisterReceiver(broadcastReceiver)
     }
 
-    override fun onDestroy() {
-        Log.d(TAG, "onDestroy")
-        super.onDestroy()
-    }
-
-    override fun onRestart() {
-        Log.d(TAG, "onRestart")
-        super.onRestart()
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
-        Log.d(TAG, "onSaveInstanceState")
         super.onSaveInstanceState(outState)
 
         outState.putParcelableArrayList(C.RES_TRACK_KEY, track)
@@ -179,7 +162,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        Log.d(TAG, "onRestoreInstanceState")
         super.onRestoreInstanceState(savedInstanceState)
 
         track = savedInstanceState.getParcelableArrayList(C.RES_TRACK_KEY)!!
@@ -219,25 +201,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        Log.i(TAG, "onRequestPermissionResult")
         if (requestCode == C.REQUEST_FINE_LOC_PERMISSIONS_REQUEST_CODE) {
             when {
-                grantResults.count() <= 0 -> { // If user interaction was interrupted, the permission request is cancelled and you
-                    // receive empty arrays.
-                    Log.i(TAG, "User interaction was cancelled.")
-                    Toast.makeText(this, "User interaction was cancelled.", Toast.LENGTH_SHORT)
-                        .show()
+                grantResults.count() <= 0 -> { // If user interaction was interrupted,
+                    // the permission request is cancelled and we receive empty arrays.
+                    Log.i(TAG, getString(R.string.user_ia_cancelled))
+                    Common.showToastMsg(this, getString(R.string.user_ia_cancelled))
                 }
                 grantResults[0] == PackageManager.PERMISSION_GRANTED -> { // Permission was granted.
-                    Log.i(TAG, "Permission granted.")
-                    Toast.makeText(this, "Permission granted.", Toast.LENGTH_SHORT).show()
+                    Log.i(TAG, getString(R.string.permission_granted))
+                    Common.showToastMsg(this, getString(R.string.permission_granted))
                 }
                 else -> { // Permission denied.
                     Snackbar.make(
                         findViewById(R.id.activity_maps),
-                        "GPS permission denied, unable to continue.",
+                        getString(R.string.gps_permission_denied),
                         Snackbar.LENGTH_INDEFINITE
-                    ).setAction("Settings") {
+                    ).setAction(getString(R.string.settings)) {
                         // Build intent that displays the App settings screen.
                         val intent = Intent()
                         intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
@@ -255,7 +235,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        Log.d(TAG, "onMapReady")
         mMap = googleMap
         if (checkFineLocationPermission()) {
             mMap.isMyLocationEnabled = true
@@ -265,14 +244,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun createNotificationChannel() {
-        // when on 8 Oreo or higher
+        // When on 8 Oreo or higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 C.NOTIFICATION_CHANNEL,
-                "Default channel",
+                C.NOTIFICATION_CHANNEL_DESC,
                 NotificationManager.IMPORTANCE_LOW
             )
-            channel.description = "Default channel"
+            channel.description = C.NOTIFICATION_CHANNEL_DESC
 
             val notificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -289,19 +268,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun requestFineLocationPermission() {
-        val shouldProvideRationale =
-            ActivityCompat.shouldShowRequestPermissionRationale(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
+        val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
         // Provide an additional rationale to the user. This would happen if the user denied the
         // request previously, but didn't check the "Don't ask again" checkbox.
         if (shouldProvideRationale) {
             Snackbar.make(
                 findViewById(R.id.activity_maps),
-                "Access to GPS needed!",
+                getString(R.string.gps_needed),
                 Snackbar.LENGTH_INDEFINITE
-            ).setAction("OK") {
+            ).setAction(getString(R.string.ok)) {
                 // Request permission
                 ActivityCompat.requestPermissions(
                     this,
@@ -310,7 +288,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 )
             }.show()
         } else {
-            Log.i(TAG, "Requesting permission")
             // Request permission. It's possible this can be auto answered if device policy
             // sets the permission in a given state or the user denied the permission
             // previously and checked "Never ask again".
@@ -343,8 +320,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun updateSessionState() {
         if (!State.sessionActive) {
             if (Build.VERSION.SDK_INT >= 26) {
-                // starting the FOREGROUND service
-                // service has to display non-dismissible notification within 5 secs
+                // Start the Foreground service
+                // Service has to display non-dismissible notification within 5 secs
                 startForegroundService(Intent(this, LocationService::class.java))
             } else {
                 startService(Intent(this, LocationService::class.java))
@@ -369,7 +346,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         val input = EditText(this)
-        params.setMargins(52,24,52,24)
+        params.setMargins(52, 24, 52, 24)
         input.layoutParams = params
         input.inputType = InputType.TYPE_CLASS_TEXT
         input.hint = getString(R.string.session_title_hint)
@@ -402,8 +379,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     // BROADCAST RECEIVER
     private inner class InnerBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            Log.d(TAG, intent!!.action!!)
-            when (intent.action) {
+            when (intent!!.action) {
                 C.LOCATION_UPDATE -> {
                     val loc = intent.extras!!.get(C.LOC_UPD_LOCATION_KEY) as Location
                     updateCamera(loc)
@@ -417,24 +393,60 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         cpArray = updAllCPs
                     }
                     if (updLocationWP != null) {
-                            wp = updLocationWP
+                        wp = updLocationWP
                     }
                     updateMap()
 
-                    walkDistStart.text = replaceNullString(intent.getStringExtra(C.TCK_UPD_WALK_DIST_START_KEY), getString(R.string.init_dist))
-                    flyDistStart.text = replaceNullString(intent.getStringExtra(C.TCK_UPD_FLY_DIST_START_KEY), getString(R.string.init_dist))
-                    timeStart.text = replaceNullString(intent.getStringExtra(C.TCK_UPD_TIME_START_KEY), getString(R.string.init_time))
-                    speedStart.text = replaceNullString(intent.getStringExtra(C.TCK_UPD_SPEED_START_KEY), getString(R.string.init_speed))
+                    walkDistStart.text = replaceNullString(
+                        intent.getStringExtra(C.TCK_UPD_WALK_DIST_START_KEY),
+                        getString(R.string.init_dist)
+                    )
+                    flyDistStart.text = replaceNullString(
+                        intent.getStringExtra(C.TCK_UPD_FLY_DIST_START_KEY),
+                        getString(R.string.init_dist)
+                    )
+                    timeStart.text = replaceNullString(
+                        intent.getStringExtra(C.TCK_UPD_TIME_START_KEY),
+                        getString(R.string.init_time)
+                    )
+                    speedStart.text = replaceNullString(
+                        intent.getStringExtra(C.TCK_UPD_SPEED_START_KEY),
+                        getString(R.string.init_speed)
+                    )
 
-                    walkDistCP.text = replaceNullString(intent.getStringExtra(C.TCK_UPD_WALK_DIST_CP_KEY), getString(R.string.init_dist))
-                    flyDistCP.text = replaceNullString(intent.getStringExtra(C.TCK_UPD_FLY_DIST_CP_KEY), getString(R.string.init_dist))
-                    timeCP.text = replaceNullString(intent.getStringExtra(C.TCK_UPD_TIME_CP_KEY), getString(R.string.init_time))
-                    speedCP.text = replaceNullString(intent.getStringExtra(C.TCK_UPD_SPEED_CP_KEY), getString(R.string.init_speed))
+                    walkDistCP.text = replaceNullString(
+                        intent.getStringExtra(C.TCK_UPD_WALK_DIST_CP_KEY),
+                        getString(R.string.init_dist)
+                    )
+                    flyDistCP.text = replaceNullString(
+                        intent.getStringExtra(C.TCK_UPD_FLY_DIST_CP_KEY),
+                        getString(R.string.init_dist)
+                    )
+                    timeCP.text = replaceNullString(
+                        intent.getStringExtra(C.TCK_UPD_TIME_CP_KEY),
+                        getString(R.string.init_time)
+                    )
+                    speedCP.text = replaceNullString(
+                        intent.getStringExtra(C.TCK_UPD_SPEED_CP_KEY),
+                        getString(R.string.init_speed)
+                    )
 
-                    walkDistWP.text = replaceNullString(intent.getStringExtra(C.TCK_UPD_WALK_DIST_WP_KEY), getString(R.string.init_dist))
-                    flyDistWP.text = replaceNullString(intent.getStringExtra(C.TCK_UPD_FLY_DIST_WP_KEY), getString(R.string.init_dist))
-                    timeWP.text = replaceNullString(intent.getStringExtra(C.TCK_UPD_TIME_WP_KEY), getString(R.string.init_time))
-                    speedWP.text = replaceNullString(intent.getStringExtra(C.TCK_UPD_SPEED_WP_KEY), getString(R.string.init_speed))
+                    walkDistWP.text = replaceNullString(
+                        intent.getStringExtra(C.TCK_UPD_WALK_DIST_WP_KEY),
+                        getString(R.string.init_dist)
+                    )
+                    flyDistWP.text = replaceNullString(
+                        intent.getStringExtra(C.TCK_UPD_FLY_DIST_WP_KEY),
+                        getString(R.string.init_dist)
+                    )
+                    timeWP.text = replaceNullString(
+                        intent.getStringExtra(C.TCK_UPD_TIME_WP_KEY),
+                        getString(R.string.init_time)
+                    )
+                    speedWP.text = replaceNullString(
+                        intent.getStringExtra(C.TCK_UPD_SPEED_WP_KEY),
+                        getString(R.string.init_speed)
+                    )
                 }
             }
         }
@@ -469,8 +481,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun updateTrack() {
         while (track.size - 1 > trackPolyLinesCount) {
-            val first = LatLng(track[trackPolyLinesCount].latitude, track[trackPolyLinesCount].longitude)
-            val second = LatLng(track[trackPolyLinesCount + 1].latitude, track[trackPolyLinesCount + 1].longitude)
+            val first =
+                LatLng(track[trackPolyLinesCount].latitude, track[trackPolyLinesCount].longitude)
+            val second = LatLng(
+                track[trackPolyLinesCount + 1].latitude,
+                track[trackPolyLinesCount + 1].longitude
+            )
             val color = Common.getTrackColor(
                 this,
                 track[trackPolyLinesCount].time,
@@ -500,7 +516,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         while (cpArray.size > cpMarkersCount) {
             val marker = MarkerOptions()
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_beenhere_black_36))
-                .position(LatLng(cpArray[cpMarkersCount].latitude, cpArray[cpMarkersCount].longitude))
+                .position(
+                    LatLng(
+                        cpArray[cpMarkersCount].latitude,
+                        cpArray[cpMarkersCount].longitude
+                    )
+                )
                 .anchor(0.5f, 0.9f)
             mMap.addMarker(marker)
             cpMarkersCount++
@@ -510,16 +531,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 val marker = MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_place_black_36))
                     .anchor(0.5f, 0.9f)
-                wpMarker = mMap.addMarker(marker
-                    .position(LatLng(wp!!.latitude, wp!!.longitude)))
+                wpMarker = mMap.addMarker(
+                    marker
+                        .position(LatLng(wp!!.latitude, wp!!.longitude))
+                )
             } else if (wpMarker!!.position.latitude != wp!!.latitude
-                || wpMarker!!.position.longitude != wp!!.longitude) {
+                || wpMarker!!.position.longitude != wp!!.longitude
+            ) {
                 val marker = MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_place_black_36))
                     .anchor(0.5f, 0.9f)
                 wpMarker!!.remove()
-                wpMarker = mMap.addMarker(marker
-                    .position(LatLng(wp!!.latitude, wp!!.longitude)))
+                wpMarker = mMap.addMarker(
+                    marker
+                        .position(LatLng(wp!!.latitude, wp!!.longitude))
+                )
             }
         }
     }
@@ -538,8 +564,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         cpMarkersCount = 0
         wp = null
         mMap.clear()
-        //trackPolyline = mMap.addPolyline(trackPolylineOptions)
-        //trackPolyline.points = track
     }
 
     private fun resetBottomPanelStats() {

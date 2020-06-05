@@ -10,7 +10,7 @@ import ee.iti0213.navigationhelper.api.API
 import ee.iti0213.navigationhelper.api.APICallback
 import ee.iti0213.navigationhelper.helper.C
 import ee.iti0213.navigationhelper.helper.Common
-import ee.iti0213.navigationhelper.helper.State
+import ee.iti0213.navigationhelper.state.State
 import kotlinx.android.synthetic.main.activity_register.*
 import org.json.JSONObject
 
@@ -50,7 +50,9 @@ class RegisterActivity : AppCompatActivity() {
         if (Common.isNameValid(this, editTextFirstName.text)
             && Common.isNameValid(this, editTextLastName.text)
             && Common.isEmailValid(this, editTextEmail.text)
-            && Common.isPasswordValid(this, editTextPassword.text)) {
+            && Common.isPasswordValid(this, editTextPassword.text)
+            && Common.isPasswordConfirmed(this, editTextPassword.text, editTextConfirmPassword.text)
+        ) {
 
             State.userEmail = editTextEmail.text.toString()
             val reqParams = JSONObject()
@@ -60,8 +62,8 @@ class RegisterActivity : AppCompatActivity() {
             reqParams.put("lastName", editTextLastName.text.toString())
             API.postToUrl(
                 this, API.AUTH_REGISTER, reqParams, false,
-                { c, r ->  APICallback.registerSuccess(c, r) },
-                { c, r ->  APICallback.registerFail(c, r)}
+                { c, r -> APICallback.registerSuccess(c, r) },
+                { c, r -> APICallback.registerFail(c, r) }
             )
             finish()
         }

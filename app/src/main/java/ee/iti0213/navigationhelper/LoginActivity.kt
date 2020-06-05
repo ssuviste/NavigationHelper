@@ -10,7 +10,7 @@ import ee.iti0213.navigationhelper.api.API
 import ee.iti0213.navigationhelper.api.APICallback
 import ee.iti0213.navigationhelper.helper.C
 import ee.iti0213.navigationhelper.helper.Common
-import ee.iti0213.navigationhelper.helper.State
+import ee.iti0213.navigationhelper.state.State
 import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONObject
 

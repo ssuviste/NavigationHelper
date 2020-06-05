@@ -19,6 +19,8 @@ import ee.iti0213.navigationhelper.db.LocationData
 import ee.iti0213.navigationhelper.db.Repository
 import ee.iti0213.navigationhelper.db.SessionData
 import ee.iti0213.navigationhelper.helper.*
+import ee.iti0213.navigationhelper.state.Preferences
+import ee.iti0213.navigationhelper.state.State
 
 class LocationService : Service() {
     companion object {
@@ -69,7 +71,6 @@ class LocationService : Service() {
 
 
     override fun onCreate() {
-        Log.d(TAG, "onCreate")
         super.onCreate()
 
         databaseConnector = Repository(this).open()
@@ -94,36 +95,20 @@ class LocationService : Service() {
     }
 
     override fun onDestroy() {
-        Log.d(TAG, "onDestroy")
         super.onDestroy()
 
-        //stop location updates
         mFusedLocationClient.removeLocationUpdates(mLocationCallback)
-
-        // close database connection
         databaseConnector.close()
-
-        // remove notifications
         cancelAllNotifications()
-
-        // unregister broadcast receiver
         unregisterReceiver(broadcastReceiver)
     }
 
-    override fun onLowMemory() {
-        Log.d(TAG, "onLowMemory")
-        super.onLowMemory()
-    }
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d(TAG, "onStartCommand")
-
         trackingEnabled = true
         serviceStartTimestamp = System.currentTimeMillis()
 
         addSessionToDatabase()
 
-        // set counters and locations to initial state
         currentLocation = null
         locationStart = null
         locationCP = null
@@ -154,18 +139,7 @@ class LocationService : Service() {
     }
 
     override fun onBind(intent: Intent?): IBinder? {
-        Log.d(TAG, "onBind")
         return binder
-    }
-
-    override fun onRebind(intent: Intent?) {
-        Log.d(TAG, "onRebind")
-        super.onRebind(intent)
-    }
-
-    override fun onUnbind(intent: Intent?): Boolean {
-        Log.d(TAG, "onUnbind")
-        return super.onUnbind(intent)
     }
 
     private fun addSessionToDatabase() {
@@ -219,38 +193,40 @@ class LocationService : Service() {
     private fun getLastLocation() {
         try {
             mFusedLocationClient.lastLocation
-                .addOnCompleteListener { task -> if (task.isSuccessful) {
-                    Log.w(TAG, "Successfully got last location")
-                    if (task.result != null) {
-                        onNewLocation(task.result!!)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.w(TAG, getString(R.string.last_loc_success))
+                        if (task.result != null) {
+                            onNewLocation(task.result!!)
+                        }
+                    } else {
+                        Log.w(TAG, getString(R.string.last_loc_fail) + task.exception)
                     }
-                } else {
-                    Log.w(TAG, "Failed to get location." + task.exception)
-                }}
+                }
         } catch (unlikely: SecurityException) {
-            Log.e(TAG, "Lost location permission. $unlikely")
+            Log.e(TAG, getString(R.string.lost_loc_permission) + " $unlikely")
         }
     }
 
     private fun requestLocationUpdates() {
-        Log.i(TAG, "Requesting location updates")
         try {
             mFusedLocationClient.requestLocationUpdates(
                 mLocationRequest,
                 mLocationCallback, Looper.myLooper()
             )
         } catch (unlikely: SecurityException) {
-            Log.e(TAG, "Lost location permission. Could not request updates. $unlikely")
+            Log.e(TAG, getString(R.string.lost_loc_permission) + " $unlikely")
         }
     }
 
     private fun onNewLocation(location: Location) {
         if (!location.hasAccuracy()
             || location.accuracy > Preferences.gpsAccuracy
-            || (currentLocation != null && currentLocation!!.distanceTo(location) < C.LOC_STAND_RADIUS)) {
+            || (currentLocation != null && currentLocation!!.distanceTo(location) < C.LOC_STAND_RADIUS)
+        ) {
             return
         }
-        Log.i(TAG, "New location: $location")
+        Log.i(TAG, getString(R.string.new_loc) + ": $location")
         val intent = Intent(C.LOCATION_UPDATE)
         intent.putExtra(C.LOC_UPD_LOCATION_KEY, location)
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
@@ -308,7 +284,6 @@ class LocationService : Service() {
     private fun showTrack() {
         showNotification()
 
-        // broadcast new location to UI
         val intent = Intent(C.TRACKING_UPDATE)
         intent.putExtra(C.TCK_UPD_TRACK_KEY, track)
         intent.putExtra(C.TCK_UPD_CPS_KEY, allCPs)
@@ -317,44 +292,53 @@ class LocationService : Service() {
         intent.putExtra(
             C.TCK_UPD_WALK_DIST_START_KEY, "%.0f".format(walkDistStart) + getString(
                 R.string.unit_dist
-            ))
+            )
+        )
         intent.putExtra(
             C.TCK_UPD_FLY_DIST_START_KEY, "%.0f".format(flyDistStart) + getString(
                 R.string.unit_dist
-            ))
+            )
+        )
         intent.putExtra(C.TCK_UPD_TIME_START_KEY, Common.formatTime(timeStart))
         intent.putExtra(
             C.TCK_UPD_SPEED_START_KEY, Common.formatSpeed(speedStart) + getString(
                 R.string.unit_speed
-            ))
+            )
+        )
 
         intent.putExtra(
             C.TCK_UPD_WALK_DIST_CP_KEY, "%.0f".format(walkDistCP) + getString(
                 R.string.unit_dist
-            ))
+            )
+        )
         intent.putExtra(
             C.TCK_UPD_FLY_DIST_CP_KEY, "%.0f".format(flyDistCP) + getString(
                 R.string.unit_dist
-            ))
+            )
+        )
         intent.putExtra(C.TCK_UPD_TIME_CP_KEY, Common.formatTime(timeCP))
         intent.putExtra(
             C.TCK_UPD_SPEED_CP_KEY, Common.formatSpeed(speedCP) + getString(
                 R.string.unit_speed
-            ))
+            )
+        )
 
         intent.putExtra(
             C.TCK_UPD_WALK_DIST_WP_KEY, "%.0f".format(walkDistWP) + getString(
                 R.string.unit_dist
-            ))
+            )
+        )
         intent.putExtra(
             C.TCK_UPD_FLY_DIST_WP_KEY, "%.0f".format(flyDistWP) + getString(
                 R.string.unit_dist
-            ))
+            )
+        )
         intent.putExtra(C.TCK_UPD_TIME_WP_KEY, Common.formatTime(timeWP))
         intent.putExtra(
             C.TCK_UPD_SPEED_WP_KEY, Common.formatSpeed(speedWP) + getString(
                 R.string.unit_speed
-            ))
+            )
+        )
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
     }
@@ -372,42 +356,51 @@ class LocationService : Service() {
         notifyView.setOnClickPendingIntent(R.id.buttonWP, pendingIntentWp)
 
         notifyView.setTextViewText(
-            R.id.walkDistStart, "%.0f".format(walkDistStart) + getString(R.string.unit_dist))
+            R.id.walkDistStart, "%.0f".format(walkDistStart) + getString(R.string.unit_dist)
+        )
         notifyView.setTextViewText(
-            R.id.flyDistStart, "%.0f".format(flyDistStart) + getString(R.string.unit_dist))
+            R.id.flyDistStart, "%.0f".format(flyDistStart) + getString(R.string.unit_dist)
+        )
         notifyView.setTextViewText(R.id.timeStart, Common.formatTime(timeStart))
         notifyView.setTextViewText(
-            R.id.speedStart, Common.formatSpeed(speedStart) + getString(R.string.unit_speed))
+            R.id.speedStart, Common.formatSpeed(speedStart) + getString(R.string.unit_speed)
+        )
 
         notifyView.setTextViewText(
             R.id.walkDistCP, "%.0f".format(walkDistCP) + getString(
                 R.string.unit_dist
-            ))
+            )
+        )
         notifyView.setTextViewText(
             R.id.flyDistCP, "%.0f".format(flyDistCP) + getString(
                 R.string.unit_dist
-            ))
+            )
+        )
         notifyView.setTextViewText(R.id.timeCP, Common.formatTime(timeCP))
         notifyView.setTextViewText(
             R.id.speedCP, Common.formatSpeed(speedCP) + getString(
                 R.string.unit_speed
-            ))
+            )
+        )
 
         notifyView.setTextViewText(
             R.id.walkDistWP, "%.0f".format(walkDistWP) + getString(
                 R.string.unit_dist
-            ))
+            )
+        )
         notifyView.setTextViewText(
             R.id.flyDistWP, "%.0f".format(flyDistWP) + getString(
                 R.string.unit_dist
-            ))
+            )
+        )
         notifyView.setTextViewText(R.id.timeWP, Common.formatTime(timeWP))
         notifyView.setTextViewText(
             R.id.speedWP, Common.formatSpeed(speedWP) + getString(
                 R.string.unit_speed
-            ))
+            )
+        )
 
-        // construct and show notification
+        // Construct notification
         val builder = NotificationCompat.Builder(applicationContext, C.NOTIFICATION_CHANNEL)
             .setSmallIcon(R.drawable.baseline_gps_fixed_24)
             .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -415,8 +408,9 @@ class LocationService : Service() {
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setCustomBigContentView(notifyView)
 
-        // Super important, start as foreground service - ie android considers this as an active app. Need visual reminder - notification.
-        // must be called within 5 secs after service starts.
+        // Very important to start as Foreground service, so Android considers this an active app
+        // and does not kill it. Needs a visual reminder, ie notification.
+        // Must be called within 5 secs after service starts.
         startForeground(C.NOTIFICATION_ID, builder.build())
     }
 
@@ -437,10 +431,9 @@ class LocationService : Service() {
         }
     }
 
-    private inner class InnerBroadcastReceiver: BroadcastReceiver() {
+    private inner class InnerBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            Log.d(TAG, intent!!.action!!)
-            when(intent.action) {
+            when (intent!!.action) {
                 C.DISABLE_TRACKING -> {
                     val newSessionName = intent.getStringExtra(C.DIS_TCK_SESSION_NAME_KEY)
                     trackingEnabled = false

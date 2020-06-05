@@ -5,6 +5,8 @@ import android.os.Handler
 import android.os.Looper
 import ee.iti0213.navigationhelper.db.Repository
 import ee.iti0213.navigationhelper.helper.*
+import ee.iti0213.navigationhelper.state.Preferences
+import ee.iti0213.navigationhelper.state.State
 import org.json.JSONObject
 
 object SyncManager {
@@ -57,10 +59,10 @@ object SyncManager {
     }
 
     private fun syncLocations() {
-        val locationsToSync = databaseConnector!!.getAllLocationsWhichNeedSync()
+        val locationsToSync = databaseConnector!!.getAllLocationsThatNeedSync()
         for (loc in locationsToSync) {
             val sessionServerId =
-                databaseConnector!!.getSessionServerIdWhereLocalId(loc.sessionLocalId)
+                databaseConnector!!.getSessionServerIdByLocalId(loc.sessionLocalId)
             if (!sessionServerId.isNullOrBlank() && sessionServerId != C.LOCAL_SESSION) {
                 val locationType = when (loc.locationType) {
                     C.LOC_TYPE_LOC -> API.REST_ID_LOC
@@ -90,6 +92,6 @@ object SyncManager {
     }
 
     fun setLocationSyncNeedToZero(startTime: Long) {
-        databaseConnector!!.setLocationSyncNeed(startTime, 0)
+        databaseConnector!!.setLocationNeedsSyncByRecordedAt(startTime, 0)
     }
 }

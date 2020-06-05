@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.muddzdev.styleabletoast.StyleableToast
 import ee.iti0213.navigationhelper.R
+import ee.iti0213.navigationhelper.state.Preferences
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -57,6 +58,14 @@ class Common {
                 return false
             } else if (!Pattern.compile("^.*[^a-zA-Z0-9].*\$").matcher(target).matches()) {
                 showToastMsg(context, context.getString(R.string.invalid_pw_special_char))
+                return false
+            }
+            return true
+        }
+
+        fun isPasswordConfirmed(context: Context, t1: CharSequence?, t2: CharSequence?): Boolean {
+            if (t1.toString() != t2.toString()) {
+                showToastMsg(context, context.getString(R.string.invalid_pw_confirmation))
                 return false
             }
             return true

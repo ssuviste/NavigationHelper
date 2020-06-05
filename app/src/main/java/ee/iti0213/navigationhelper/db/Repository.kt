@@ -87,7 +87,7 @@ class Repository(val context: Context) {
         return getAllSessions().filter { it.serverId == null }
     }
 
-    fun getSessionServerIdWhereLocalId(localId: String): String? {
+    fun getSessionServerIdByLocalId(localId: String): String? {
         val columns = arrayOf(
             DbHelper.SESSION_SERVER_ID
         )
@@ -163,7 +163,7 @@ class Repository(val context: Context) {
         )
     }
 
-    fun deleteAllSessionsWithLocalId(localId: String) {
+    fun deleteAllSessionsByLocalId(localId: String) {
         db.delete(
             DbHelper.SESSIONS_TABLE_NAME,
             "${DbHelper.SESSION_LOCAL_ID} = '$localId'",
@@ -238,7 +238,7 @@ class Repository(val context: Context) {
         }
     }
 
-    fun getAllLocationsWhichNeedSync(): List<LocationData> {
+    fun getAllLocationsThatNeedSync(): List<LocationData> {
         val columns = arrayOf(
             DbHelper.LOCATION_SESSION_LOCAL_ID,
             DbHelper.LOCATION_RECORDED_AT,
@@ -279,7 +279,7 @@ class Repository(val context: Context) {
         return locations
     }
 
-    fun setLocationSyncNeed(recordedAt: Long, needsSync: Int) {
+    fun setLocationNeedsSyncByRecordedAt(recordedAt: Long, needsSync: Int) {
         val values = ContentValues()
         values.put(DbHelper.LOCATION_NEEDS_SYNC, needsSync)
         db.update(
@@ -290,7 +290,7 @@ class Repository(val context: Context) {
         )
     }
 
-    fun deleteAllLocationsWithSessionLocalId(sessionLocalId: String) {
+    fun deleteAllLocationsBySessionLocalId(sessionLocalId: String) {
         db.delete(
             DbHelper.LOCATIONS_TABLE_NAME,
             "${DbHelper.LOCATION_SESSION_LOCAL_ID} = '$sessionLocalId'",

@@ -26,7 +26,7 @@ import ee.iti0213.navigationhelper.db.Repository
 import ee.iti0213.navigationhelper.helper.C
 import ee.iti0213.navigationhelper.helper.Common
 import ee.iti0213.navigationhelper.helper.DateFormat
-import ee.iti0213.navigationhelper.helper.State
+import ee.iti0213.navigationhelper.state.State
 import kotlinx.android.synthetic.main.cp_stats_history.*
 import kotlinx.android.synthetic.main.start_stats_history.*
 import kotlinx.android.synthetic.main.wp_stats_history.*
@@ -250,16 +250,26 @@ class HistoryMapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 "http://www.topografix.com/GPX/1/1/gpx.xsd\"><trk>\n"
         val name = "<name>$sessionLocalId</name><trkseg>\n"
         var segments = ""
+        var wpts = ""
         for (loc in locations) {
             segments += "<trkpt lat=\"" + loc.latitude.toString() +
                     "\" lon=\"" + loc.longitude.toString() +
                     "\"><time>" + Common.convertLongToDate(loc.recordedAt, DateFormat.GPX) +
                     "</time>" + "<type>" + loc.locationType + "</type>" +
                     "</trkpt>\n"
+            if (loc.locationType == C.LOC_TYPE_CP) {
+                wpts += "<wpt lat=\"" + loc.latitude.toString() +
+                        "\" lon=\"" + loc.longitude.toString() +
+                        "\"><time>" + Common.convertLongToDate(loc.recordedAt, DateFormat.GPX) +
+                        "</time>" + "<type>" + loc.locationType + "</type>" +
+                        "</wpt>\n"
+            }
         }
-        val footer = "</trkseg></trk></gpx>"
+        val trkEnd = "</trkseg></trk>"
+        val footer = "</gpx>"
 
-        return header + "\n" + name + "\n" + segments + "\n" + footer + "\n"
+        return header + "\n" + name + "\n" + segments + "\n" +
+                trkEnd + "\n" + wpts + "\n" + footer + "\n"
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -317,8 +327,8 @@ class HistoryMapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         builder.setPositiveButton(getString(R.string.confirm)) { _, _ ->
             run {
-                databaseConnector.deleteAllLocationsWithSessionLocalId(sessionLocalId)
-                databaseConnector.deleteAllSessionsWithLocalId(sessionLocalId)
+                databaseConnector.deleteAllLocationsBySessionLocalId(sessionLocalId)
+                databaseConnector.deleteAllSessionsByLocalId(sessionLocalId)
                 Common.showToastMsg(this, getString(R.string.session_deleted))
                 finish()
             }

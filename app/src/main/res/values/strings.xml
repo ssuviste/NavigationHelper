@@ -16,15 +16,17 @@
     <string name="logout">Log Out</string>
     <string name="register">Register</string>
 
-    <string name="login_success">Login successful!</string>
-    <string name="login_fail">Login failed!</string>
-    <string name="register_success">Registration successful!</string>
-    <string name="register_fail">Registration failed!</string>
-
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="email">E-mail</string>
     <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+
+    <string name="login_success">Login successful!</string>
+    <string name="login_fail">Login failed!</string>
+    <string name="register_success">Registration successful!</string>
+    <string name="register_fail">Registration failed!</string>
+    <string name="no_network">No network connection!</string>
 
     <string name="sync_data_to_server">Sync data to server</string>
     <string name="sync_interval">Sync interval (s)</string>
@@ -39,7 +41,7 @@
     <string name="session_title">Session title</string>
     <string name="date">Date:</string>
     <string name="checkpoints">Checkpoints:</string>
-    <string name="date_sample">31.12.2000 12:00:00</string>
+    <string name="date_sample">31 Jan 2000 12:00:00</string>
 
     <string name="help_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ac
         mauris sed turpis efficitur maximus. Donec lobortis fermentum risus in accumsan. Integer
@@ -99,18 +101,13 @@
 
     <string name="session_started">Session started!</string>
     <string name="session_ended_saved">Session ended &amp; saved!</string>
-    <string name="save_failed">Saving failed!</string>
-    <string name="compass_enabled">Compass: Enabled</string>
-    <string name="compass_disabled">Compass: Disabled</string>
     <string name="up_dir_north">Up direction: North</string>
     <string name="up_dir_direction">Up direction: Real direction</string>
     <string name="up_dir_user_chosen">Up direction: User chosen</string>
     <string name="center_enabled">Centering: Enabled</string>
     <string name="center_disabled">Centering: Disabled</string>
-    <string name="preferences_locked">Locked during active session!</string>
     <string name="session_name_changed">Session name changed!</string>
     <string name="session_deleted">Session deleted!</string>
-    <string name="email_sent">GPX file sent to user email.</string>
 
     <string name="end_session_question">End and save session?</string>
     <string name="session_title_hint">Enter session title</string>
@@ -132,9 +129,22 @@
     <string name="invalid_pw_uc_lc">Password must contain upper- and lowercase letters!</string>
     <string name="invalid_pw_number">Password must contain at least 1 number!</string>
     <string name="invalid_pw_special_char">Password must contain at least 1 special character!</string>
+    <string name="invalid_pw_confirmation">Passwords must match!</string>
 
     <string name="send_email_using">Send email using:</string>
     <string name="no_email_clients_installed">There are no email clients installed.</string>
     <string name="email_default_subject">Navigation Helper Session GPX File</string>
     <string name="email_default_body">Session GPX file can be found in the attachments.</string>
+
+    <string name="last_loc_success">Success on getting last location.</string>
+    <string name="last_loc_fail">Failed to get last location.</string>
+    <string name="lost_loc_permission">Lost location permission.</string>
+    <string name="new_loc">New location</string>
+
+    <string name="user_ia_cancelled">User interaction was cancelled.</string>
+    <string name="permission_granted">Permission granted.</string>
+    <string name="gps_permission_denied">GPS permission denied, unable to continue.</string>
+    <string name="gps_needed">Access to GPS needed!</string>
+    <string name="settings">Settings</string>
+    <string name="ok">OK</string>
 </resources>
