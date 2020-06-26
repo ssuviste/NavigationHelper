@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:background="@drawable/button_green_ripple_tb"
-        android:contentDescription="@string/cont_desc_edit_btn"
+        android:contentDescription="@string/cont_desc_rename_btn"
         android:onClick="buttonEditOnClick"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"

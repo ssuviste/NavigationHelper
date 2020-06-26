@@ -33,7 +33,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.material.snackbar.Snackbar
 import ee.iti0213.navigationhelper.controller.CompassController
-import ee.iti0213.navigationhelper.helper.*
+import ee.iti0213.navigationhelper.helper.C
+import ee.iti0213.navigationhelper.helper.Common
+import ee.iti0213.navigationhelper.helper.UpDirection
 import ee.iti0213.navigationhelper.service.LocationService
 import ee.iti0213.navigationhelper.state.State
 import kotlinx.android.synthetic.main.activity_maps.*
@@ -42,7 +44,6 @@ import kotlinx.android.synthetic.main.cp_stats.*
 import kotlinx.android.synthetic.main.start_stats.*
 import kotlinx.android.synthetic.main.top_panel.*
 import kotlinx.android.synthetic.main.wp_stats.*
-import kotlin.collections.ArrayList
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     companion object {
@@ -58,6 +59,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var compass: CompassController
 
+    private var forceZoom = true
+
     private var track = ArrayList<Location>()
     private var trackPolyLinesCount = 0
     private var cpArray = ArrayList<Location>()
@@ -66,7 +69,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var wpMarker: Marker? = null
 
     private lateinit var mBoundService: LocationService
-    private var mBound: Boolean = false
+    private var mBound = false
 
     // Defines callbacks for service binding, passed to bindService()
     private val connection = object : ServiceConnection {
@@ -141,6 +144,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
+        outState.putBoolean(C.RES_FORCE_ZOOM_KEY, forceZoom)
         outState.putParcelableArrayList(C.RES_TRACK_KEY, track)
         outState.putParcelableArrayList(C.RES_CPS_KEY, cpArray)
         outState.putParcelable(C.RES_WP, wp)
@@ -164,6 +168,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
 
+        forceZoom = savedInstanceState.getBoolean(C.RES_FORCE_ZOOM_KEY)
         track = savedInstanceState.getParcelableArrayList(C.RES_TRACK_KEY)!!
         cpArray = savedInstanceState.getParcelableArrayList(C.RES_CPS_KEY)!!
         wp = savedInstanceState.getParcelable(C.RES_WP)
@@ -453,24 +458,33 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun updateCamera(loc: Location) {
-        val target = if (keepCenteredEnabled && (loc.latitude != 0.0 || loc.longitude != 0.0)) {
+        val target = if ((forceZoom || keepCenteredEnabled)
+            && (loc.latitude != 0.0 || loc.longitude != 0.0)) {
             LatLng(loc.latitude, loc.longitude)
         } else {
             mMap.cameraPosition.target
         }
+        val zoom = if (forceZoom) 15f else mMap.cameraPosition.zoom
         val bearing = when (upDirectionState) {
             UpDirection.NORTH -> 0f
             UpDirection.DIRECTION -> loc.bearing
             UpDirection.USER_CHOSEN -> mMap.cameraPosition.bearing
         }
-        if (target != mMap.cameraPosition.target || bearing != mMap.cameraPosition.bearing) {
+        if (target != mMap.cameraPosition.target
+            || bearing != mMap.cameraPosition.bearing
+            || zoom != mMap.cameraPosition.zoom) {
             val cameraPosition = CameraPosition(
                 target,
-                mMap.cameraPosition.zoom,
+                zoom,
                 mMap.cameraPosition.tilt,
                 bearing
             )
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+            if (forceZoom) {
+                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+                forceZoom = false
+            } else {
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+            }
         }
     }
 
@@ -517,10 +531,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val marker = MarkerOptions()
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_beenhere_black_36))
                 .position(
-                    LatLng(
-                        cpArray[cpMarkersCount].latitude,
-                        cpArray[cpMarkersCount].longitude
-                    )
+                    LatLng(cpArray[cpMarkersCount].latitude, cpArray[cpMarkersCount].longitude)
                 )
                 .anchor(0.5f, 0.9f)
             mMap.addMarker(marker)
@@ -532,8 +543,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_place_black_36))
                     .anchor(0.5f, 0.9f)
                 wpMarker = mMap.addMarker(
-                    marker
-                        .position(LatLng(wp!!.latitude, wp!!.longitude))
+                    marker.position(LatLng(wp!!.latitude, wp!!.longitude))
                 )
             } else if (wpMarker!!.position.latitude != wp!!.latitude
                 || wpMarker!!.position.longitude != wp!!.longitude
@@ -543,8 +553,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .anchor(0.5f, 0.9f)
                 wpMarker!!.remove()
                 wpMarker = mMap.addMarker(
-                    marker
-                        .position(LatLng(wp!!.latitude, wp!!.longitude))
+                    marker.position(LatLng(wp!!.latitude, wp!!.longitude))
                 )
             }
         }
@@ -586,8 +595,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun changeStartStopBtnIcon() {
         if (State.sessionActive) {
             buttonStartStop.setImageResource(R.drawable.baseline_stop_24)
+            buttonStartStop.contentDescription = getString(R.string.cont_desc_stop_btn)
         } else {
             buttonStartStop.setImageResource(R.drawable.baseline_play_arrow_24)
+            buttonStartStop.contentDescription = getString(R.string.cont_desc_start_btn)
         }
     }
 
@@ -601,20 +612,29 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun changeUpDirBtnIcon() {
         when (upDirectionState) {
-            UpDirection.USER_CHOSEN ->
+            UpDirection.USER_CHOSEN -> {
                 buttonUpDirection.setImageResource(R.drawable.baseline_emoji_people_24)
-            UpDirection.DIRECTION ->
+                buttonUpDirection.contentDescription = getString(R.string.cont_desc_up_dir_user_btn)
+            }
+            UpDirection.DIRECTION -> {
                 buttonUpDirection.setImageResource(R.drawable.baseline_direction_indicator_24)
-            UpDirection.NORTH ->
+                buttonUpDirection.contentDescription = getString(R.string.cont_desc_up_dir_real_btn)
+            }
+            UpDirection.NORTH -> {
                 buttonUpDirection.setImageResource(R.drawable.baseline_north_up_24)
+                buttonUpDirection.contentDescription =
+                    getString(R.string.cont_desc_up_dir_north_btn)
+            }
         }
     }
 
     private fun changeKeepCenteredBtnIcon() {
         if (keepCenteredEnabled) {
             buttonKeepCentered.setImageResource(R.drawable.baseline_donut_small_24)
+            buttonKeepCentered.contentDescription = getString(R.string.cont_desc_centering_btn)
         } else {
             buttonKeepCentered.setImageResource(R.drawable.baseline_donut_large_24)
+            buttonKeepCentered.contentDescription = getString(R.string.cont_desc_no_centering_btn)
         }
     }
 

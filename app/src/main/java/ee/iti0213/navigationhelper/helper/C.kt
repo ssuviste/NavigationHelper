@@ -32,6 +32,7 @@ class C {
 
         const val TIMER_ACTION = "timer_action"
 
+        const val RES_FORCE_ZOOM_KEY = "restore.force_zoom"
         const val RES_TRACK_KEY = "restore.track"
         const val RES_CPS_KEY = "restore.all_cps"
         const val RES_WP = "restore.wp"

@@ -47,7 +47,7 @@
         android:layout_width="60dp"
         android:layout_height="0dp"
         android:background="@drawable/button_green_ripple_lr"
-        android:contentDescription="@string/cont_desc_ss_btn"
+        android:contentDescription="@string/cont_desc_start_btn"
         android:onClick="buttonStartStopOnClick"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"

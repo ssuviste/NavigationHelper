@@ -25,14 +25,453 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mainMenuToolbar">
 
-        <TextView
-            android:id="@+id/helpScreenText"
-            style=""
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="@string/help_text"
-            android:textSize="24sp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewHelpGeneralTitle"
+                style="@style/helpSubtitleTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:text="@string/help_general_title" />
+
+            <TextView
+                android:id="@+id/textViewHelpGeneral"
+                style="@style/helpTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="1sp"
+                android:textSize="24sp"
+                android:text="@string/help_general" />
+
+            <TextView
+                android:id="@+id/textViewHelpSessionTitle"
+                style="@style/helpSubtitleTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:text="@string/help_new_session_title" />
+
+            <TextView
+                android:id="@+id/textViewHelpSession"
+                style="@style/helpTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:layout_gravity="center_vertical"
+                android:text="@string/help_new_session" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <ImageView
+                    android:id="@+id/imageViewCompassEnabled"
+                    style="@style/helpTextIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:contentDescription="@string/cont_desc_compass_btn"
+                    android:paddingTop="1dp"
+                    android:paddingBottom="1dp"
+                    app:srcCompat="@drawable/baseline_explore_24" />
+
+                <ImageView
+                    android:id="@+id/imageViewCompassDisabled"
+                    style="@style/helpTextIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:contentDescription="@string/cont_desc_compass_btn"
+                    android:paddingStart="0dp"
+                    android:paddingTop="1dp"
+                    android:paddingEnd="24dp"
+                    android:paddingBottom="1dp"
+                    app:srcCompat="@drawable/baseline_explore_off_24" />
+
+                <TextView
+                    android:id="@+id/textViewCompassDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingStart="18dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="0dp"
+                    android:paddingBottom="2dp"
+                    android:text="@string/help_toggle_compass" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <ImageView
+                    android:id="@+id/imageViewCenteringEnabled"
+                    style="@style/helpTextIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:contentDescription="@string/cont_desc_centering_btn"
+                    android:paddingTop="1dp"
+                    android:paddingBottom="1dp"
+                    app:srcCompat="@drawable/baseline_donut_small_24" />
+
+                <ImageView
+                    android:id="@+id/imageViewCenteringDisabled"
+                    style="@style/helpTextIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:contentDescription="@string/cont_desc_no_centering_btn"
+                    android:paddingStart="0dp"
+                    android:paddingTop="1dp"
+                    android:paddingEnd="24dp"
+                    android:paddingBottom="1dp"
+                    app:srcCompat="@drawable/baseline_donut_large_24" />
+
+                <TextView
+                    android:id="@+id/textViewCenteringDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingStart="18dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="0dp"
+                    android:paddingBottom="2dp"
+                    android:text="@string/help_toggle_centering" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <ImageView
+                    android:id="@+id/imageViewUserChosenUp"
+                    style="@style/helpTextIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:contentDescription="@string/cont_desc_up_dir_user_btn"
+                    android:paddingTop="1dp"
+                    android:paddingBottom="1dp"
+                    app:srcCompat="@drawable/baseline_emoji_people_24" />
+
+                <ImageView
+                    android:id="@+id/imageViewRealDirUp"
+                    style="@style/helpTextIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:contentDescription="@string/cont_desc_up_dir_real_btn"
+                    android:paddingTop="1dp"
+                    android:paddingBottom="1dp"
+                    app:srcCompat="@drawable/baseline_direction_indicator_24" />
+
+                <ImageView
+                    android:id="@+id/imageViewNorthUp"
+                    style="@style/helpTextIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:contentDescription="@string/cont_desc_up_dir_north_btn"
+                    android:paddingTop="1dp"
+                    android:paddingBottom="1dp"
+                    app:srcCompat="@drawable/baseline_north_up_24" />
+
+                <TextView
+                    android:id="@+id/textViewUpDirDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingStart="18dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="0dp"
+                    android:paddingBottom="2dp"
+                    android:text="@string/help_toggle_up_dir" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <ImageView
+                    android:id="@+id/imageViewStart"
+                    style="@style/helpTextIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:contentDescription="@string/cont_desc_start_btn"
+                    android:paddingTop="1dp"
+                    android:paddingBottom="1dp"
+                    app:srcCompat="@drawable/baseline_play_arrow_24" />
+
+                <ImageView
+                    android:id="@+id/imageViewStop"
+                    style="@style/helpTextIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:contentDescription="@string/cont_desc_stop_btn"
+                    android:paddingStart="0dp"
+                    android:paddingTop="1dp"
+                    android:paddingEnd="24dp"
+                    android:paddingBottom="1dp"
+                    app:srcCompat="@drawable/baseline_stop_24" />
+
+                <TextView
+                    android:id="@+id/textViewStartStopDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingStart="18dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="0dp"
+                    android:paddingBottom="2dp"
+                    android:text="@string/help_start_or_finish_session" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <ImageView
+                    android:id="@+id/imageViewCP"
+                    style="@style/helpTextIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:contentDescription="@string/cont_desc_cp_btn"
+                    android:paddingStart="0dp"
+                    android:paddingTop="1dp"
+                    android:paddingEnd="48dp"
+                    android:paddingBottom="1dp"
+                    app:srcCompat="@drawable/baseline_beenhere_24" />
+
+                <TextView
+                    android:id="@+id/textViewCPDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingStart="18dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="0dp"
+                    android:paddingBottom="2dp"
+                    android:text="@string/help_add_cp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <ImageView
+                    android:id="@+id/imageViewWP"
+                    style="@style/helpTextIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:contentDescription="@string/cont_desc_cp_btn"
+                    android:paddingStart="0dp"
+                    android:paddingTop="1dp"
+                    android:paddingEnd="48dp"
+                    android:paddingBottom="1dp"
+                    app:srcCompat="@drawable/baseline_place_24" />
+
+                <TextView
+                    android:id="@+id/textViewWPDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingStart="18dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="0dp"
+                    android:paddingBottom="2dp"
+                    android:text="@string/help_add_wp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewHelpPastSessionsTitle"
+                style="@style/helpSubtitleTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:text="@string/help_past_sessions_title" />
+
+            <TextView
+                android:id="@+id/textViewHelpPastSessions"
+                style="@style/helpTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:layout_gravity="center_vertical"
+                android:text="@string/help_past_sessions" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <ImageView
+                    android:id="@+id/imageViewEdit"
+                    style="@style/helpTextIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:contentDescription="@string/cont_desc_rename_btn"
+                    android:paddingStart="0dp"
+                    android:paddingTop="1dp"
+                    android:paddingEnd="48dp"
+                    android:paddingBottom="1dp"
+                    app:srcCompat="@drawable/baseline_edit_24" />
+
+                <TextView
+                    android:id="@+id/textViewEditDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingStart="18dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="0dp"
+                    android:paddingBottom="2dp"
+                    android:text="@string/help_rename_session" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <ImageView
+                    android:id="@+id/imageViewDelete"
+                    style="@style/helpTextIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:contentDescription="@string/cont_desc_delete_btn"
+                    android:paddingStart="0dp"
+                    android:paddingTop="1dp"
+                    android:paddingEnd="48dp"
+                    android:paddingBottom="1dp"
+                    app:srcCompat="@drawable/baseline_delete_24" />
+
+                <TextView
+                    android:id="@+id/textViewDeleteDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingStart="18dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="0dp"
+                    android:paddingBottom="2dp"
+                    android:text="@string/help_delete_session" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <ImageView
+                    android:id="@+id/imageViewEmail"
+                    style="@style/helpTextIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:contentDescription="@string/cont_desc_email_btn"
+                    android:paddingStart="0dp"
+                    android:paddingTop="1dp"
+                    android:paddingEnd="48dp"
+                    android:paddingBottom="1dp"
+                    app:srcCompat="@drawable/baseline_mail_24" />
+
+                <TextView
+                    android:id="@+id/textViewEmailDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingStart="18dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="0dp"
+                    android:paddingBottom="2dp"
+                    android:text="@string/help_export_session" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewHelpRegAndLoginTitle"
+                style="@style/helpSubtitleTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:text="@string/help_reg_and_login_title" />
+
+            <TextView
+                android:id="@+id/textViewHelpRegAndLogin"
+                style="@style/helpTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:layout_gravity="center_vertical"
+                android:paddingBottom="16dp"
+                android:text="@string/help_reg_and_login" />
+        </LinearLayout>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -43,40 +43,12 @@
     <string name="checkpoints">Checkpoints:</string>
     <string name="date_sample">31 Jan 2000 12:00:00</string>
 
-    <string name="help_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ac
-        mauris sed turpis efficitur maximus. Donec lobortis fermentum risus in accumsan. Integer
-        suscipit nisi quis augue mollis dapibus malesuada quis elit. Nam semper tortor libero, ut
-        ullamcorper dui semper et. Nunc ut velit sit amet elit gravida sodales ac nec enim. Cras eu
-        vulputate lorem, vel rhoncus libero. Quisque consequat cursus nunc at convallis.\n\nNulla
-        sed ex eget ex convallis fringilla. Sed facilisis sit amet nisl eget porta. Nullam ac
-        suscipit sem. Proin gravida felis velit, vel efficitur lectus placerat a. Nam bibendum lorem
-        sapien, a luctus turpis porta ac. Proin sed efficitur nisl. Mauris metus massa, ullamcorper
-        at bibendum bibendum, vulputate maximus felis. Fusce dictum diam viverra lorem molestie
-        convallis. In et gravida lectus. Pellentesque nec justo vitae ante porta eleifend. Duis
-        accumsan feugiat nulla sed facilisis. Mauris fermentum egestas bibendum. Cras sodales leo
-        vitae maximus volutpat. Pellentesque viverra ex quis lacinia rhoncus.\n\nIn mattis fringilla
-        ultrices. Curabitur tempor lacinia ligula. Maecenas justo justo, consequat ac metus vel,
-        faucibus elementum sem. Donec luctus tempus congue. Morbi commodo quam vitae turpis accumsan
-        scelerisque. Vivamus laoreet est vel venenatis venenatis. Cras gravida nulla quis venenatis
-        varius. Nullam mollis tincidunt vehicula.\n\nVestibulum vehicula sem vel condimentum
-        rhoncus. Duis vel semper enim, nec rhoncus enim. Pellentesque ultricies est elit, vel
-        consequat mauris porttitor sollicitudin. Nam ante massa, facilisis quis orci ac, malesuada
-        suscipit felis. Sed placerat eget nibh eget feugiat. Maecenas non vehicula lacus.
-        Suspendisse turpis metus, ultricies eu ipsum eu, aliquet facilisis odio. Praesent sagittis
-        mi non laoreet accumsan. Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nAenean
-        gravida ex velit, sed vestibulum orci imperdiet vitae. Nam erat ante, semper ut aliquam non,
-        commodo sed metus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
-        inceptos himenaeos. In id lacus quis metus consectetur commodo ut sed magna. Sed at
-        fringilla ligula. Etiam turpis arcu, dignissim at rhoncus viverra, cursus in ex. Sed at nibh
-        ut orci ultricies rutrum. Sed molestie augue non ex euismod mollis. Aenean ullamcorper metus
-        augue, eu posuere velit pulvinar ac. Proin blandit nisl et consectetur auctor. Nulla feugiat
-        quam vel nunc malesuada rutrum.</string>
-
     <string name="from_start">From Start</string>
     <string name="from_cp">From CP</string>
     <string name="from_wp">From WP</string>
 
-    <string name="cont_desc_ss_btn">Start/Stop</string>
+    <string name="cont_desc_start_btn">Start</string>
+    <string name="cont_desc_stop_btn">Stop</string>
     <string name="cont_desc_cp_btn">Add CP</string>
     <string name="cont_desc_wp_btn">Add WP</string>
     <string name="cont_desc_walk_icon">Total Dist</string>
@@ -84,9 +56,12 @@
     <string name="cont_desc_time_icon">Time</string>
     <string name="cont_desc_speed_icon">Speed</string>
     <string name="cont_desc_compass_btn">Compass</string>
-    <string name="cont_desc_up_dir_btn">Up Direction</string>
-    <string name="cont_desc_keep_centered_btn">Keep Centered</string>
-    <string name="cont_desc_edit_btn">Edit</string>
+    <string name="cont_desc_up_dir_user_btn">User-chosen Up</string>
+    <string name="cont_desc_up_dir_real_btn">Real Dir Up</string>
+    <string name="cont_desc_up_dir_north_btn">North Up</string>
+    <string name="cont_desc_centering_btn">Centering</string>
+    <string name="cont_desc_no_centering_btn">No Centering</string>
+    <string name="cont_desc_rename_btn">Rename</string>
     <string name="cont_desc_delete_btn">Delete</string>
     <string name="cont_desc_email_btn">Email GPX</string>
     <string name="cont_desc_menu_btn">Menu</string>
@@ -147,4 +122,41 @@
     <string name="gps_needed">Access to GPS needed!</string>
     <string name="settings">Settings</string>
     <string name="ok">OK</string>
+
+    <string name="help_general_title">How it works</string>
+    <string name="help_new_session_title">New Session</string>
+    <string name="help_past_sessions_title">Past Sessions</string>
+    <string name="help_reg_and_login_title">Register &#38; Log In</string>
+    
+    <string name="help_start_or_finish_session">Start or finish a session.</string>
+    <string name="help_add_cp">Add checkpoint (CP).</string>
+    <string name="help_add_wp">Add waypoint (WP).</string>
+    <string name="help_toggle_compass">Toggle on-screen compass.</string>
+    <string name="help_toggle_up_dir">Switch between map orientations.</string>
+    <string name="help_toggle_centering">Toggle current location centering.</string>
+    <string name="help_rename_session">Rename session.</string>
+    <string name="help_delete_session">Delete session.</string>
+    <string name="help_export_session">Export to GPX and email.</string>
+
+    <string name="help_general">Navigation Helper is an application designed to help with
+        navigation in unknown terrains. This is done by tracking the location of the device,
+        displaying it on map and allowing the user to set map markers (checkpoints and waypoints)
+        along the way, from which the travelled and direct distances to their current location are
+        then displayed. The app can also be used to keep track of your progress in orienteering or
+        sporting competitions and training, as it displays the time elapsed and the average pace
+        from the map markers.</string>
+    <string name="help_new_session">To start a new tracking session, navigate to NEW SESSION from
+        the main menu and hit the START button. Once started, a map marker is set to indicate the
+        starting location and the continuous drawing of the track begins. A static notification
+        is then displayed, allowing you to also view the session data and add map markers from the
+        lock-screen. To finish the current session, hit the STOP button. You will be prompted to
+        name the session to save as. If no name is given, the session will be saved as \"Unnamed
+        Session\".</string>
+    <string name="help_past_sessions">Every finished session is saved and is accessible in PAST
+        SESSIONS. Past sessions can be renamed, deleted and emailed in GPX format.</string>
+    <string name="help_reg_and_login">The app allows creating a user and logging in to
+        sportmap.akaver.com. While logged in and \"Sync data to server\" is enabled in PREFERENCES,
+        sessions will be synced to the named server in real-time, allowing other people to track
+        your progress at sportmap.akaver.com. To register or log in, hit the user icon in the main
+        menu app bar.</string>
 </resources>

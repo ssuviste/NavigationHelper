@@ -220,22 +220,27 @@ class LocationService : Service() {
     }
 
     private fun onNewLocation(location: Location) {
-        if (!location.hasAccuracy()
-            || location.accuracy > Preferences.gpsAccuracy
-            || (currentLocation != null && currentLocation!!.distanceTo(location) < C.LOC_STAND_RADIUS)
-        ) {
-            return
-        }
         Log.i(TAG, getString(R.string.new_loc) + ": $location")
         val intent = Intent(C.LOCATION_UPDATE)
         intent.putExtra(C.LOC_UPD_LOCATION_KEY, location)
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
 
-        if (trackingEnabled) {
+        if (trackingEnabled && filterLocation(location)) {
             updateDistances(location)
             showTrack()
             addLocationToDatabase(location, C.LOC_TYPE_LOC)
         }
+    }
+
+    private fun filterLocation(location: Location): Boolean {
+        if (!location.hasAccuracy()
+            || location.accuracy > Preferences.gpsAccuracy
+            || (currentLocation != null
+                    && currentLocation!!.distanceTo(location) < C.LOC_STAND_RADIUS)
+        ) {
+            return false
+        }
+        return true
     }
 
     private fun updateDistances(location: Location) {

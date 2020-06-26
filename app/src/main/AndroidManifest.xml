@@ -49,7 +49,6 @@
         <service
             android:name=".service.LocationService"
             android:enabled="true"
-            android:exported="true"
             android:foregroundServiceType="location"
             android:launchMode="singleTask" />
         <service android:name=".service.TimerService" />

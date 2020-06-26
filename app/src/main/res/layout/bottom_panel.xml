@@ -110,7 +110,7 @@
         style="@style/panelButton"
         android:layout_width="0dp"
         android:layout_height="35dp"
-        android:contentDescription="@string/cont_desc_ss_btn"
+        android:contentDescription="@string/cont_desc_start_btn"
         android:onClick="buttonStartStopOnClick"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
