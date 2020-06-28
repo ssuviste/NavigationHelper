@@ -17,10 +17,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.*
 import ee.iti0213.navigationhelper.db.LocationData
 import ee.iti0213.navigationhelper.db.Repository
 import ee.iti0213.navigationhelper.helper.C
@@ -209,7 +206,14 @@ class HistoryMapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 locations[i + 1].recordedAt,
                 distBetween[0]
             )
-            mMap.addPolyline(PolylineOptions().add(first, second).color(color).width(C.TRACK_WIDTH))
+            mMap.addPolyline(
+                PolylineOptions()
+                    .add(first, second)
+                    .color(color)
+                    .width(C.TRACK_WIDTH)
+                    .startCap(RoundCap())
+                    .endCap(RoundCap())
+            )
         }
     }
 
@@ -298,7 +302,10 @@ class HistoryMapsActivity : AppCompatActivity(), OnMapReadyCallback {
         builder.setPositiveButton(getString(R.string.confirm)) { _, _ ->
             run {
                 if (input.text.isNullOrBlank()) {
-                    databaseConnector.setSessionName(sessionLocalId, getString(R.string.auto_session_name))
+                    databaseConnector.setSessionName(
+                        sessionLocalId,
+                        getString(R.string.auto_session_name)
+                    )
                 } else {
                     databaseConnector.setSessionName(sessionLocalId, input.text.toString())
                 }

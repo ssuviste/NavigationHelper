@@ -5,7 +5,6 @@ import android.os.Handler
 import android.os.Looper
 import ee.iti0213.navigationhelper.db.Repository
 import ee.iti0213.navigationhelper.helper.*
-import ee.iti0213.navigationhelper.state.Preferences
 import ee.iti0213.navigationhelper.state.State
 import org.json.JSONObject
 
@@ -16,13 +15,16 @@ object SyncManager {
     private var handler: Handler = Handler(Looper.getMainLooper())
     private val syncToServer = object : Runnable {
         override fun run() {
-            if (Preferences.syncEnabled && State.loggedIn && API.token != null) {
+            val pref = context!!.getSharedPreferences(C.PREF_FILE_KEY, Context.MODE_PRIVATE)
+            val syncEnabled = pref.getBoolean(C.PREF_SYNC_ENABLED_KEY, C.DEFAULT_SYNC_ENABLED)
+            val syncInterval = pref.getLong(C.PREF_SYNC_INTERVAL_KEY, C.DEFAULT_SYNC_INTERVAL)
+            if (syncEnabled && State.loggedIn && API.token != null) {
                 syncSessions()
                 syncLocations()
             }
             handler.postDelayed(
                 this,
-                Preferences.syncInterval
+                syncInterval
             )
         }
     }
@@ -31,9 +33,11 @@ object SyncManager {
         if (this.context == null || databaseConnector == null) {
             this.context = context
             databaseConnector = Repository(context).open()
+            val pref = this.context!!.getSharedPreferences(C.PREF_FILE_KEY, Context.MODE_PRIVATE)
+            val syncInterval = pref.getLong(C.PREF_SYNC_INTERVAL_KEY, C.DEFAULT_SYNC_INTERVAL)
             handler.postDelayed(
                 syncToServer,
-                Preferences.syncInterval
+                syncInterval
             )
         }
     }

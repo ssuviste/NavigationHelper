@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.muddzdev.styleabletoast.StyleableToast
 import ee.iti0213.navigationhelper.R
-import ee.iti0213.navigationhelper.state.Preferences
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -83,13 +82,16 @@ class Common {
         }
 
         fun getTrackColor(context: Context, firstTime: Long, secondTime: Long, dist: Float): Int {
-            return if (Preferences.gradientEnabled) {
+            val pref = context.getSharedPreferences(C.PREF_FILE_KEY, Context.MODE_PRIVATE)
+            val gradientEnabled = pref.getBoolean(C.PREF_GRAD_ENABLED_KEY, C.DEFAULT_GRAD_ENABLED)
+            return if (gradientEnabled) {
+                val gradientMinPace = pref.getInt(C.PREF_GRAD_MIN_PACE_KEY, C.DEFAULT_GRAD_MIN_PACE)
+                val gradientMaxPace = pref.getInt(C.PREF_GRAD_MAX_PACE_KEY, C.DEFAULT_GRAD_MAX_PACE)
                 val pace = (secondTime - firstTime) / 60f / dist
                 val ratio = when {
-                    pace < Preferences.gradientMinPace -> 0f
-                    pace > Preferences.gradientMaxPace -> 1f
-                    else -> (pace - Preferences.gradientMinPace) /
-                            (Preferences.gradientMaxPace - Preferences.gradientMinPace)
+                    pace < gradientMinPace -> 0f
+                    pace > gradientMaxPace -> 1f
+                    else -> (pace - gradientMinPace) / (gradientMaxPace - gradientMinPace)
                 }
                 var red = if (ratio < 0.5) (255 * 2 * ratio).toInt().toString(16) else "ff"
                 var green = if (ratio > 0.5) (255 * 2 * (1 - ratio)).toInt().toString(16) else "ff"

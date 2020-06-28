@@ -51,6 +51,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         private var compassEnabled: Boolean = false
         private var upDirectionState: UpDirection = UpDirection.USER_CHOSEN
         private var keepCenteredEnabled: Boolean = false
+        private var latLngEnabled: Boolean = false
     }
 
     private val broadcastReceiver = InnerBroadcastReceiver()
@@ -149,6 +150,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         outState.putParcelableArrayList(C.RES_CPS_KEY, cpArray)
         outState.putParcelable(C.RES_WP, wp)
 
+        outState.putString(C.RES_CURR_LAT_LNG_KEY, buttonHideLatLng.text.toString())
+
         outState.putString(C.RES_WALK_DIST_START_KEY, walkDistStart.text.toString())
         outState.putString(C.RES_FLY_DIST_START_KEY, flyDistStart.text.toString())
         outState.putString(C.RES_TIME_START_KEY, timeStart.text.toString())
@@ -173,32 +176,35 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         cpArray = savedInstanceState.getParcelableArrayList(C.RES_CPS_KEY)!!
         wp = savedInstanceState.getParcelable(C.RES_WP)
 
+        buttonHideLatLng.text =
+            savedInstanceState.getString(C.RES_CURR_LAT_LNG_KEY, getString(R.string.init_lat_lng))
+
         walkDistStart.text =
-            savedInstanceState.getString(C.RES_WALK_DIST_START_KEY, R.string.init_dist.toString())
+            savedInstanceState.getString(C.RES_WALK_DIST_START_KEY, getString(R.string.init_dist))
         flyDistStart.text =
-            savedInstanceState.getString(C.RES_FLY_DIST_START_KEY, R.string.init_dist.toString())
+            savedInstanceState.getString(C.RES_FLY_DIST_START_KEY, getString(R.string.init_dist))
         timeStart.text =
-            savedInstanceState.getString(C.RES_TIME_START_KEY, R.string.init_time.toString())
+            savedInstanceState.getString(C.RES_TIME_START_KEY, getString(R.string.init_time))
         speedStart.text =
-            savedInstanceState.getString(C.RES_SPEED_START_KEY, R.string.init_speed.toString())
+            savedInstanceState.getString(C.RES_SPEED_START_KEY, getString(R.string.init_speed))
 
         walkDistCP.text =
-            savedInstanceState.getString(C.RES_WALK_DIST_CP_KEY, R.string.init_dist.toString())
+            savedInstanceState.getString(C.RES_WALK_DIST_CP_KEY, getString(R.string.init_dist))
         flyDistCP.text =
-            savedInstanceState.getString(C.RES_FLY_DIST_CP_KEY, R.string.init_dist.toString())
+            savedInstanceState.getString(C.RES_FLY_DIST_CP_KEY, getString(R.string.init_dist))
         timeCP.text =
-            savedInstanceState.getString(C.RES_TIME_CP_KEY, R.string.init_time.toString())
+            savedInstanceState.getString(C.RES_TIME_CP_KEY, getString(R.string.init_time))
         speedCP.text =
-            savedInstanceState.getString(C.RES_SPEED_CP_KEY, R.string.init_speed.toString())
+            savedInstanceState.getString(C.RES_SPEED_CP_KEY, getString(R.string.init_speed))
 
         walkDistWP.text =
-            savedInstanceState.getString(C.RES_WALK_DIST_WP_KEY, R.string.init_dist.toString())
+            savedInstanceState.getString(C.RES_WALK_DIST_WP_KEY, getString(R.string.init_dist))
         flyDistWP.text =
-            savedInstanceState.getString(C.RES_FLY_DIST_WP_KEY, R.string.init_dist.toString())
+            savedInstanceState.getString(C.RES_FLY_DIST_WP_KEY, getString(R.string.init_dist))
         timeWP.text =
-            savedInstanceState.getString(C.RES_TIME_WP_KEY, R.string.init_time.toString())
+            savedInstanceState.getString(C.RES_TIME_WP_KEY, getString(R.string.init_time))
         speedWP.text =
-            savedInstanceState.getString(C.RES_SPEED_WP_KEY, R.string.init_speed.toString())
+            savedInstanceState.getString(C.RES_SPEED_WP_KEY, getString(R.string.init_speed))
     }
 
     override fun onRequestPermissionsResult(
@@ -387,6 +393,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             when (intent!!.action) {
                 C.LOCATION_UPDATE -> {
                     val loc = intent.extras!!.get(C.LOC_UPD_LOCATION_KEY) as Location
+                    updateLatLng(loc)
                     updateCamera(loc)
                 }
                 C.TRACKING_UPDATE -> {
@@ -457,9 +464,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    private fun updateLatLng(loc: Location) {
+        val lat = loc.latitude.toString()
+        val lng = loc.longitude.toString()
+        val newLatLng =
+            getString(R.string.lat_desc) + lat + "\n" + getString(R.string.lng_desc) + lng
+        buttonHideLatLng.text = newLatLng
+    }
+
     private fun updateCamera(loc: Location) {
         val target = if ((forceZoom || keepCenteredEnabled)
-            && (loc.latitude != 0.0 || loc.longitude != 0.0)) {
+            && (loc.latitude != 0.0 || loc.longitude != 0.0)
+        ) {
             LatLng(loc.latitude, loc.longitude)
         } else {
             mMap.cameraPosition.target
@@ -472,7 +488,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         if (target != mMap.cameraPosition.target
             || bearing != mMap.cameraPosition.bearing
-            || zoom != mMap.cameraPosition.zoom) {
+            || zoom != mMap.cameraPosition.zoom
+        ) {
             val cameraPosition = CameraPosition(
                 target,
                 zoom,
@@ -507,7 +524,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 track[trackPolyLinesCount + 1].time,
                 track[trackPolyLinesCount].distanceTo(track[trackPolyLinesCount + 1])
             )
-            mMap.addPolyline(PolylineOptions().add(first, second).color(color).width(C.TRACK_WIDTH))
+            mMap.addPolyline(
+                PolylineOptions()
+                    .add(first, second)
+                    .color(color)
+                    .width(C.TRACK_WIDTH)
+                    .startCap(RoundCap())
+                    .endCap(RoundCap())
+            )
             trackPolyLinesCount++
         }
     }
@@ -638,6 +662,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    private fun toggleLatLng() {
+        if (latLngEnabled) {
+            imageButtonShowLatLng.visibility = View.INVISIBLE
+            buttonHideLatLng.visibility = View.VISIBLE
+        } else {
+            buttonHideLatLng.visibility = View.INVISIBLE
+            imageButtonShowLatLng.visibility = View.VISIBLE
+        }
+    }
+
     private fun toggleCompass() {
         compass.setVisible(compassEnabled)
         if (!compassEnabled) {
@@ -651,6 +685,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         changeCompassBtnIcon()
         changeUpDirBtnIcon()
         changeKeepCenteredBtnIcon()
+        toggleLatLng()
         toggleCompass()
         updateMap()
     }
@@ -700,6 +735,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             Common.showToastMsg(this, getString(R.string.center_disabled))
         }
         changeKeepCenteredBtnIcon()
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun buttonShowLatLngOnClick(view: View) {
+        latLngEnabled = true
+        toggleLatLng()
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun buttonHideLatLngOnClick(view: View) {
+        latLngEnabled = false
+        toggleLatLng()
     }
 
     @Suppress("UNUSED_PARAMETER")

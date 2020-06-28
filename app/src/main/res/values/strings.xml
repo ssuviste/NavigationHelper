@@ -66,6 +66,7 @@
     <string name="cont_desc_email_btn">Email GPX</string>
     <string name="cont_desc_menu_btn">Menu</string>
     <string name="cont_desc_track_icon">Track</string>
+    <string name="cont_desc_lat_lng_btn">LatLng</string>
 
     <string name="unit_dist">&#160;m</string>
     <string name="unit_speed">/km</string>
@@ -73,6 +74,10 @@
     <string name="init_dist">0 m</string>
     <string name="init_time">00:00:00</string>
     <string name="init_speed">00:00/km</string>
+    <string name="init_lat_lng">Lat: no signal\nLng: no signal</string>
+
+    <string name="lat_desc">Lat:&#160;</string>
+    <string name="lng_desc">Lng:&#160;</string>
 
     <string name="session_started">Session started!</string>
     <string name="session_ended_saved">Session ended &amp; saved!</string>
@@ -147,11 +152,12 @@
         from the map markers.</string>
     <string name="help_new_session">To start a new tracking session, navigate to NEW SESSION from
         the main menu and hit the START button. Once started, a map marker is set to indicate the
-        starting location and the continuous drawing of the track begins. A static notification
-        is then displayed, allowing you to also view the session data and add map markers from the
-        lock-screen. To finish the current session, hit the STOP button. You will be prompted to
-        name the session to save as. If no name is given, the session will be saved as \"Unnamed
-        Session\".</string>
+        starting location and the continuous drawing of the track begins. If \"Track gradient\" is
+        enabled in PREFERENCES, the track will be colored from red to green, indicating the pace of
+        movement (pace range also adjustable in PREFERENCES). A static notification is displayed,
+        allowing you to also view the session data and add map markers from the lock-screen. To
+        finish the current session, hit the STOP button. You will be prompted to name the session to
+        save as. If no name is given, the session will be saved as \"Unnamed Session\".</string>
     <string name="help_past_sessions">Every finished session is saved and is accessible in PAST
         SESSIONS. Past sessions can be renamed, deleted and emailed in GPX format.</string>
     <string name="help_reg_and_login">The app allows creating a user and logging in to

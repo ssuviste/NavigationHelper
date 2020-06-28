@@ -14,5 +14,9 @@
     <color name="colorBlueGoogle">#4C8BF5</color>
 
     <color name="colorGlass">#A6E0EEEE</color>
-    <color name="colorGlassFoggy">#D9767E7E</color>
+    <color name="colorGlassDark">#D9767E7E</color>
+    <color name="colorGlassWhiteFoggy">#BFFFFFFF</color>
+    <color name="colorGlassGrayFoggy">#BFCFCFCF</color>
+
+    <color name="colorShadow">#14000000</color>
 </resources>

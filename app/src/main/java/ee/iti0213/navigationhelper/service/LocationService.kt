@@ -19,7 +19,6 @@ import ee.iti0213.navigationhelper.db.LocationData
 import ee.iti0213.navigationhelper.db.Repository
 import ee.iti0213.navigationhelper.db.SessionData
 import ee.iti0213.navigationhelper.helper.*
-import ee.iti0213.navigationhelper.state.Preferences
 import ee.iti0213.navigationhelper.state.State
 
 class LocationService : Service() {
@@ -147,15 +146,19 @@ class LocationService : Service() {
         while (existingLocalIds.contains(sessionLocalId)) {
             sessionLocalId = Common.generateHashString()
         }
+        val pref = this.getSharedPreferences(C.PREF_FILE_KEY, Context.MODE_PRIVATE)
+        val syncEnabled = pref.getBoolean(C.PREF_SYNC_ENABLED_KEY, C.DEFAULT_SYNC_ENABLED)
+        val gradientMinPace = pref.getInt(C.PREF_GRAD_MIN_PACE_KEY, C.DEFAULT_GRAD_MIN_PACE)
+        val gradientMaxPace = pref.getInt(C.PREF_GRAD_MAX_PACE_KEY, C.DEFAULT_GRAD_MAX_PACE)
         databaseConnector.addSession(
             SessionData(
                 sessionLocalId,
-                if (Preferences.syncEnabled && State.loggedIn) null else C.LOCAL_SESSION,
+                if (syncEnabled && State.loggedIn) null else C.LOCAL_SESSION,
                 getString(R.string.auto_session_name),
                 getString(R.string.auto_session_desc),
                 System.currentTimeMillis() / 1000 * 1000,
-                Preferences.gradientMinPace,
-                Preferences.gradientMaxPace,
+                gradientMinPace,
+                gradientMaxPace,
                 0
             )
         )
@@ -172,13 +175,15 @@ class LocationService : Service() {
     }
 
     private fun addLocationToDatabase(location: Location, locationType: String) {
+        val pref = this.getSharedPreferences(C.PREF_FILE_KEY, Context.MODE_PRIVATE)
+        val syncEnabled = pref.getBoolean(C.PREF_SYNC_ENABLED_KEY, C.DEFAULT_SYNC_ENABLED)
         databaseConnector.addLocation(
             LocationData(
                 sessionLocalId,
                 location,
                 System.currentTimeMillis() / 1000 * 1000,
                 locationType,
-                if (Preferences.syncEnabled && State.loggedIn) 1 else 0
+                if (syncEnabled && State.loggedIn) 1 else 0
             )
         )
     }
@@ -233,8 +238,10 @@ class LocationService : Service() {
     }
 
     private fun filterLocation(location: Location): Boolean {
+        val pref = this.getSharedPreferences(C.PREF_FILE_KEY, Context.MODE_PRIVATE)
+        val gpsAccuracy = pref.getInt(C.PREF_GPS_ACC_KEY, C.DEFAULT_GPS_ACC)
         if (!location.hasAccuracy()
-            || location.accuracy > Preferences.gpsAccuracy
+            || location.accuracy > gpsAccuracy
             || (currentLocation != null
                     && currentLocation!!.distanceTo(location) < C.LOC_STAND_RADIUS)
         ) {

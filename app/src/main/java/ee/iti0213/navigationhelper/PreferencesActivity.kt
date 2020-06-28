@@ -1,12 +1,12 @@
 package ee.iti0213.navigationhelper
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import ee.iti0213.navigationhelper.helper.C
-import ee.iti0213.navigationhelper.state.Preferences
 import kotlinx.android.synthetic.main.activity_preferences.*
 import me.bendik.simplerangeview.SimpleRangeView
 import me.bendik.simplerangeview.SimpleRangeView.OnTrackRangeListener
@@ -28,56 +28,74 @@ class PreferencesActivity : AppCompatActivity() {
         toolbar.logo.setColorFilter(white, mode)
         setSupportActionBar(toolbar)
 
-        switchSyncEnable.isChecked = Preferences.syncEnabled
+        val pref = this.getSharedPreferences(C.PREF_FILE_KEY, Context.MODE_PRIVATE)
+        val prefEditor = pref.edit()
+
+        switchSyncEnable.isChecked =
+            pref.getBoolean(C.PREF_SYNC_ENABLED_KEY, C.DEFAULT_SYNC_ENABLED)
         switchSyncEnable.setOnCheckedChangeListener { _, isChecked ->
-            Preferences.syncEnabled = isChecked
+            prefEditor.putBoolean(C.PREF_SYNC_ENABLED_KEY, isChecked)
+            prefEditor.apply()
         }
 
-        switchGradientEnable.isChecked = Preferences.gradientEnabled
+        switchGradientEnable.isChecked =
+            pref.getBoolean(C.PREF_GRAD_ENABLED_KEY, C.DEFAULT_GRAD_ENABLED)
         switchGradientEnable.setOnCheckedChangeListener { _, isChecked ->
-            Preferences.gradientEnabled = isChecked
+            prefEditor.putBoolean(C.PREF_GRAD_ENABLED_KEY, isChecked)
+            prefEditor.apply()
         }
 
-        textViewSyncInterval.text = (Preferences.syncInterval.toInt() / 1000).toString()
+        val currSyncInterval = pref.getLong(C.PREF_SYNC_INTERVAL_KEY, C.DEFAULT_SYNC_INTERVAL)
+        textViewSyncInterval.text = (currSyncInterval.toInt() / 1000).toString()
         seekBarSyncInterval.progress =
-            (Preferences.syncInterval - C.MIN_SYNC_INTERVAL_IN_MILLISECONDS).toInt() / 1000
+            (currSyncInterval - C.MIN_SYNC_INTERVAL_IN_MILLISECONDS).toInt() / 1000
         seekBarSyncInterval.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
 
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                Preferences.syncInterval =
+                prefEditor.putLong(
+                    C.PREF_SYNC_INTERVAL_KEY,
                     C.MIN_SYNC_INTERVAL_IN_MILLISECONDS + progress.toLong() * 1000
-                textViewSyncInterval.text = (Preferences.syncInterval.toInt() / 1000).toString()
+                )
+                prefEditor.apply()
+                textViewSyncInterval.text =
+                    (C.MIN_SYNC_INTERVAL_IN_MILLISECONDS.toInt() / 1000 + progress).toString()
             }
         })
 
-        textViewGpsAccuracy.text = Preferences.gpsAccuracy.toString()
-        seekBarGpsAccuracy.progress = Preferences.gpsAccuracy - C.LOC_MIN_ACCURACY
+        val currGpsAccuracy = pref.getInt(C.PREF_GPS_ACC_KEY, C.DEFAULT_GPS_ACC)
+        textViewGpsAccuracy.text = currGpsAccuracy.toString()
+        seekBarGpsAccuracy.progress = currGpsAccuracy - C.LOC_MIN_ACCURACY
         seekBarGpsAccuracy.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
 
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                Preferences.gpsAccuracy = C.LOC_MIN_ACCURACY + progress
-                textViewGpsAccuracy.text = Preferences.gpsAccuracy.toString()
+                prefEditor.putInt(C.PREF_GPS_ACC_KEY, C.LOC_MIN_ACCURACY + progress)
+                prefEditor.apply()
+                textViewGpsAccuracy.text = (C.LOC_MIN_ACCURACY + progress).toString()
             }
         })
 
-        textViewMinPace.text = Preferences.gradientMinPace.toString()
-        textViewMaxPace.text = Preferences.gradientMaxPace.toString()
-        rangeBarGradientPace.start = Preferences.gradientMinPace - C.PACE_MIN
-        rangeBarGradientPace.end = Preferences.gradientMaxPace - C.PACE_MIN
+        val currMinPace = pref.getInt(C.PREF_GRAD_MIN_PACE_KEY, C.DEFAULT_GRAD_MIN_PACE)
+        val currMaxPace = pref.getInt(C.PREF_GRAD_MAX_PACE_KEY, C.DEFAULT_GRAD_MAX_PACE)
+        textViewMinPace.text = currMinPace.toString()
+        textViewMaxPace.text = currMaxPace.toString()
+        rangeBarGradientPace.start = currMinPace - C.PACE_MIN
+        rangeBarGradientPace.end = currMaxPace - C.PACE_MIN
         rangeBarGradientPace.onTrackRangeListener = object : OnTrackRangeListener {
             override fun onStartRangeChanged(@NotNull rangeView: SimpleRangeView, start: Int) {
-                Preferences.gradientMinPace = start + C.PACE_MIN
+                prefEditor.putInt(C.PREF_GRAD_MIN_PACE_KEY, start + C.PACE_MIN)
+                prefEditor.apply()
                 textViewMinPace.text = (start + C.PACE_MIN).toString()
             }
 
             override fun onEndRangeChanged(@NotNull rangeView: SimpleRangeView, end: Int) {
-                Preferences.gradientMaxPace = end + C.PACE_MIN
+                prefEditor.putInt(C.PREF_GRAD_MAX_PACE_KEY, end + C.PACE_MIN)
+                prefEditor.apply()
                 textViewMaxPace.text = (end + C.PACE_MIN).toString()
             }
         }

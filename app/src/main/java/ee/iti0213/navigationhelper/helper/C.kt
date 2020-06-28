@@ -33,6 +33,7 @@ class C {
         const val TIMER_ACTION = "timer_action"
 
         const val RES_FORCE_ZOOM_KEY = "restore.force_zoom"
+        const val RES_CURR_LAT_LNG_KEY = "restore.current_lat_lng"
         const val RES_TRACK_KEY = "restore.track"
         const val RES_CPS_KEY = "restore.all_cps"
         const val RES_WP = "restore.wp"
@@ -56,6 +57,21 @@ class C {
         const val LOC_TYPE_LOC = "LOC"
         const val LOC_TYPE_CP = "CP"
         const val LOC_TYPE_WP = "WP"
+
+        const val PREF_FILE_KEY = "preferences_file"
+        const val PREF_SYNC_ENABLED_KEY = "preferences.sync_enabled"
+        const val PREF_SYNC_INTERVAL_KEY = "preferences.sync_interval"
+        const val PREF_GPS_ACC_KEY = "preferences.gps_accuracy"
+        const val PREF_GRAD_ENABLED_KEY = "preferences.gradient_enabled"
+        const val PREF_GRAD_MIN_PACE_KEY = "preferences.gradient_min_pace"
+        const val PREF_GRAD_MAX_PACE_KEY = "preferences.gradient_max_pace"
+
+        const val DEFAULT_SYNC_ENABLED = true
+        const val DEFAULT_SYNC_INTERVAL = 30000L
+        const val DEFAULT_GPS_ACC = 20
+        const val DEFAULT_GRAD_ENABLED = true
+        const val DEFAULT_GRAD_MIN_PACE = 7
+        const val DEFAULT_GRAD_MAX_PACE = 20
 
         const val SESSION_LOCAL_ID_LENGTH = 10
 
