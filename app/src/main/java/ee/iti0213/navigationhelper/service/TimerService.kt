@@ -26,7 +26,6 @@ class TimerService : Service() {
 
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d(TAG, "onStartCommand")
         handler = Handler(Looper.getMainLooper())
         handler.postDelayed(
             sendTimerBroadcast,
@@ -37,9 +36,7 @@ class TimerService : Service() {
     }
 
     override fun onDestroy() {
-        Log.d(TAG, "onDestroy")
         super.onDestroy()
-
         handler.removeCallbacks(sendTimerBroadcast)
     }
 

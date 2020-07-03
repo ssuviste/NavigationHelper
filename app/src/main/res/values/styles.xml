@@ -162,6 +162,7 @@
 
     <style name="glassToast">
         <item name="stGravity">center</item>
+        <item name="stTextColor">@color/colorWhite</item>
         <item name="stColorBackground">@color/colorGlassDark</item>
         <item name="stRadius">15dp</item>
     </style>

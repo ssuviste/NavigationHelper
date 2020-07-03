@@ -414,7 +414,7 @@ class LocationService : Service() {
 
         // Construct notification
         val builder = NotificationCompat.Builder(applicationContext, C.NOTIFICATION_CHANNEL)
-            .setSmallIcon(R.drawable.baseline_gps_fixed_24)
+            .setSmallIcon(R.drawable.baseline_explore_24)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setOngoing(true)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -433,11 +433,7 @@ class LocationService : Service() {
 
     private fun toggleTimerService(start: Boolean) {
         if (start) {
-            if (Build.VERSION.SDK_INT >= 26) {
-                startForegroundService(Intent(this, TimerService::class.java))
-            } else {
-                startService(Intent(this, TimerService::class.java))
-            }
+            startService(Intent(this, TimerService::class.java))
         } else {
             stopService(Intent(this, TimerService::class.java))
         }

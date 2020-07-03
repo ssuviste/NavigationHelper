@@ -17,7 +17,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="10dp"
         android:layout_weight="1"
-        android:drawableStart="@drawable/baseline_gps_fixed_primary_dark_24"
+        android:drawableStart="@drawable/baseline_explore_primary_dark_24"
         android:drawablePadding="5dp"
         android:gravity="center_vertical"
         android:text="@string/app_name"
