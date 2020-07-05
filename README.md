@@ -8,9 +8,9 @@ Navigation Helper is an application designed to help with navigation in unknown 
   * Draw track based on movement & color based on pace
   * Add map markers (checkpoints & waypoints)
   * Display direct & travelled distance, time elapsed & pace from map markers to current location
-  * Save sessions locally and view/rename/delete/export past sessions
-  * Register, log in & sync sessions to sportmap.akaver.com in real-time, allowing others to monitor your progress online
-  * Manage preferences
+  * Save sessions locally to view/rename/delete/export later
+  * Register, log in & sync sessions to sportmap.akaver.com in real-time, allowing others to monitor your progress
+  * Manage syncing, track coloring & GPS preferences
 <br/>
 
 | Simple menu | Register & log in | Add map markers | View coordinates | Toggle compass |
