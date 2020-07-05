@@ -9,7 +9,7 @@ Navigation Helper is an application designed to help with navigation in unknown 
   * Rotation support for UI
 <br/>
 
-<div width="600">
+<div width="1600">
 
 Header | header
 ------ | -----
