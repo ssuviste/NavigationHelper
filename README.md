@@ -9,6 +9,6 @@ Navigation Helper is an application designed to help with navigation in unknown 
   * Rotation support for UI
 <br/>
 
-| Easy-to-use menu | Register & login | Add markers | View coordinates | Toggle compass |
+| Simple navigation menu | Register & log in | Add map markers | View coordinates | Toggle compass |
 |------------------------|-------------------|-----------------|---------------------------|----------------|
 | ![screenshot](screenshots/screenshot1.png) | ![screenshot](screenshots/screenshot2.png) | ![screenshot](screenshots/screenshot3.png) | ![screenshot](screenshots/screenshot4.png) | ![screenshot](screenshots/screenshot5.png) |
