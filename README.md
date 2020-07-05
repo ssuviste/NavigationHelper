@@ -13,7 +13,7 @@ Navigation Helper is an application designed to help with navigation in unknown 
 
 | Header | header |
 | ------ | ----- |
-| <p width="200">Baraaaaaaaaaaaaaaaaaaa</p> | bar |
+| <p width=2>Baraaaaaaaaaaaaaaaaaaa</p> | bar |
 
 </div>
 
