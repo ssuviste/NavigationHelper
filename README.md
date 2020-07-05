@@ -14,7 +14,7 @@ Navigation Helper is an application designed to help with navigation in unknown 
 | <img src="screenshots/screenshot1.png" height="250"> | <img src="screenshots/screenshot2.png" height="250"> | <img src="screenshots/screenshot3.png" height="250"> | <img src="screenshots/screenshot4.png" height="250"> | <img src="screenshots/screenshot5.png" height="250"> |
 
 
-| Interactive notification | Browse past sessions | Zoom / rename / edit / export past sessions | Toggle gradient coloring | Manage preferences |
+| Static notification | Browse past sessions | Zoom into past sessions | Toggle gradient coloring | Manage preferences |
 |:-----------:|:-----------------:|:---------------:|:----------------:|:--------------:|
 | <img src="screenshots/screenshot6.png" height="250"> | <img src="screenshots/screenshot7.png" height="250"> | <img src="screenshots/screenshot8.png" height="250"> | <img src="screenshots/screenshot9.png" height="250"> | <img src="screenshots/screenshot10.png" height="250"> |
 
