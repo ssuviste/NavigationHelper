@@ -11,9 +11,9 @@ Navigation Helper is an application designed to help with navigation in unknown 
 
 <div width="600">
 
-Header | header
------- | -----
-<p width="200">Baraaaaaaaaaaaaaaaaaaa</p> | bar
+| Header | header |
+| ------ | ----- |
+| <p width="200">Baraaaaaaaaaaaaaaaaaaa</p> | bar |
 
 </div>
 
