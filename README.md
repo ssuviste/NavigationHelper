@@ -11,4 +11,4 @@ Navigation Helper is an application designed to help with navigation in unknown 
 
 | Simple navigation menu | Register & log in | Add map markers | View coordinates | Toggle compass |
 |------------------------|-------------------|-----------------|---------------------------|----------------|
-| <img src="screenshots/screenshot1.png" width="200"> | ![screenshot](screenshots/screenshot2.png) | ![screenshot](screenshots/screenshot3.png) | ![screenshot](screenshots/screenshot4.png) | ![screenshot](screenshots/screenshot5.png) |
+| <img src="screenshots/screenshot1.png" width="500"> | ![screenshot](screenshots/screenshot2.png) | ![screenshot](screenshots/screenshot3.png) | ![screenshot](screenshots/screenshot4.png) | ![screenshot](screenshots/screenshot5.png) |
