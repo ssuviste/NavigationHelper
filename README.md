@@ -10,7 +10,7 @@ Navigation Helper is an application designed to help with navigation in unknown 
 <br/>
 
 | Simple navigation menu | Register & log in | Add map markers | View coordinates | Toggle compass |
-|-------------------|-------------------|-------------------|-------------------|-------------------|
+|:-----------------:|-------------------|-------------------|-------------------|-------------------|
 | <img src="screenshots/screenshot1.png" height="200"> | <img src="screenshots/screenshot2.png" height="200"> | <img src="screenshots/screenshot3.png" height="200"> | <img src="screenshots/screenshot4.png" height="200"> | <img src="screenshots/screenshot5.png" height="200"> |
 
 | Simple user menu | Register & log in | Add map markers | View latitud & longitude | Toggle compass |
