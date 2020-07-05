@@ -3,15 +3,14 @@
 Navigation Helper is an application designed to help with navigation in unknown terrains. This is done by tracking the location of the device, displaying it on map and allowing the user to set map markers (checkpoints and waypoints) along the way, from which the travelled and direct distances to their current location are displayed, making it possible to triangulate locations. The app can also be used to keep track of your progress in orienteering or sporting competitions and training, as it displays the time elapsed and the average pace from the map markers.
 
 ## Features:
-  * Toggle compass, map orientation & user location centering
+  * Toggle compass, map orientation & location centering
   * View real-time coordinates
   * Draw track based on movement & color based on pace
   * Add map markers (checkpoints & waypoints)
   * Display direct & travelled distance, time elapsed & pace from map markers to current location
   * Save sessions locally and view/rename/delete/export past sessions
   * Register, log in & sync sessions to sportmap.akaver.com in real-time, allowing others to monitor your progress online
-  * Manage preferences: toggle syncing, track coloring & adjust sync interval, GPS accuracy, track coloring range
-  * Rotation support for UI
+  * Manage preferences
 <br/>
 
 | Simple menu | Register & log in | Add map markers | View coordinates | Toggle compass |
