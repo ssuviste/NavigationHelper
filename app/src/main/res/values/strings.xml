@@ -148,8 +148,8 @@
         map and allowing the user to set map markers (checkpoints and waypoints) along the way, from
         which the travelled and direct distances to their current location are displayed, making it
         possible to triangulate locations. The app can also be used to keep track of your progress
-        in orienteering or sporting competitions and training, as it displays the time elapsed and
-        the average pace from the map markers.</string>
+        in orienteering or sporting competitions and training sessions, as it displays the time
+        elapsed and the average pace from the map markers.</string>
     <string name="help_new_session">To start a new tracking session, navigate to NEW SESSION from
         the main menu and hit the START button. Once started, a map marker is set to indicate the
         starting location and the continuous drawing of the track begins. If \"Track gradient\" is
