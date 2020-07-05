@@ -9,6 +9,12 @@ Navigation Helper is an application designed to help with navigation in unknown 
   * Rotation support for UI
 <br/>
 
-| <img src="screenshots/screenshot1.png"> | <img src="screenshots/screenshot2.png"> | <img src="screenshots/screenshot3.png"> | <img src="screenshots/screenshot4.png"> | <img src="screenshots/screenshot5.png"> |
-|:-----------:|:-----------------:|:---------------:|:----------------:|:--------------:|
 | Simple menu | Register & log in | Add map markers | View coordinates | Toggle compass |
+|:-----------:|:-----------------:|:---------------:|:----------------:|:--------------:|
+| <img src="screenshots/screenshot1.png" height="250"> | <img src="screenshots/screenshot2.png" height="250"> | <img src="screenshots/screenshot3.png" height="250"> | <img src="screenshots/screenshot4.png" height="250"> | <img src="screenshots/screenshot5.png" height="250"> |
+
+
+| Interactive notification | Browse past sessions | Zoom / rename / edit / export past sessions | Toggle gradient coloring | Manage preferences |
+|:-----------:|:-----------------:|:---------------:|:----------------:|:--------------:|
+| <img src="screenshots/screenshot6.png" height="250"> | <img src="screenshots/screenshot7.png" height="250"> | <img src="screenshots/screenshot8.png" height="250"> | <img src="screenshots/screenshot9.png" height="250"> | <img src="screenshots/screenshot10.png" height="250"> |
+
