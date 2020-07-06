@@ -10,7 +10,7 @@ Navigation Helper is an application designed to help with navigation in unknown 
   * Display direct & travelled distance, time elapsed & pace from map markers to current location
   * Show static notification for viewing session data and adding map markers from lock-screen
   * Save sessions locally to view/rename/delete/export later
-  * Register, log in & sync sessions to sportmap.akaver.com in real-time, allowing others to monitor your progress
+  * Register, log in & sync sessions to **sportmap.akaver.com** in real-time, allowing others to monitor your progress
   * Manage syncing, track coloring & GPS preferences
 <br/>
 
