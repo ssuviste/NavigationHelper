@@ -15,7 +15,7 @@ Navigation Helper is an application designed to help with navigation in unknown 
 <br/>
 
 | Easy-to-use menu | Register & log in | Add map markers | View coordinates | Toggle compass |
-|:-----------:|:-----------------:|:---------------:|:----------------:|:--------------:|
+|:----------------:|:-----------------:|:---------------:|:----------------:|:--------------:|
 | <img src="screenshots/screenshot01.png" height="250"> | <img src="screenshots/screenshot02.png" height="250"> | <img src="screenshots/screenshot03.png" height="250"> | <img src="screenshots/screenshot04.png" height="250"> | <img src="screenshots/screenshot05.png" height="250"> |
 
 
